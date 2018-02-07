@@ -6,7 +6,6 @@ public class BoardConstructor : MonoBehaviour
 {
     #region Variables
 
-    public Board Gameboard;
 
     public Transform Prefab_Foundation;
     public Transform Prefab_Tile;
@@ -15,11 +14,15 @@ public class BoardConstructor : MonoBehaviour
 
     private const float elementSize = 1f;
     private float offset;
-        
-    #endregion
+    private Board Gameboard;
 
-    // Use this for initialization
+    #endregion
+    
     void Start() {
+
+        // Set Gameboard according to selected difficulty
+        Gameboard = Utils.ReadSelectedGameboard();
+
         Debug.Log("Level Name: " + Gameboard.LevelName
             + ", board size is: " + Gameboard.BoardSize);
 
