@@ -7,7 +7,6 @@ public class Board : ScriptableObject {
 
     #region Properties
     [SerializeField]
-
     public int Size { get { return Mathf.Clamp(Size, 3, 8); } }
     public int Pieces { get { return NumberOfNormalPieces; } }
     public int Capstones { get { return NumberOfCapstones; } }
