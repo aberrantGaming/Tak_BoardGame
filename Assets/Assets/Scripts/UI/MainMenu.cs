@@ -3,25 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
-
-    public void PlayGame()
+namespace UI
+{
+    public class MainMenu : MonoBehaviour
     {
-        TMPro.TMP_Dropdown Selection = gameObject.GetComponentInChildren<TMPro.TMP_Dropdown>();
 
-        if (Selection != null)
+        public void PlayGame()
         {
-            if (Selection.value == 0)
-                Utils.SelectGameboard("Beginner");
-            else if (Selection.value == 2)
-                Utils.SelectGameboard("Master");
+            TMPro.TMP_Dropdown Selection = gameObject.GetComponentInChildren<TMPro.TMP_Dropdown>();
+
+            if (Selection != null)
+            {
+                if (Selection.value == 0)
+                    Utils.SelectGameboard("Beginner");
+                else if (Selection.value == 2)
+                    Utils.SelectGameboard("Master");
+            }
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
     }
 }
