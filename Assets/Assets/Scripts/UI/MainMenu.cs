@@ -9,10 +9,13 @@ public class MainMenu : MonoBehaviour {
     {
         TMPro.TMP_Dropdown Selection = gameObject.GetComponentInChildren<TMPro.TMP_Dropdown>();
 
-        if (Selection.value == 0)
-            Utils.SelectGameboard("Beginner");
-        else if (Selection.value == 2)
-            Utils.SelectGameboard("Master");
+        if (Selection != null)
+        {
+            if (Selection.value == 0)
+                Utils.SelectGameboard("Beginner");
+            else if (Selection.value == 2)
+                Utils.SelectGameboard("Master");
+        }
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
