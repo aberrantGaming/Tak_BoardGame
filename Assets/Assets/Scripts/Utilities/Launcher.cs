@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Launcher : Photon.PunBehaviour
 {
@@ -105,6 +106,8 @@ public class Launcher : Photon.PunBehaviour
     public override void OnJoinedRoom()
     {
         Debug.Log("DemoAnimator/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     #endregion
