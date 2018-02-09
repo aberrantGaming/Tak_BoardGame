@@ -2,81 +2,85 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Gameboard")]
-public class Board : ScriptableObject {
-
-    #region Properties
-
-    public int Pieces { get { return NumberOfNormalPieces; } }
-    public int Capstones { get { return NumberOfCapstones; } }
-    
-    #endregion
-
-    #region Variables
-
-    [SerializeField] private int boardSize = 5;
-    public int BoardSize { get { return boardSize; } }
-
-    [SerializeField] private string levelName = "Standard";      
-    public string LevelName { get { return levelName; } }
-
-    [SerializeField] private List<Tile> tiles;
-    public List<Tile> Tiles { get { return tiles; } }
-
-    #endregion
-
-    private void Awake()
+namespace Com.SeeSameGames.Tak
+{
+    [CreateAssetMenu(menuName = "Gameboard")]
+    public class Board : ScriptableObject
     {
-        PopulateTilesArray();
-    }
 
-    private void PopulateTilesArray()
-    {
-        tiles = new List<Tile>();
-        int volume = boardSize * boardSize;
+        #region Properties
 
-        for (int i = 0; i < volume; i++)
+        public int Pieces { get { return NumberOfNormalPieces; } }
+        public int Capstones { get { return NumberOfCapstones; } }
+
+        #endregion
+
+        #region Variables
+
+        [SerializeField] private int boardSize = 5;
+        public int BoardSize { get { return boardSize; } }
+
+        [SerializeField] private string levelName = "Standard";
+        public string LevelName { get { return levelName; } }
+
+        [SerializeField] private List<Tile> tiles;
+        public List<Tile> Tiles { get { return tiles; } }
+
+        #endregion
+
+        private void Awake()
         {
-            tiles.Add(new Tile());
+            PopulateTilesArray();
         }
-    }
-    
-    private int NumberOfNormalPieces
-    {
-        get
+
+        private void PopulateTilesArray()
         {
-            if (boardSize == 3)
-                return 10;
-            else if (boardSize == 4)
-                return 15;
-            else if (boardSize == 5)
-                return 21;
-            else if (boardSize == 6)
-                return 30;
-            else if (boardSize == 7)
-                return 40;
-            else if (boardSize == 8)
-                return 50;
-            else
-                return 0;                    
-        }
-    }
+            tiles = new List<Tile>();
+            int volume = boardSize * boardSize;
 
-    private int NumberOfCapstones
-    {
-        get
-        { 
-            if (boardSize == 5)
-                return 1;
-            else if (boardSize == 6)
-                return 1;
-            else if (boardSize == 7)
-                return 2;
-            else if (boardSize == 8)
-                return 2;
-            else
-                return 0;                    
+            for (int i = 0; i < volume; i++)
+            {
+                tiles.Add(new Tile());
+            }
         }
-    }
 
+        private int NumberOfNormalPieces
+        {
+            get
+            {
+                if (boardSize == 3)
+                    return 10;
+                else if (boardSize == 4)
+                    return 15;
+                else if (boardSize == 5)
+                    return 21;
+                else if (boardSize == 6)
+                    return 30;
+                else if (boardSize == 7)
+                    return 40;
+                else if (boardSize == 8)
+                    return 50;
+                else
+                    return 0;
+            }
+        }
+
+        private int NumberOfCapstones
+        {
+            get
+            {
+                if (boardSize == 5)
+                    return 1;
+                else if (boardSize == 6)
+                    return 1;
+                else if (boardSize == 7)
+                    return 2;
+                else if (boardSize == 8)
+                    return 2;
+                else
+                    return 0;
+            }
+        }
+
+    }
 }
