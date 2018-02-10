@@ -23,21 +23,16 @@ namespace Com.SeeSameGames.Tak
         #region Singleton Pattern
 
         protected GameManager() { }
-        private static GameManager instance = null;
         public event OnStateChangeHandler OnStateChange;
 
-        public static GameManager Instance
-        {
-            get
-            {
-                if (GameManager.instance == null)
-                {
-                    DontDestroyOnLoad(GameManager.instance);
-                    GameManager.instance = new GameManager();
-                }
+        public static GameManager Instance { get; private set; }
 
-                return GameManager.instance;
-            }
+        protected void Awake()
+        {
+            if (GameManager.Instance == null)
+                Instance = this;
+            else
+                DestroyObject(this);
         }
 
         #endregion
@@ -48,12 +43,25 @@ namespace Com.SeeSameGames.Tak
         public GameState PreviousGameState { get; private set; }
 
         #endregion
-        
-        #region MonoBehaviour Callbacks
 
+        #region MonoBehaviour Callbacks
+        
         protected void OnApplicationQuit()
         {
-            GameManager.instance = null;
+            GameManager.Instance = null;
+        }
+
+        #endregion
+
+        #region Photon Methods
+
+        /// <summary>
+        /// Called when the local player leaves the room.
+        /// </summary>
+        public void OnLeftRoom()
+        {
+            // Load launcher scene
+            SceneManager.LoadScene(0);      // TODO: Consider a refactor to load previous scene;
         }
 
         #endregion
@@ -67,7 +75,11 @@ namespace Com.SeeSameGames.Tak
             OnStateChange();
         }
 
+        public void LeaveRoom()
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+
         #endregion
-        
     }
 }

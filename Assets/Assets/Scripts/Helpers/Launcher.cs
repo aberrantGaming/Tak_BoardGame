@@ -30,7 +30,7 @@ namespace Com.SeeSameGames.Tak
         /// <summary>
         /// This Client's version number. Users are seperated from each other by gameversion (which allows you to make breaking changes).
         /// </summary>
-        string _gameVersion = "1";
+        private string _gameVersion = "1";
 
         #endregion
 
@@ -41,22 +41,9 @@ namespace Com.SeeSameGames.Tak
         /// </summary>
         private void Awake()
         {
-            // #NotImportant
-            // Force LogLevel.
-            PhotonNetwork.logLevel = Loglevel;
-
-            // #Critical 
-            // we don't join the lobby. There is no need to join a lobby to get the list of rooms.
-            PhotonNetwork.autoJoinLobby = false;
-
-            // #Critical
-            // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically.
-            PhotonNetwork.automaticallySyncScene = true;
+            PhotonNetworkInit();
         }
-
-        /// <summary>
-        /// MonoBehaviour method called on GameObject by Unity during initialization phase.
-        /// </summary>
+        
         private void Start()
         {
             progressLabel.SetActive(false);
@@ -66,7 +53,7 @@ namespace Com.SeeSameGames.Tak
         #endregion
 
         #region Public Methods
-
+        
         /// <summary>
         /// Start the connection process.
         /// - If already connected, we attempt joining a random room.
@@ -88,6 +75,25 @@ namespace Com.SeeSameGames.Tak
                 // #Critical, we must first and foremost connect to Photon Online Server.
                 PhotonNetwork.ConnectUsingSettings(_gameVersion);
             }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        protected void PhotonNetworkInit()
+        {
+            // #NotImportant
+            // Force LogLevel.
+            PhotonNetwork.logLevel = Loglevel;
+
+            // #Critical 
+            // we don't join the lobby. There is no need to join a lobby to get the list of rooms.
+            PhotonNetwork.autoJoinLobby = false;
+
+            // #Critical
+            // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically.
+            PhotonNetwork.automaticallySyncScene = true;
         }
 
         #endregion
