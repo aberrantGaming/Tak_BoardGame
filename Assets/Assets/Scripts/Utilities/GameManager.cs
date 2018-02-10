@@ -5,26 +5,66 @@ using UnityEngine.SceneManagement;
 
 namespace Com.SeeSameGames.Tak
 {
+    public enum GameState
+    {
+        INTRO,
+        MAIN_MENU,
+        SYSTEM_MENU,
+        PLAYING
+    }
+
+    public delegate void OnStateChangeHandler();
+
     public class GameManager : MonoBehaviour
     {
-        #region Photon Messages
-
         /// <summary>
-        /// Called when the local player leaves the room.
+        /// Ensures that our class has only one instance and provides a global point of access to it.
         /// </summary>
-        public void OnLeftRoom()
+        #region Singleton Pattern
+
+        protected GameManager() { }
+        private static GameManager instance = null;
+        public event OnStateChangeHandler OnStateChange;
+
+        public static GameManager Instance
         {
-            // Load launcher scene
-            SceneManager.LoadScene(0);      // TODO: Consider a refactor to load previous scene;
+            get
+            {
+                if (GameManager.instance == null)
+                {
+                    DontDestroyOnLoad(GameManager.instance);
+                    GameManager.instance = new GameManager();
+                }
+
+                return GameManager.instance;
+            }
+        }
+
+        #endregion
+
+        #region Public Variables
+
+        public GameState CurrentGameState { get; private set; }
+        public GameState PreviousGameState { get; private set; }
+
+        #endregion
+        
+        #region MonoBehaviour Callbacks
+
+        protected void OnApplicationQuit()
+        {
+            GameManager.instance = null;
         }
 
         #endregion
 
         #region Public Methods
 
-        public void LeaveRoom()
+        public void SetGameState(GameState state)
         {
-            PhotonNetwork.LeaveRoom();
+            this.PreviousGameState = this.CurrentGameState;
+            this.CurrentGameState = state;
+            OnStateChange();
         }
 
         #endregion
