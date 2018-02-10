@@ -43,6 +43,27 @@ namespace Com.SeeSameGames.Tak
 
         #endregion
 
+        #region Public Methods
+
+        public virtual void SystemResume_OnPress()
+        {
+            uc.ResetSystemUiElements();
+            // gm.SetGameState(ReturnToGameState);
+        }
+
+        public virtual void SystemQuitButton_OnPress()
+        {
+            uc.QuitToDesktop();
+        }
+
+        public virtual void SystemSettingsButton_OnPress()
+        {
+            uc.ToggleSystemMenu(false);
+            uc.ToggleSettingsMenu(true);
+        }
+
+        #endregion
+
         #region Private Methods
 
         protected virtual void UiInitilization()
