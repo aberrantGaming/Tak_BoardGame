@@ -25,27 +25,6 @@ namespace Com.SeeSameGames.Tak
 
         #region Public Methods
 
-        public virtual void ToggleSystemUI(bool value = new bool())
-        {
-            Debug.Log(value);
-            SystemUI.SetActive(value ? value : !SystemUI.activeSelf);
-        }
-
-        public virtual void ToggleSystemMenu(bool value = new bool())
-        {
-            SystemMenuGO.SetActive(value ? value : !SystemMenuGO.activeSelf);
-        }
-
-        public virtual void ToggleSettingsMenu(bool value = new bool())
-        {
-            SettingsMenuGO.SetActive(value ? value : !SettingsMenuGO.activeSelf);
-        }
-
-        public virtual void QuitToDesktop()
-        {
-            Application.Quit();
-        }
-
         public virtual void ResetSystemUiElements()
         {
             ToggleSystemUI(false);
@@ -53,7 +32,25 @@ namespace Com.SeeSameGames.Tak
             ToggleSettingsMenu(false);
         }
 
+        public virtual void QuitToDesktop()
+        {
+            Application.Quit();
+        }
 
+        public virtual void ToggleSystemUI(bool? value = null)
+        {
+            SystemUI.SetActive(value == null ? !SystemUI.activeSelf : value ?? false);
+        }
+
+        public virtual void ToggleSystemMenu(bool? value = null)
+        {
+            SystemMenuGO.SetActive(value == null ? !SystemMenuGO.activeSelf : value ?? false);
+        }
+
+        public virtual void ToggleSettingsMenu(bool? value = null)
+        {
+            SettingsMenuGO.SetActive(value == null ? !SettingsMenuGO.activeSelf : value ?? false);
+        }
 
         #endregion
     }
