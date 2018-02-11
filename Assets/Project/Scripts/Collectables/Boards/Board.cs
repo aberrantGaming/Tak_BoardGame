@@ -4,19 +4,19 @@ using UnityEngine;
 
 namespace Com.SeeSameGames.Tak
 {
-    [CreateAssetMenu(menuName = "Gameboard")]
+    [CreateAssetMenu(menuName = "Collectables/Gameboard")]
     public class Board : ScriptableObject
     {
 
-        #region Properties
+        #region Public Properties
 
         public int Pieces { get { return NumberOfNormalPieces; } }
         public int Capstones { get { return NumberOfCapstones; } }
 
         #endregion
 
-        #region Variables
-
+        #region Public Setters
+        
         [SerializeField] private int boardSize = 5;
         public int BoardSize { get { return boardSize; } }
 
@@ -27,6 +27,16 @@ namespace Com.SeeSameGames.Tak
         public List<Tile> Tiles { get { return tiles; } }
 
         #endregion
+
+        #region Public Variables
+
+        public string GameboardName = "_BoardName";
+        public string GameboardDesc = "_BoardDescription";
+
+        public GameObject GameboardPrefab;
+
+        #endregion
+
 
         private void Awake()
         {
