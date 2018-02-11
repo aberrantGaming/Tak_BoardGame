@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Com.SeeSameGames.Tak
 {
@@ -62,6 +60,11 @@ namespace Com.SeeSameGames.Tak
             uc.ToggleSettingsMenu(true);
         }
 
+        public virtual void CloseSystemUi()
+        {
+            uc.ResetSystemUiElements();
+        }
+
         #endregion
 
         #region Private Methods
@@ -81,7 +84,9 @@ namespace Com.SeeSameGames.Tak
 
         protected virtual void SystemInput()
         {
-            if (Input.GetKeyDown(SystemMenuInput))
+            if (Input.GetKeyDown(SystemMenuInput) && uc.SettingsMenuGO.activeSelf)
+                uc.ResetSystemUiElements();
+            else if (Input.GetKeyDown(SystemMenuInput))
                 uc.ToggleSystemUI();
         }
 

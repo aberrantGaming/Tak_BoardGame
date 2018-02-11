@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Com.SeeSameGames.Tak
 {
     public class UiMotor : MonoBehaviour
     {
-        #region Variables
+        #region PUblic Variables
 
         #region Booleans
 
