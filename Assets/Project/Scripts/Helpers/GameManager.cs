@@ -39,6 +39,11 @@ namespace Com.SeeSameGames.Tak
 
         #region Public Variables
 
+        [Header("|   PROFILE VARIABLES   |")]
+        public Box CurrentBox;
+        public Board CurrentBoard;
+        public Stones CurrentStones;
+
         public GameState CurrentGameState { get; private set; }
         public GameState PreviousGameState { get; private set; }
 
