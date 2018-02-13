@@ -2,18 +2,21 @@
 
 namespace Com.SeeSameGames.Tak
 {
-    public class UiInput : MonoBehaviour
+    public class SystemUiInput : MonoBehaviour
     {
         #region Public Variables
 
         public KeyCode SystemMenuInput = KeyCode.Escape;
+
+        public GameObject SystemUiCanvas;
+        public GameObject SettingsUiCanvas;
 
         #endregion
 
         #region Private Variables
 
         protected UiController uc;      // access to the UiController component
-
+        
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -31,7 +34,7 @@ namespace Com.SeeSameGames.Tak
 
         protected virtual void FixedUpdate()
         {
-
+            // UpdateCamera();
         }
 
         protected virtual void Update()
@@ -43,26 +46,27 @@ namespace Com.SeeSameGames.Tak
 
         #region Public Methods
 
-        public virtual void SystemResume_OnPress()
+        public virtual void SystemResumeBtn_OnPress()
         {
-            uc.ResetSystemUiElements();
+            uc.ToggleUiElement(SystemUiCanvas, false);
             // gm.SetGameState(ReturnToGameState);
         }
 
-        public virtual void SystemQuitButton_OnPress()
+        public virtual void SystemQuitBtn_OnPress()
         {
             uc.QuitToDesktop();
         }
 
-        public virtual void SystemSettingsButton_OnPress()
+        public virtual void SystemSettingsBtn_OnPress()
         {
-            uc.ToggleSystemMenu(false);
-            uc.ToggleSettingsMenu(true);
+            uc.ToggleUiElement(SystemUiCanvas, false);
+            uc.ToggleUiElement(SettingsUiCanvas, true);
         }
 
         public virtual void CloseSystemUi()
         {
-            uc.ResetSystemUiElements();
+            uc.ToggleUiElement(SystemUiCanvas, false);
+            uc.ToggleUiElement(SettingsUiCanvas, false);
         }
 
         #endregion
@@ -74,22 +78,18 @@ namespace Com.SeeSameGames.Tak
             uc = GetComponent<UiController>();
 
             if (uc != null)
+            {
                 uc.Initialize();
+                uc.ToggleUiElement(SystemUiCanvas, false);
+            }
         }
 
         protected virtual void InputHandle()
         {
-            SystemInput();
+            if (Input.GetKeyDown(SystemMenuInput))
+                uc.ToggleUiElement(SystemUiCanvas);
         }
-
-        protected virtual void SystemInput()
-        {
-            if (Input.GetKeyDown(SystemMenuInput) && uc.SettingsMenuGO.activeSelf)
-                uc.ResetSystemUiElements();
-            else if (Input.GetKeyDown(SystemMenuInput))
-                uc.ToggleSystemUI();
-        }
-
+        
         #endregion
     }
 }

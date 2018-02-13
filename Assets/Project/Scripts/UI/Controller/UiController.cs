@@ -22,6 +22,7 @@ namespace Com.SeeSameGames.Tak
 
         #region Private Variables
 
+        GameManager gm;
         static string[] resPresentation;
         static Resolution[] availResolutions;
 
@@ -29,9 +30,14 @@ namespace Com.SeeSameGames.Tak
 
         #region MonoBehaviour Callbacks
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
-            ResetSystemUiElements();
+            gm = GameManager.Instance;
+            gm.OnStateChange += HandleOnStateChange;
+        }
+
+        protected virtual void Start()
+        {            
             StoreAvailableResolutions();
             PopulateResolutionsDropdown();
         }
@@ -40,11 +46,12 @@ namespace Com.SeeSameGames.Tak
 
         #region Public Methods
 
-        public virtual void ResetSystemUiElements()
+        public void HandleOnStateChange()
         {
-            ToggleSystemUI(false);
-            ToggleSystemMenu(true);
-            ToggleSettingsMenu(false);
+            switch (gm.CurrentGameState)
+            {
+                
+            }
         }
 
         public virtual void QuitToDesktop()
@@ -52,19 +59,14 @@ namespace Com.SeeSameGames.Tak
             Application.Quit();
         }
 
-        public virtual void ToggleSystemUI(bool? value = null)
+        /// <summary>
+        /// Toggle a UI Element On/Off
+        /// </summary>
+        /// <param name="uiElement"></param>
+        /// <param name="display"></param>
+        public virtual void ToggleUiElement(GameObject uiElement, bool? display = null)
         {
-            SystemUI.SetActive(value == null ? !SystemUI.activeSelf : value ?? false);
-        }
-
-        public virtual void ToggleSystemMenu(bool? value = null)
-        {
-            SystemMenuGO.SetActive(value == null ? !SystemMenuGO.activeSelf : value ?? false);
-        }
-
-        public virtual void ToggleSettingsMenu(bool? value = null)
-        {
-            SettingsMenuGO.SetActive(value == null ? !SettingsMenuGO.activeSelf : value ?? false);
+            uiElement.SetActive(display == null ? !uiElement.activeSelf : display ?? false);
         }
 
         public virtual void SetVolume(float volume)
