@@ -41,6 +41,8 @@ namespace Com.SeeSameGames.Tak
 
         public virtual void Resume()
         {
+            isPaused = false;
+            ToggleUiElement(SystemUiCanvas, false);
             gm.SetGameState(ResumeToGameState);
         }
 
@@ -71,11 +73,6 @@ namespace Com.SeeSameGames.Tak
                 case (GameState.PAUSED):
                     isPaused = true;
                     ToggleUiElement(SystemUiCanvas, true);
-                    break;
-
-                default:
-                    isPaused = false;
-                    Resume();
                     break;
             }
         }
