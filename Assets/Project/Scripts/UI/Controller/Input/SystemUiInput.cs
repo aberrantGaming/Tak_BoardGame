@@ -29,12 +29,10 @@ namespace Com.SeeSameGames.Tak
         protected virtual void LateUpdate()
         {
             InputHandle();
-            // UpdateUiStates();
         }
 
         protected virtual void FixedUpdate()
         {
-            // UpdateCamera();
         }
 
         protected virtual void Update()
@@ -49,7 +47,6 @@ namespace Com.SeeSameGames.Tak
         public virtual void SystemResumeBtn_OnPress()
         {
             uc.ToggleUiElement(SystemUiCanvas, false);
-            // gm.SetGameState(ReturnToGameState);
         }
 
         public virtual void SystemQuitBtn_OnPress()

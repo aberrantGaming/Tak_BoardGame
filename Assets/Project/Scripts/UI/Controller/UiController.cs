@@ -14,8 +14,6 @@ namespace Com.SeeSameGames.Tak
         public AudioMixer audioMixer;
 
         public GameObject SystemUI;
-        public GameObject SystemMenuGO;
-        public GameObject SettingsMenuGO;
         public TMPro.TMP_Dropdown SettingsResolutionDropdownGO;
 
         #endregion
@@ -54,11 +52,6 @@ namespace Com.SeeSameGames.Tak
             }
         }
 
-        public virtual void QuitToDesktop()
-        {
-            Application.Quit();
-        }
-
         /// <summary>
         /// Toggle a UI Element On/Off
         /// </summary>
@@ -67,6 +60,11 @@ namespace Com.SeeSameGames.Tak
         public virtual void ToggleUiElement(GameObject uiElement, bool? display = null)
         {
             uiElement.SetActive(display == null ? !uiElement.activeSelf : display ?? false);
+        }
+
+        public virtual void QuitToDesktop()
+        {
+            Application.Quit();
         }
 
         public virtual void SetVolume(float volume)
