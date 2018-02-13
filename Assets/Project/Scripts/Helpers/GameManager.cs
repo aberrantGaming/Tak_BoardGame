@@ -1,27 +1,22 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Com.SeeSameGames.Tak
 {
-    public enum GameState
-    {
-        INTRO,
-        MAIN_MENU,
-        SYSTEM_MENU,
-        PLAYING
-    }
+    public enum GameState { INTRO, PAUSED, LAUNCHER, GAME, END_GAME, QUIT }
 
     public delegate void OnStateChangeHandler();
 
     public class GameManager : MonoBehaviour
     {
+        #region Singleton Pattern
+
         /// <summary>
         /// Ensures that our class has only one instance and provides a global point of access to it.
         /// </summary>
-        #region Singleton Pattern
-
         protected GameManager() { }
         public event OnStateChangeHandler OnStateChange;
 
@@ -39,13 +34,21 @@ namespace Com.SeeSameGames.Tak
 
         #region Public Variables
 
+        [Header("|   PROFILE VARIABLES   |")]
+        public Box CurrentBox;
+        public Board CurrentBoard;
+        public Stones CurrentStones;
+
+        #endregion
+
+        #region Private Variables
+
         public GameState CurrentGameState { get; private set; }
-        public GameState PreviousGameState { get; private set; }
 
         #endregion
 
         #region MonoBehaviour Callbacks
-        
+
         protected void OnApplicationQuit()
         {
             GameManager.Instance = null;
@@ -70,7 +73,6 @@ namespace Com.SeeSameGames.Tak
 
         public void SetGameState(GameState state)
         {
-            this.PreviousGameState = this.CurrentGameState;
             this.CurrentGameState = state;
             OnStateChange();
         }
@@ -81,5 +83,6 @@ namespace Com.SeeSameGames.Tak
         }
 
         #endregion
+
     }
 }
