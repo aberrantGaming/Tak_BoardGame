@@ -7,15 +7,13 @@ namespace Com.SeeSameGames.Tak
         #region Public Variables
 
         public KeyCode SystemMenuInput = KeyCode.Escape;
-
-        public GameObject SystemUiCanvas;
-        public GameObject SettingsUiCanvas;
-
+                
         #endregion
 
         #region Private Variables
 
         protected UiController uc;      // access to the UiController component
+        protected GameManager gm;       // access to Game State
         
         #endregion
 
@@ -37,7 +35,7 @@ namespace Com.SeeSameGames.Tak
 
         protected virtual void Update()
         {
-            uc.UpdateAnimator();
+            //uc.UpdateAnimator();
         }
 
         #endregion
@@ -46,7 +44,7 @@ namespace Com.SeeSameGames.Tak
 
         public virtual void SystemResumeBtn_OnPress()
         {
-            uc.ToggleUiElement(SystemUiCanvas, false);
+            uc.ToggleUiElement(gameObject, false);
         }
 
         public virtual void SystemQuitBtn_OnPress()
@@ -56,15 +54,8 @@ namespace Com.SeeSameGames.Tak
 
         public virtual void SystemSettingsBtn_OnPress()
         {
-            uc.ToggleUiElement(SystemUiCanvas, false);
-            uc.ToggleUiElement(SettingsUiCanvas, true);
-        }
-
-        public virtual void CloseSystemUi()
-        {
-            uc.ToggleUiElement(SystemUiCanvas, false);
-            uc.ToggleUiElement(SettingsUiCanvas, false);
-        }
+            //uc.LaunchSettingsUi();
+        }        
 
         #endregion
 
@@ -77,14 +68,16 @@ namespace Com.SeeSameGames.Tak
             if (uc != null)
             {
                 uc.Initialize();
-                uc.ToggleUiElement(SystemUiCanvas, false);
+                uc.ToggleUiElement(gameObject, false);
             }
         }
 
         protected virtual void InputHandle()
         {
             if (Input.GetKeyDown(SystemMenuInput))
-                uc.ToggleUiElement(SystemUiCanvas);
+            {
+                    //uc.Resume();
+            }
         }
         
         #endregion

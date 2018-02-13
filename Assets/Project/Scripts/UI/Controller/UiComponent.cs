@@ -1,37 +1,28 @@
 ﻿using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Com.SeeSameGames.Tak
 {
-    public class UiMotor : MonoBehaviour
+    public class UiComponent : MonoBehaviour
     {
-        #region PUblic Variables
-
-        #region Booleans
-
+        #region Public Variables
+        
         [HideInInspector]
         public bool 
-            isPaused;
-
-        [HideInInspector]
-        public bool
-            inSystemMenu,
-            inSettingsMenu;
-
-        #endregion
-
-        #region Components
+            isPaused = false;
 
         [HideInInspector]
         public Animator animator;
+        [HideInInspector]
+        public AudioMixer audioMixer;
 
-        #endregion
-        
         #endregion
 
         public void Initialize()
         {
             // access components
             animator = GetComponent<Animator>();
+            audioMixer = GetComponent<AudioMixer>();
         }
     }
 }

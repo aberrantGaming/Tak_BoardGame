@@ -1,6 +1,6 @@
 ﻿namespace Com.SeeSameGames.Tak
 {
-    public class UiAnimator : UiMotor
+    public class UiAnimator : UiComponent
     {
         #region MonoBehaviour Callbacks
 

@@ -17,15 +17,13 @@ namespace Com.SeeSameGames.Tak
         {
             gm = GameManager.Instance;
             gm.OnStateChange += HandleOnStateChange;
-
-            Debug.Log("Current game state when Awakes: " + gm.CurrentGameState);
+            
         }
 
         protected void Start()
         {
-            Invoke("LoadLevel", 3f);
-
-            Debug.Log("Current game state when Starts: " + gm.CurrentGameState);
+        //    Invoke("LoadLevel", 3f);
+        
         }
 
         #endregion
@@ -34,7 +32,6 @@ namespace Com.SeeSameGames.Tak
 
         public void HandleOnStateChange()
         {
-            Debug.Log("Handling state change to: " + gm.CurrentGameState);
         }
 
         #endregion
@@ -43,7 +40,7 @@ namespace Com.SeeSameGames.Tak
 
         protected void LoadLevel()
         {
-            gm.SetGameState(GameState.MAIN_MENU);
+            gm.SetGameState(GameState.LAUNCHER);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
