@@ -15,7 +15,6 @@ using UnityEngine;
         #region Private Variables
 
         protected UiController uc;      // access to the UiController component
-        protected GameManager gm;       // access to Game State
         
         #endregion
 
@@ -43,6 +42,17 @@ using UnityEngine;
         #endregion
 
         #region Public Methods
+
+        public virtual void Resume_OnButtonPress()
+        {
+            uc.Resume();
+            uc.ToggleUiElement(SystemUiCanvas, false);
+        }
+
+        public virtual void Quit_OnButtonPress()
+        {
+            uc.QuitToDesktop();
+        }
 
         #endregion
 

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Com.SeeSameGames.Tak
 {
-    public enum GameState { INTRO, PAUSED, LAUNCHER, GAME, END_GAME, QUIT }
+    public enum GameState { NULL, INTRO, PAUSED, LAUNCHER, GAME, END_GAME, QUIT }
 
     public delegate void OnStateChangeHandler();
 
@@ -67,6 +67,11 @@ namespace Com.SeeSameGames.Tak
             SceneManager.LoadScene(0);      // TODO: Consider a refactor to load previous scene;
         }
 
+        public void LeaveRoom()
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+
         #endregion
 
         #region Public Methods
@@ -77,12 +82,7 @@ namespace Com.SeeSameGames.Tak
             OnStateChange();
         }
 
-        public void LeaveRoom()
-        {
-            PhotonNetwork.LeaveRoom();
-        }
 
         #endregion
-
     }
 }

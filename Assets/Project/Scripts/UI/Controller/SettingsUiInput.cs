@@ -35,6 +35,11 @@ namespace Com.SeeSameGames.Tak
 
         #region Public Methods
 
+        public virtual void OpenSettingsMenu()
+        {
+            uc.ToggleUiElement(SettingsUiCanvas, true);
+        }
+
         public virtual void SetVolume(float volume)
         {
             uc.audioMixer.SetFloat("volume", volume);

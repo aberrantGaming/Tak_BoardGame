@@ -10,6 +10,7 @@ namespace Com.SeeSameGames.Tak
         #region Public Variables
 
         public GameObject SystemUiCanvas;
+        public GameObject SettingsUiCanvas;
 
         #endregion
 
@@ -42,13 +43,12 @@ namespace Com.SeeSameGames.Tak
         public virtual void Resume()
         {
             isPaused = false;
-            ToggleUiElement(SystemUiCanvas, false);
             gm.SetGameState(ResumeToGameState);
         }
 
         public virtual void QuitToDesktop()
         {
-            Application.Quit();
+            gm.SetGameState(GameState.QUIT);
         }
 
         /// <summary>
@@ -71,10 +71,26 @@ namespace Com.SeeSameGames.Tak
             switch (gm.CurrentGameState)
             {
                 case (GameState.PAUSED):
-                    isPaused = true;
-                    ToggleUiElement(SystemUiCanvas, true);
+                    OnPaused();
+                    break;
+
+                case (GameState.QUIT):
+                    OnQuit();
                     break;
             }
+        }
+
+        protected virtual void OnPaused()
+        {
+            isPaused = true;
+            ToggleUiElement(SystemUiCanvas, true);
+            ToggleUiElement(SettingsUiCanvas, false);
+        }
+
+        protected virtual void OnQuit()
+        {
+            Debug.Log("Quitting...");
+            Application.Quit();
         }
 
         #endregion
