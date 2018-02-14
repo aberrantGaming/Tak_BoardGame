@@ -60,6 +60,11 @@ namespace Com.SeeSameGames.Tak
             OnSettings();            
         }
 
+        public virtual void ConcedeMatch()
+        {
+            gm.LeaveRoom();
+        }
+
         public virtual void Quit()
         {
             gm.SetGameState(GameState.QUIT);
