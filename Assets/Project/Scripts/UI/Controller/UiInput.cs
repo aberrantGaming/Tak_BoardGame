@@ -6,11 +6,6 @@ using UnityEngine;
 {
     public class UiInput : MonoBehaviour
     {
-        #region Public Variables
-
-        public KeyCode SystemMenuInput = KeyCode.Escape;
-        
-        #endregion
 
         #region Private Variables
 
@@ -41,21 +36,6 @@ using UnityEngine;
 
         #endregion
 
-        #region Public Methods
-
-        public virtual void Resume_OnButtonPress()
-        {
-            uc.Resume();
-            uc.ToggleUiElement(SystemUiCanvas, false);
-        }
-
-        public virtual void Quit_OnButtonPress()
-        {
-            uc.QuitToDesktop();
-        }
-
-        #endregion
-
         #region Private Methods
 
         protected virtual void UiInitilization()
@@ -70,13 +50,6 @@ using UnityEngine;
 
         protected virtual void InputHandle()
         {
-            if (Input.GetKeyDown(SystemMenuInput))
-            {
-                if (!uc.isPaused)
-                    uc.Pause();
-                else
-                    uc.Resume();
-            }
 
         }
 

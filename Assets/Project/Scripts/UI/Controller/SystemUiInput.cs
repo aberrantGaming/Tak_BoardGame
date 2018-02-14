@@ -2,81 +2,43 @@
 
 namespace Com.SeeSameGames.Tak
 {
-    public class SystemUiInput : MonoBehaviour
+    public class SystemUiInput : UiInput
     {
         #region Public Variables
 
         public KeyCode SystemMenuInput = KeyCode.Escape;
-                
-        #endregion
-
-        #region Private Variables
-
-        protected UiController uc;      // access to the UiController component
-        protected GameManager gm;       // access to Game State
-        
-        #endregion
-
-        #region MonoBehaviour Callbacks
-
-        protected virtual void Start()
-        {
-            UiInitilization();
-        }
-
-        protected virtual void LateUpdate()
-        {
-            InputHandle();
-        }
-
-        protected virtual void FixedUpdate()
-        {
-        }
-
-        protected virtual void Update()
-        {
-            //uc.UpdateAnimator();
-        }
 
         #endregion
 
         #region Public Methods
 
-        public virtual void SystemResumeBtn_OnPress()
+        public virtual void Resume_OnButtonPress()
         {
-            uc.ToggleUiElement(gameObject, false);
+            uc.Resume();
         }
 
-        public virtual void SystemQuitBtn_OnPress()
+        public virtual void Quit_OnButtonPress()
         {
-            uc.QuitToDesktop();
+            uc.Quit();
         }
-
-        public virtual void SystemSettingsBtn_OnPress()
-        {
-            //uc.LaunchSettingsUi();
-        }        
 
         #endregion
 
         #region Private Methods
 
-        protected virtual void UiInitilization()
-        {
-            uc = GetComponent<UiController>();
-
-            if (uc != null)
-            {
-                uc.Initialize();
-                uc.ToggleUiElement(gameObject, false);
-            }
-        }
-
-        protected virtual void InputHandle()
+        protected override void InputHandle()
         {
             if (Input.GetKeyDown(SystemMenuInput))
             {
-                    //uc.Resume();
+                {
+                    if (Input.GetKeyDown(SystemMenuInput))
+                    {
+                        if (!uc.isPaused)
+                            uc.Pause();
+                        else
+                            uc.Resume();
+                    }
+                }
             }
         }
         

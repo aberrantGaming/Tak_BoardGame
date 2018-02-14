@@ -5,11 +5,15 @@ using UnityEngine.SceneManagement;
 
 namespace Com.SeeSameGames.Tak
 {
-    public class LauncherUiInput : MonoBehaviour
+    public class LauncherUiInput : UiInput
     {
-        public void LauncherPlayBtn_OnPress()
+        public void Quickmatch_OnButtonPress()
         {
-            Debug.Log("PlayGame");
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+
+        public void PracticeMatch_OnButtonPress()
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
