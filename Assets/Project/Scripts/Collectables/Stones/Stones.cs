@@ -13,13 +13,13 @@ namespace Com.SeeSameGames.Tak
         public string StonesDesc = "_StonesDescription";
 
         public Sprite StonesSprite;
-        public GameObject DarkCapPrefab;
-        public GameObject DarkStandingPrefab;
-        public GameObject LightCapPrefab;
-        public GameObject LightStandingPrefab;
 
+        public GameObject CapStoneDark;
+        public GameObject FlatStoneDark;
 
-
+        public GameObject CapStoneLight;
+        public GameObject FlatStoneLight;
+        
         #endregion
     }
 }

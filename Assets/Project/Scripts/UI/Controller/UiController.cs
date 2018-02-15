@@ -10,13 +10,13 @@ namespace Com.SeeSameGames.Tak
         #region Public Variables
 
         public GameObject SystemUiCanvas;
+        public GameObject SettingsUiCanvas;
 
         #endregion
 
         #region Private Variables
 
         protected GameManager gm;
-
         protected GameState ResumeToGameState;
 
         #endregion
@@ -35,20 +35,39 @@ namespace Com.SeeSameGames.Tak
 
         public virtual void Pause()
         {
+            if (gm.CurrentGameState == GameState.INTRO)
+                return;
+
             ResumeToGameState = gm.CurrentGameState;
             gm.SetGameState(GameState.PAUSED);
         }
 
         public virtual void Resume()
         {
-            isPaused = false;
-            ToggleUiElement(SystemUiCanvas, false);
+            if (gm.CurrentGameState != GameState.PAUSED)
+                return;
+
             gm.SetGameState(ResumeToGameState);
+
+            OnResume();
         }
 
-        public virtual void QuitToDesktop()
+        public virtual void OpenSettings()
         {
-            Application.Quit();
+            if (gm.CurrentGameState != GameState.PAUSED)
+                return;
+
+            OnSettings();            
+        }
+
+        public virtual void ConcedeMatch()
+        {
+            gm.LeaveRoom();
+        }
+
+        public virtual void Quit()
+        {
+            gm.SetGameState(GameState.EXITING_APP);
         }
 
         /// <summary>
@@ -71,10 +90,41 @@ namespace Com.SeeSameGames.Tak
             switch (gm.CurrentGameState)
             {
                 case (GameState.PAUSED):
-                    isPaused = true;
-                    ToggleUiElement(SystemUiCanvas, true);
+                    OnPaused();
+                    break;
+
+                case (GameState.EXITING_APP):
+                    OnQuit();
                     break;
             }
+        }
+
+        protected virtual void OnPaused()
+        {
+            isPaused = true;
+
+            ToggleUiElement(SystemUiCanvas, true);
+            ToggleUiElement(SettingsUiCanvas, false);
+        }
+
+        protected virtual void OnResume()
+        {
+            isPaused = false;
+
+            ToggleUiElement(SystemUiCanvas, false);
+            ToggleUiElement(SettingsUiCanvas, false);
+        }            
+
+        protected virtual void OnQuit()
+        {
+            Debug.Log("Quitting...");
+            Application.Quit();
+        }
+
+        protected virtual void OnSettings()
+        {
+            ToggleUiElement(SystemUiCanvas, false);
+            ToggleUiElement(SettingsUiCanvas, true);
         }
 
         #endregion

@@ -32,6 +32,13 @@ namespace Com.SeeSameGames.Tak
         /// </summary>
         private string _gameVersion = "1";
 
+        /// <summary>
+        /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon, 
+        /// we need to keep track of this to properly adjust the behavior when we receive call back by Photon.
+        /// Typically this is used for the OnConnectedToMaster() callback.
+        /// </summary>
+        bool isConnecting;
+
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -61,14 +68,20 @@ namespace Com.SeeSameGames.Tak
         /// </summary>
         public void Connect()
         {
+            // keep track of the will to join a room, because when we come back from the game we will get a callback that we are connected, so we need to know what to do then
+            isConnecting = true;
+
             progressLabel.SetActive(true);
             controlPanel.SetActive(false);
 
             // we check if we are connected or not, we join if we are, else we initiate the connection to the server.
             if (PhotonNetwork.connected)
             {
-                // #Critical we need at this point to attempt joining a Random Room. If it fails, we'll get notified in OnPhotonRandomJoinFailed() and we'll create one.
-                PhotonNetwork.JoinRandomRoom();
+                if (isConnecting)
+                {
+                    // #Critical we need at this point to attempt joining a Random Room. If it fails, we'll get notified in OnPhotonRandomJoinFailed() and we'll create one.
+                    PhotonNetwork.JoinRandomRoom();
+                }
             }
             else
             {
@@ -127,7 +140,7 @@ namespace Com.SeeSameGames.Tak
         {
             Debug.Log("DemoAnimator/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.");
 
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
         #endregion

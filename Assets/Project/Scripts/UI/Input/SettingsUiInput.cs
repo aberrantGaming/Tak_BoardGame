@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Com.SeeSameGames.Tak
 {
-    public class SettingsUiInput : MonoBehaviour
+    public class SettingsUiInput : UiInput
     {
         #region Public Variables
 
@@ -16,17 +16,17 @@ namespace Com.SeeSameGames.Tak
 
         #region Private Variables
 
-        protected UiController uc;      // access to the UiController component
-
         static string[] resPresentation;
         static Resolution[] availResolutions;
 
         #endregion
 
         #region MonoBehaviour Callbacks
-
-        protected virtual void Start()
+        
+        protected override void Start()
         {
+            base.Start();
+
             StoreAvailableResolutions();
             PopulateResolutionsDropdown();
         }
@@ -34,6 +34,11 @@ namespace Com.SeeSameGames.Tak
         #endregion
 
         #region Public Methods
+
+        public virtual void Settings_OnButtonPress()
+        {
+            uc.OpenSettings();
+        }
 
         public virtual void SetVolume(float volume)
         {

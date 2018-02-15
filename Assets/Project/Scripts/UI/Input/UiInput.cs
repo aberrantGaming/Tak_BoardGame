@@ -6,16 +6,10 @@ using UnityEngine;
 {
     public class UiInput : MonoBehaviour
     {
-        #region Public Variables
-
-        public KeyCode SystemMenuInput = KeyCode.Escape;
-        
-        #endregion
 
         #region Private Variables
 
         protected UiController uc;      // access to the UiController component
-        protected GameManager gm;       // access to Game State
         
         #endregion
 
@@ -42,10 +36,6 @@ using UnityEngine;
 
         #endregion
 
-        #region Public Methods
-
-        #endregion
-
         #region Private Methods
 
         protected virtual void UiInitilization()
@@ -60,13 +50,6 @@ using UnityEngine;
 
         protected virtual void InputHandle()
         {
-            if (Input.GetKeyDown(SystemMenuInput))
-            {
-                if (!uc.isPaused)
-                    uc.Pause();
-                else
-                    uc.Resume();
-            }
 
         }
 

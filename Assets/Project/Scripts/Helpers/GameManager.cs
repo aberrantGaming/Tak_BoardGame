@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 
 namespace Com.SeeSameGames.Tak
 {
-    public enum GameState { INTRO, PAUSED, LAUNCHER, GAME, END_GAME, QUIT }
+    public enum GameState { NULL, INTRO, PAUSED, IN_LAUNCHER, STARTING_MATCH, PLAYERS_TURN, OPPONENTS_TURN, ENDING_MATCH, EXITING_APP }
 
     public delegate void OnStateChangeHandler();
 
-    public class GameManager : MonoBehaviour
+    public class GameManager : Photon.PunBehaviour
     {
         #region Singleton Pattern
 
@@ -32,15 +32,6 @@ namespace Com.SeeSameGames.Tak
 
         #endregion
 
-        #region Public Variables
-
-        [Header("|   PROFILE VARIABLES   |")]
-        public Box CurrentBox;
-        public Board CurrentBoard;
-        public Stones CurrentStones;
-
-        #endregion
-
         #region Private Variables
 
         public GameState CurrentGameState { get; private set; }
@@ -54,18 +45,33 @@ namespace Com.SeeSameGames.Tak
             GameManager.Instance = null;
         }
 
-        #endregion
+        #region PunBehaviour Callbacks
 
-        #region Photon Methods
-
-        /// <summary>
-        /// Called when the local player leaves the room.
-        /// </summary>
-        public void OnLeftRoom()
+        public override void OnPhotonPlayerConnected(PhotonPlayer otherPlayer)
         {
-            // Load launcher scene
-            SceneManager.LoadScene(0);      // TODO: Consider a refactor to load previous scene;
+            Debug.Log("OnPhotonPlayerConnected() " + otherPlayer.NickName);
+
+            if (PhotonNetwork.isMasterClient)
+            {
+                Debug.Log("OnPhotonPlayerConnected isMasterClient " + PhotonNetwork.isMasterClient);
+
+                LoadArena();
+            }
         }
+
+        public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
+        {
+            Debug.Log("OnPhotonPlayerDisconnected() " + otherPlayer.NickName);
+
+            if (PhotonNetwork.isMasterClient)
+            {
+                Debug.Log("OnPhotonPlayerDisonnected isMasterClient " + PhotonNetwork.isMasterClient);
+                
+                LoadArena();
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -77,6 +83,15 @@ namespace Com.SeeSameGames.Tak
             OnStateChange();
         }
 
+        /// <summary>
+        /// Called when the local player leaves the room.
+        /// </summary>
+        public override void OnLeftRoom()
+        {
+            // Load launcher scene
+            SceneManager.LoadScene(0);      // TODO: Consider a refactor to load previous scene;
+        }
+
         public void LeaveRoom()
         {
             PhotonNetwork.LeaveRoom();
@@ -84,5 +99,19 @@ namespace Com.SeeSameGames.Tak
 
         #endregion
 
+        #region Private Methods
+
+        protected void LoadArena()
+        {
+            if (!PhotonNetwork.isMasterClient)
+                Debug.LogError("PhotonNetwork : Trying to load a level but we are not the master client");
+
+            Debug.Log("PhotonNetwork : Loading Level. ");
+            PhotonNetwork.LoadLevel("Arena");
+        }
+
+        
+
+        #endregion
     }
 }
