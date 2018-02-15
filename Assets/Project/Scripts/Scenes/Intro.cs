@@ -52,7 +52,7 @@ namespace Com.SeeSameGames.Tak
 
         protected void LoadLauncher()
         {
-            gm.SetGameState(GameState.LAUNCHER);
+            gm.SetGameState(GameState.IN_LAUNCHER);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 

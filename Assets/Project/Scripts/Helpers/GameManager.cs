@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Com.SeeSameGames.Tak
 {
-    public enum GameState { NULL, INTRO, PAUSED, LAUNCHER, GAME, END_GAME, QUIT }
+    public enum GameState { NULL, INTRO, PAUSED, IN_LAUNCHER, STARTING_MATCH, ENDING_MATCH, EXITING_APP }
 
     public delegate void OnStateChangeHandler();
 

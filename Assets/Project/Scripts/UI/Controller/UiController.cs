@@ -67,7 +67,7 @@ namespace Com.SeeSameGames.Tak
 
         public virtual void Quit()
         {
-            gm.SetGameState(GameState.QUIT);
+            gm.SetGameState(GameState.EXITING_APP);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Com.SeeSameGames.Tak
                     OnPaused();
                     break;
 
-                case (GameState.QUIT):
+                case (GameState.EXITING_APP):
                     OnQuit();
                     break;
             }
