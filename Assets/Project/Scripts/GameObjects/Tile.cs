@@ -8,7 +8,7 @@ namespace Com.SeeSameGames.Tak
     public class Tile : MonoBehaviour
     {
 
-        public int tileID;
+        public int tileID = -1;
 
         private Stone lastStoneAdded;
                 

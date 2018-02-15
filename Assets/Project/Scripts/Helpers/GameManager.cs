@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Com.SeeSameGames.Tak
 {
-    public enum GameState { NULL, INTRO, PAUSED, IN_LAUNCHER, STARTING_MATCH, ENDING_MATCH, EXITING_APP }
+    public enum GameState { NULL, INTRO, PAUSED, IN_LAUNCHER, STARTING_MATCH, PLAYERS_TURN, OPPONENTS_TURN, ENDING_MATCH, EXITING_APP }
 
     public delegate void OnStateChangeHandler();
 
@@ -29,15 +29,6 @@ namespace Com.SeeSameGames.Tak
             else
                 DestroyObject(this);
         }
-
-        #endregion
-
-        #region Public Variables
-
-        [Header("|   PROFILE VARIABLES   |")]
-        public Box CurrentBox;
-        public Board CurrentBoard;
-        public Stones CurrentStones;
 
         #endregion
 

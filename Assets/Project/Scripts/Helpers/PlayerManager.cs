@@ -28,7 +28,8 @@ namespace Com.SeeSameGames.Tak
 
         #region  Properties
 
-        public bool PlayersTurn { get { return (gm.CurrentGameState == GameState.PLAYERS_TURN); } private set { } }
+        //public bool PlayersTurn { get { return (gm.CurrentGameState == GameState.PLAYERS_TURN); } private set { } }
+        public bool PlayersTurn = true;
 
 
         // Expose our Auto Properties to the Unity Inspector.
@@ -49,10 +50,11 @@ namespace Com.SeeSameGames.Tak
         #region Private Variables
 
         GameManager gm;
+        CommandManager cm = new CommandManager();
 
-
-        Queue<Stone> StonesBag = new Queue<Stone>();    // This object represents the "deck" that the player draws new stones from
-        Queue<Stone> HeldStack = new Queue<Stone>();    // This object represents what the player is "holding" in hand
+        int CarryLimit = 5;
+        StoneColor PlayerColor;
+        Queue<Stone> Hand = new Queue<Stone>();    // This object represents what the player is "holding" in hand
 
         #endregion
 
@@ -62,6 +64,11 @@ namespace Com.SeeSameGames.Tak
         {
             if (PlayersTurn)
                 HandleInput();
+        }
+
+        protected void FixedUpdate()
+        {
+            cm.ProcessPendingCommands();
         }
 
         /// <summary>
@@ -81,27 +88,67 @@ namespace Com.SeeSameGames.Tak
 
         protected void HandleOnStateChange()
         {
+            switch (gm.CurrentGameState)
+            {
+                case (GameState.STARTING_MATCH): OnMatchStarting(); break;
+            }
         }
 
         protected void HandleInput()
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+                if (Physics.Raycast(ray, out hit, 100.0f))
+                {
+                    GameObject selectedTransform = hit.transform.gameObject;
+
+                    Tile selectedTile = selectedTransform.GetComponent<Tile>();
+                    if (selectedTile != null)
+                        SelectTile(selectedTile);
+
+                    StonesBag selectedStonesBag = selectedTransform.GetComponent<StonesBag>();
+                    if (selectedStonesBag != null)
+                        SelectStonesBag(selectedStonesBag);
+
+                    Stone selectedStone = selectedTransform.GetComponent<Stone>();
+                    if (selectedStone != null)
+                        SelectStone(selectedStone);                    
+                }
+            }
         }
 
         /// <summary>
-        ///     Request a new Stone from the StonesBag
+        ///     Request to pick up a stack from the tile.
         /// </summary>
-        private void DrawStone()
+        private void RequestStackPickup(Tile _source)
         {
-            // Clear the current selection and draw a new stone.
-            HeldStack.Clear();
-            HeldStack.Enqueue(StonesBag.Dequeue());
+            PickupStack pickupCommand = new PickupStack(_source, PlayerColor, CarryLimit);
+            cm.AddCommand(pickupCommand);
         }
 
-        private void PlaceStone(Tile destination, Stone stone)
+        private void SelectStone(Stone _stone)
         {
-            if (!destination.IsBlocked)
-                destination.Stack.Enqueue(HeldStack.Dequeue());
+            Debug.Log("Stone Selected: " + _stone.name);
+        }
+
+        private void SelectTile(Tile _tile)
+        {
+            RequestStackPickup(_tile);
+            Debug.Log("Tile Selected: " + _tile.name);
+        }
+
+        private void SelectStonesBag(StonesBag _stonesBag)
+        {
+            Debug.Log("Stones Bag Selected: " +_stonesBag.name);
+        }
+
+        private void OnMatchStarting()
+        {
+            CarryLimit = 5; // TODO: REPLACE with dynamic call back to match manager's board size
+            PlayerColor = StoneColor.LIGHT;
         }
 
         #endregion
