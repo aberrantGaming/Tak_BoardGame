@@ -4,20 +4,25 @@ using UnityEngine;
 
 namespace Com.SeeSameGames.Tak
 {
-    public enum StoneType { FLAT_STONE, CAP_STONE }
-    public enum StonePosition { FLAT, STANDING}
+    public enum StoneType { STONE, CAP_STONE }
+    public enum StoneColor { DARK, LIGHT }
+    public enum StoneOrientations { FLAT, STANDING }    
     
     public class Stone : MonoBehaviour
     {
-        public StoneType Type { get; private set; }
-        public StonePosition Position;
+        public StoneType StoneType { get; private set; }
+        public StoneColor StoneColor { get; private set; }
+        public StoneOrientations StoneOrientation { get; private set; }
+
         public GameObject Prefab { get; private set; }
 
-        public Stone(StoneType _stoneType, GameObject _stonePrefab)
+        public Stone(StoneType _stoneType, StoneColor _stoneColor, StoneOrientations _stoneOrientations, GameObject _stonePrefab)
         {
-            Type = _stoneType;
+            StoneType = _stoneType;
+            StoneColor = _stoneColor;
+            StoneOrientation = _stoneOrientations;
+
             Prefab = _stonePrefab;
         }
-
     }
 }
