@@ -28,6 +28,9 @@ namespace Com.SeeSameGames.Tak
 
         #region  Properties
 
+        public Queue<Stone> Hand { get; private set; }      // This object represents what the player is "holding" in hand
+
+
         //public bool PlayersTurn { get { return (gm.CurrentGameState == GameState.PLAYERS_TURN); } private set { } }
         public bool PlayersTurn = true;
 
@@ -54,7 +57,6 @@ namespace Com.SeeSameGames.Tak
 
         int CarryLimit = 5;
         StoneColor PlayerColor;
-        Queue<Stone> Hand = new Queue<Stone>();    // This object represents what the player is "holding" in hand
 
         #endregion
 
@@ -79,7 +81,16 @@ namespace Com.SeeSameGames.Tak
             Debug.Log("Player Manager Init()");
 
             gm = GameManager.Instance;
-            gm.OnStateChange += HandleOnStateChange;
+            gm.OnStateChange += HandleOnStateChange;           
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void StackPickup(Queue<Stone> _stack)
+        {
+            Hand = _stack;
         }
 
         #endregion
@@ -105,17 +116,17 @@ namespace Com.SeeSameGames.Tak
                 {
                     GameObject selectedTransform = hit.transform.gameObject;
 
+                    Stone selectedStone = selectedTransform.GetComponent<Stone>();
+                    if (selectedStone != null)
+                        RequestStonePickup(selectedStone);
+
                     Tile selectedTile = selectedTransform.GetComponent<Tile>();
                     if (selectedTile != null)
                         SelectTile(selectedTile);
-
+                    
                     StonesBag selectedStonesBag = selectedTransform.GetComponent<StonesBag>();
                     if (selectedStonesBag != null)
-                        SelectStonesBag(selectedStonesBag);
-
-                    Stone selectedStone = selectedTransform.GetComponent<Stone>();
-                    if (selectedStone != null)
-                        SelectStone(selectedStone);                    
+                        SelectStonesBag(selectedStonesBag);                  
                 }
             }
         }
@@ -125,18 +136,19 @@ namespace Com.SeeSameGames.Tak
         /// </summary>
         private void RequestStackPickup(Tile _source)
         {
+            Debug.Log("Requesting Pickup of Stack at : " + _source.tileID);
+
             PickupStack pickupCommand = new PickupStack(_source, PlayerColor, CarryLimit);
             cm.AddCommand(pickupCommand);
         }
 
-        private void SelectStone(Stone _stone)
+        private void RequestStonePickup(Stone _stone)
         {
-            Debug.Log("Stone Selected: " + _stone.name);
+            Debug.Log("Requesting Pickup of : " + _stone.StoneType.ToString() + " : " + _stone.name.ToString());
         }
 
         private void SelectTile(Tile _tile)
         {
-            RequestStackPickup(_tile);
             Debug.Log("Tile Selected: " + _tile.name);
         }
 
@@ -147,8 +159,8 @@ namespace Com.SeeSameGames.Tak
 
         private void OnMatchStarting()
         {
-            CarryLimit = 5; // TODO: REPLACE with dynamic call back to match manager's board size
-            PlayerColor = StoneColor.LIGHT;
+            CarryLimit = 5;                     // TODO: REPLACE with dynamic callback to the match manager's board size
+            PlayerColor = StoneColor.LIGHT;     // TODO: REPLACE with dynamic callback to the match manager's assigned colors
         }
 
         #endregion
