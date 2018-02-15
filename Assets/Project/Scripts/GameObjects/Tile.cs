@@ -19,7 +19,7 @@ namespace Com.SeeSameGames.Tak
         public bool IsBlocked
         {
             get {
-                if (lastStoneAdded != null && lastStoneAdded.StoneType != StoneType.FLAT_STONE)
+                if (lastStoneAdded != null && lastStoneAdded.Type != StoneType.FLAT_STONE)
                         return true;
 
                 return false;
@@ -45,7 +45,7 @@ namespace Com.SeeSameGames.Tak
 
         public void AddStoneToStack(Stone stoneToAdd)
         {
-            if (lastStoneAdded.StoneType != StoneType.FLAT_STONE)
+            if (lastStoneAdded.Type != StoneType.FLAT_STONE)
                 return;
 
             Stack.Enqueue(stoneToAdd);
