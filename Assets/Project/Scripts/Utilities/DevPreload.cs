@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Com.SeeSameGames.Tak
+namespace Com.SeeSameGames.Tak.Utilities
 {
     public class DevPreload : MonoBehaviour
     {
