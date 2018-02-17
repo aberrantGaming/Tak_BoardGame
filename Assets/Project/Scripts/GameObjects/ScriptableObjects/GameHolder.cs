@@ -6,10 +6,16 @@ namespace Com.aberrantGames.Tak.GameEngine
 {
     public class GameHolder : ScriptableObject
     {
-        public string GamemodeName;
-                
+        #region Exposed Auto-Properties
+
+        [SerializeField] private string gamemodeName;
+        public string GamemodeName { get { return gamemodeName; } private set { } }
+
         [SerializeField] private int boardSize;
         public int BoardSize { get { return boardSize; } private set { } }
+
+        [SerializeField] private byte playerCount;
+        public byte PlayerCount { get { return playerCount; } private set { } }
 
         [SerializeField] private int stonesCount;
         public int StonesCount { get { return stonesCount; } private set { } }
@@ -17,17 +23,22 @@ namespace Com.aberrantGames.Tak.GameEngine
         [SerializeField] private int capstonesCount;
         public int CapstonesCount { get { return capstonesCount; } private set { } }
 
-        List<Tile> BoardTiles;
-        bool BlackWinsTies;
+        [SerializeField] private bool blackWinsTies;
+        public bool BlackWinsTies { get { return blackWinsTies; } private set { } }
 
+        #endregion
+
+        #region Private Variables
+                
         List<int> defaultStones = new List<int> { 0, 0, 0, 10, 15, 21, 30, 40, 50 };
         List<int> defaultCapstones = new List<int> { 0, 0, 0, 0, 0, 1, 1, 1, 2 };
 
+        List<Tile> BoardTiles;
+
+        #endregion
+
         #region Constructor
 
-        /// <summary>
-        ///     The GameHolder is the config passed in when a new GameObject is created
-        /// </summary>
         public GameHolder()
         {
             // Apply default cfg
@@ -35,7 +46,8 @@ namespace Com.aberrantGames.Tak.GameEngine
             this.GamemodeName = "Default";
 
             this.boardSize = 5;
-            this.BlackWinsTies = true;
+            this.playerCount = 1;
+            this.blackWinsTies = true;
             this.stonesCount = defaultStones[boardSize];
             this.capstonesCount = defaultCapstones[boardSize];
 
@@ -49,6 +61,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         }
         
         #endregion
+
         // TODO: setup (object): Function that returns the initial value of G.
 
         // TODO: moves (object): The keys are move names, and the values are pure functions that return the new value of G once the move has been processed.

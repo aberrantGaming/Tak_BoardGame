@@ -6,7 +6,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 {
     public struct Position
     {
-        public Config cfg;
+        // public Config cfg;
         public byte WhiteStones;
         public byte WhiteCapstones;
         public byte BlackStones;

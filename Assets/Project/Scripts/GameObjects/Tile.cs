@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public class Tile : MonoBehaviour
+    public class Tile
     {
         string tileID;
         List<Stone> Stack;
