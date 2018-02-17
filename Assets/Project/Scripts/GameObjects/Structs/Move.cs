@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Com.aberrantGames.Tak
+namespace Com.aberrantGames.Tak.GameEngine
 {
     public enum MoveType { PlaceFlat, PlaceStanding, PlaceCapstone, SlideLeft, SlideRight, SlideUp, SlideDown }
 
