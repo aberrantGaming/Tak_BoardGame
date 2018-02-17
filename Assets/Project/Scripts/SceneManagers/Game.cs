@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Com.aberrantGames.Tak
+namespace Com.aberrantGames.Tak.Scenes
 {
     public class Game : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Com.aberrantGames.Tak
+namespace Com.aberrantGames.Tak.Scenes
 {
     public class Preload : MonoBehaviour
     {
