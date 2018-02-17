@@ -15,14 +15,8 @@ namespace Com.aberrantGames.Tak.GameEngine
         int BlackFlats;
     }
 
-    public class Game : MonoBehaviour
+    public class Board : MonoBehaviour
     {
-        public 
-
-        public Game()
-        {
-
-        }
 
     }
 
