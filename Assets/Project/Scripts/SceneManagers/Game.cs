@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Com.SeeSameGames.Tak
+namespace Com.aberrantGames.Tak
 {
     public class Game : MonoBehaviour
     {

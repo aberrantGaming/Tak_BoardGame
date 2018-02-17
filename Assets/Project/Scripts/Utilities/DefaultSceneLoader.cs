@@ -2,7 +2,7 @@
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 
-namespace Com.SeeSameGames.Tak
+namespace Com.aberrantGames.Tak
 {
     [InitializeOnLoad]
     static class SceneAutoLoader
