@@ -17,27 +17,31 @@ namespace Com.aberrantGames.Tak.GameEngine
 
     public struct Config
     {
-        int Size;
-        int Stones;
-        int Capstones;
+        public int Size;
+        public int Stones;
+        public int Capstones;
 
-        bool BlackWinsTies;
-    }
+        public bool BlackWinsTies;
 
-    public struct Position
-    {
-        Config cfg;
-        byte WhiteStones;
-        byte WhiteCapstones;
-        byte BlackStones;
-        byte BlackCapstones;
-
-        int move;
+        // public Board.Constants BoardConstants;
     }
 
     public class Game : MonoBehaviour
     {
+        List<int> defaultStones = new List<int> { 0, 0, 0, 10, 15, 21, 30, 40, 50 };
+        List<int> defaultCapstones = new List<int> { 0, 0, 0, 0, 0, 1, 1, 1, 2 };
 
+        public Game(Config g)
+        {
+            if (g.Stones == 0)
+                g.Stones = defaultStones[g.Size];
+            if (g.Capstones == 0)
+                g.Capstones = defaultCapstones[g.Size];
+
+            // g.BoardConstants = bitboard.Precompute(int(g.Size));     // TO DO : Translate this line
+
+            Position p = new Position() { };
+        }
     }
 
 }
