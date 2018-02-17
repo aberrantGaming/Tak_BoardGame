@@ -38,20 +38,7 @@ namespace Com.aberrantGames.Tak.GameEngine
     public class Game : MonoBehaviour
     {
 
-        // Use this for initialization
-        void Start()
-        {
-            GenerateBoardFromTiles();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-
-        }
-
-        GenerateBoardFromTiles(Config cfg, Tile[,] board, int move)
+        private void GenerateBoardFromTiles(Config cfg, Tile[,] board, int move)
         {
 
         }
