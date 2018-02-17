@@ -38,11 +38,6 @@ namespace Com.aberrantGames.Tak.GameEngine
     public class Game : MonoBehaviour
     {
 
-        private void GenerateBoardFromTiles(Config cfg, Tile[,] board, int move)
-        {
-
-        }
-
     }
 
 }
