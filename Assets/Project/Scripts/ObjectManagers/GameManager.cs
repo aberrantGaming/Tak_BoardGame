@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Com.SeeSameGames.Tak
+namespace Com.aberrantGames.Tak
 {
     public enum GameState { NULL, INTRO, PAUSED, LAUNCHER, GAME, END_GAME, QUIT }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Com.SeeSameGames.Tak.Utilities
+namespace Com.aberrantGames.Tak.Utilities
 {
     public class DDOL : MonoBehaviour
     {

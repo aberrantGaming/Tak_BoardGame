@@ -2,11 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Com.aberrantGames.Tak.GameEngine;
 
-namespace Com.SeeSameGames.Tak
+namespace Com.aberrantGames.Tak.Scenes
 {
     public class Game : MonoBehaviour
     {
+        #region Public Variables
+
+        public GameHolder selectedGamemode;
+
+        public Board activeGame;
+
+        #endregion
+
         #region Private Variables
 
         GameManager gm;
@@ -43,6 +52,13 @@ namespace Com.SeeSameGames.Tak
         private void OnEnterState_GAME()
         {
             Debug.Log("Handling gameState transition to GAME.");
+            
+            activeGame = new Board(selectedGamemode);
+            Debug.Log("Gamemode Name : " + activeGame.config.name + " ; " +
+                      "Board Size : " + activeGame.config.BoardSize);
+
+            // Transition to next game phase:
+            // gm.SetGameState();
         }
 
         #endregion
