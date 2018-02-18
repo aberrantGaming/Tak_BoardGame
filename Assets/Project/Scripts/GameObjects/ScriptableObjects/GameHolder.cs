@@ -40,15 +40,13 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             // Apply default cfg
 
-            this.GamemodeName = "Default";
+            this.gamemodeName = "Default";
 
             this.boardSize = 3;
             this.playerCount = 1;
             this.blackWinsTies = true;
             this.stonesCount = 0;
-            this.capstonesCount = 0;
-
-            this.BoardTiles = new List<Tile>();
+            this.capstonesCount = 0;            
         }
 
         #endregion
