@@ -54,7 +54,7 @@ namespace Com.aberrantGames.Tak.Scenes
             Debug.Log("Handling gameState transition to GAME.");
             
             activeGame = new Board(selectedGamemode);
-            Debug.Log("Gamemode Name : " + activeGame.config.name + " ; " +
+            Debug.Log("Gamemode Name : " + activeGame.config.GamemodeName + " ; " +
                       "Board Size : " + activeGame.config.BoardSize);
 
             // Transition to next game phase:
