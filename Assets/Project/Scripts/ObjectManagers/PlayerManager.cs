@@ -2,25 +2,25 @@
 
 namespace Com.aberrantGames.Tak
 {
-    public enum GameState { NULL, INTRO, PAUSED, LAUNCHER, GAME, END_GAME, QUIT }
+    public enum PlayerState { NULL }
 
-    public delegate void OnGameStateChangeHandler();
+    public delegate void OnPlayerStateChangeHandler();
 
-    public class GameManager : Photon.PunBehaviour
+    public class PlayerManager : MonoBehaviour
     {
         #region Singleton Pattern
 
         /// <summary>
         /// Ensures that our class has only one instance and provides a global point of access to it.
         /// </summary>
-        protected GameManager() { }
-        public event OnGameStateChangeHandler OnStateChange;
+        protected PlayerManager() { }
+        public event OnPlayerStateChangeHandler OnStateChange;
 
-        public static GameManager Instance { get; private set; }
+        public static PlayerManager Instance { get; private set; }
 
         protected void Awake()
         {
-            if (GameManager.Instance == null)
+            if (PlayerManager.Instance == null)
                 Instance = this;
             else
                 DestroyObject(this);
@@ -30,7 +30,7 @@ namespace Com.aberrantGames.Tak
 
         #region Private Variables
 
-        public GameState GameState { get; private set; }
+        public PlayerState PlayerState { get; private set; }
 
         #endregion
 
@@ -38,16 +38,16 @@ namespace Com.aberrantGames.Tak
 
         protected void OnApplicationQuit()
         {
-            GameManager.Instance = null;
+            PlayerManager.Instance = null;
         }
 
         #endregion
 
         #region Public Methods
 
-        public void SetGameState(GameState state)
+        public void SetGameState(PlayerState state)
         {
-            this.GameState = state;
+            this.PlayerState = state;
             OnStateChange();
         }
 
