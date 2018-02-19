@@ -1,10 +1,24 @@
 ﻿using UnityEngine;
+using Com.aberrantGames.Tak.Collectables;
 
 namespace Com.aberrantGames.Tak
 {
     public enum PlayerState { NULL }
 
     public delegate void OnPlayerStateChangeHandler();
+
+    [System.Serializable]
+    public struct Collection
+    {
+        [SerializeField] private BoardCollectable board;
+        public BoardCollectable Board { get { return board; } private set { } }
+
+        [SerializeField] private TableCollectable table;
+        public TableCollectable Table { get { return table; } private set { } }
+
+        [SerializeField] private StonesCollectable stones;
+        public StonesCollectable Stones { get { return stones; } private set { } }
+    }
 
     public class PlayerManager : MonoBehaviour
     {
@@ -25,6 +39,12 @@ namespace Com.aberrantGames.Tak
             else
                 DestroyObject(this);
         }
+
+        #endregion
+
+        #region Public Variables
+        
+        public Collection PlayerCollection;
 
         #endregion
 
