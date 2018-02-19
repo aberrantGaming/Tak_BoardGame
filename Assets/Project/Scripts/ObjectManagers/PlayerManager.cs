@@ -12,6 +12,12 @@ namespace Com.aberrantGames.Tak
     {
         [SerializeField] private BoardCollectable board;
         public BoardCollectable Board { get { return board; } private set { } }
+
+        [SerializeField] private TableCollectable table;
+        public TableCollectable Table { get { return table; } private set { } }
+
+        [SerializeField] private StonesCollectable stones;
+        public StonesCollectable Stones { get { return stones; } private set { } }
     }
 
     public class PlayerManager : MonoBehaviour
