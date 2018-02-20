@@ -68,7 +68,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             _out = _p;
             _out.Height = h;
-            _out.Stacks = h;
+            _out.Stacks = s;
             _out.analysis.LightGroups = g;                        
 
             _p.Height = _out.Height;
