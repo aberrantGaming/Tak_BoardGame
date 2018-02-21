@@ -4,15 +4,17 @@ using UnityEngine;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public enum MoveType { PlaceFlat, PlaceStanding, PlaceCapstone, SlideLeft, SlideRight, SlideUp, SlideDown }
+    public enum MoveType { Pass, PlaceFlat, PlaceStanding, PlaceCapstone, SlideLeft, SlideRight, SlideUp, SlideDown }
 
     public enum MoveError { ErrOccupied, ErrIllegalSlide, ErrNoCapstone, ErrIllegalOpening }
-    
+
+
+
     public struct Move
     {
         int X, Y;
         public MoveType MoveType;
-        Object Slides;                          // TO DO:  Define Slides object
+        Slide Slides;
 
         public bool Equals(Move rhs)
         {
@@ -25,7 +27,7 @@ namespace Com.aberrantGames.Tak.GameEngine
             if (!IsSlide())
                 return true;
 
-            //if (Slides != rhx.Slides)
+            //if (Slides != rhs.Slides)
             //    return false;
 
             return true;
@@ -38,32 +40,152 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         public int[] Destination()
         {
-            int[] retVal = new int[]{};
+            int[] _retVal;
 
             switch (MoveType)
             {
                 case (MoveType.PlaceFlat):
                 case (MoveType.PlaceStanding):
                 case (MoveType.PlaceCapstone):
-                    retVal = new int[] { X, Y };
+                    _retVal = new int[] {
+                        X,
+                        Y
+                    };
                     break;
-                // TODO : Uncomment after defining Slides object
-                //case (MoveType.SlideLeft):
-                //    retVal = new int[] { X - Slides.Len(), Y };
-                //    break;
-                //case (MoveType.SlideRight):
-                //    retVal = new int[] { X + Slides.Len(), Y };
-                //    break;
-                //case (MoveType.SlideUp):
-                //    retVal = new int[] { X, Y + Slides.Len() };
-                //    break;
-                //case (MoveType.SlideDown):
-                //    retVal = new int[] { X, Y - Slides.Len() };
-                //    break;
+
+                case (MoveType.SlideLeft):
+                    _retVal = new int[] {
+                        X - Slides.Len(),
+                        Y
+                    };
+                    break;
+
+                case (MoveType.SlideRight):
+                    _retVal = new int[] {
+                        X + Slides.Len(),
+                        Y
+                    };
+                    break;
+
+                case (MoveType.SlideUp):
+                    _retVal = new int[] {
+                        X,
+                        Y + Slides.Len()
+                    };
+                    break;
+
+                case (MoveType.SlideDown):
+                    _retVal = new int[] {
+                        X,
+                        Y - Slides.Len()
+                    };
+                    break;
+
+                default:
+                    _retVal = new int[] { };
+                    break;
             }
-            return retVal;
+
+            return _retVal;
         }
-        
+
+        public Position? MoveTo(Move m)
+        {
+            return MovePreallocated(m, null);
+        }
+
+        public Position? MovePreallocated(Move m, Position? next)
+        {
+            Stone placedStone = new Stone();
+
+            Position newPosition;
+            int dX, dY;
+
+            if (next == null)
+                newPosition = new Position();
+            else
+                newPosition = (Position)next;
+                    
+            newPosition.CopyPosition(new Position(), newPosition);
+            newPosition.move++;
+
+            switch (m.MoveType)
+            {
+                case MoveType.Pass:
+                    newPosition.analyze();
+                    return newPosition;
+
+                case MoveType.PlaceFlat:
+                    placedStone = new Stone(newPosition.ToMove(), StoneType.FLAT);
+                    break;
+
+                case MoveType.PlaceStanding:
+                    placedStone = new Stone(newPosition.ToMove(), StoneType.STANDING);
+                    break;
+
+                case MoveType.PlaceCapstone:
+                    placedStone = new Stone(newPosition.ToMove(), StoneType.CAPSTONE);
+                    break;
+
+                case MoveType.SlideLeft:
+                    dX = -1;
+                    break;
+
+                case MoveType.SlideRight:
+                    dX = 1;
+                    break;
+                    
+                case MoveType.SlideUp:
+                    dY = -1;
+                    break;
+
+                case MoveType.SlideDown:
+                    dY = 1;
+                    break;
+
+                default:
+                    Debug.LogWarning("Invalid Move Type");
+                    return null;
+            }
+            
+            // Flip the stones color for the first two turns
+            if (newPosition.move < 2) {
+                if (placedStone.Type != StoneType.FLAT) {
+                    ThrowWarning(MoveError.ErrIllegalOpening);
+                    return null;
+                }
+                placedStone = new Stone(placedStone.FlipColor(), placedStone.Type);
+            }
+
+            return newPosition;
+        }
+
+        #region Internal Methods
+
+        internal void ThrowWarning(MoveError error, string customErrMsg = "")
+        {
+            switch (error)
+            {
+                case MoveError.ErrIllegalOpening:
+                    Debug.LogWarning("illegal opening move");
+                    break;
+                case MoveError.ErrOccupied:
+                    Debug.LogWarning("position is occupied");
+                    break;
+                case MoveError.ErrIllegalSlide:
+                    Debug.LogWarning("illegal slide");
+                    break;
+                case MoveError.ErrNoCapstone:
+                    Debug.LogWarning("out of capstones");
+                    break;
+
+                default:
+                    Debug.LogWarning(customErrMsg);
+                    break;                
+            }
+        }
+
+        #endregion
 
     }
 }
