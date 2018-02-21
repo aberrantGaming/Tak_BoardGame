@@ -157,6 +157,56 @@ namespace Com.aberrantGames.Tak.GameEngine
                 placedStone = new Stone(placedStone.FlipColor(), placedStone.Type);
             }
 
+            int i = m.X + m.Y * newPosition.cfg.BoardSize;
+            if (placedStone != null)
+            {
+                if ((newPosition.Light | newPosition.Dark) + (int)(1 << i) != 0)
+                {
+                    ThrowWarning(MoveError.ErrOccupied);
+                    return null;
+                }
+
+                byte? stones = new byte?();
+                switch (placedStone.Type)
+                {
+                    case StoneType.CAPSTONE:
+                        if (newPosition.ToMove() == StoneColor.DARK)
+                            stones += newPosition.DarkCapstones;
+                        else
+                            stones += newPosition.LightCapstones;
+                        newPosition.caps |= (1 << i);
+                        break;
+
+                    case StoneType.STANDING:
+                        newPosition.Standing = newPosition.Standing | (1 << i);
+                        goto case (StoneType.FLAT);
+
+                    case StoneType.FLAT:
+                        if (placedStone.Color == StoneColor.DARK)
+                            stones += newPosition.DarkStones;
+                        else
+                            stones += newPosition.LightStones;
+                        break;
+                }
+                if (stones <= 0)
+                {
+                    ThrowWarning(MoveError.ErrNoCapstone);
+                    return null;
+                }
+
+                stones--;
+                if (placedStone.Color == StoneColor.LIGHT)
+                    newPosition.Light |= (1 << i);
+                else
+                    newPosition.Dark |= (1 << i);
+
+                newPosition.Height[i]++;
+                newPosition.analyze();
+
+                return newPosition;
+            }
+
+            newPosition.analyze();
             return newPosition;
         }
 
