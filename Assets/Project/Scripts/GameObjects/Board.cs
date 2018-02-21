@@ -18,36 +18,26 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         List<int> defaultStones = new List<int> { 0, 0, 0, 10, 15, 21, 30, 40, 50 };
         List<int> defaultCapstones = new List<int> { 0, 0, 0, 0, 0, 1, 1, 1, 2 };
-        private PlayerManager pm;
-
-        protected void Awake()
-        {
-            pm = PlayerManager.Instance;
-        }
+        
+        private IDictionary<string, Transform> PrefabDictionary;
 
         #endregion
 
-        void Start()
-        {
-
-            // Set Gameboard according to selected difficulty
-            //Gameboard = Utils.ReadSelectedGameboard();
-
-            Debug.Log(/*"Level Name: " + Gameboard.LevelName
-                + */", board size is: " + config.BoardSize);
-
-            //offset = (config.BoardSize / 2f) - (elementSize / 2f);     // adjust the offset for the difference in size between the board and tiles.
-
-            BuildBoardFoundation();
-            BuildBoardTiles();
-        }
-
         #region Constructor
 
-        public Board(GameHolder g)
+        public Board(GameHolder g, Dictionary<string, Transform> _prefabs)
         {
             if (g != null)
                 config = g;
+
+            if (_prefabs != null)
+                PrefabDictionary = _prefabs;
+
+            Init();
+        }
+
+        void Init()
+        {
 
             if (config.StonesCount == 0)
                 config.SetStonesCount(defaultStones[config.BoardSize]);
@@ -55,12 +45,15 @@ namespace Com.aberrantGames.Tak.GameEngine
             if (config.CapstonesCount == 0)
                 config.SetCapstonesCount(defaultCapstones[config.BoardSize]);
 
+
+            BuildBoardFoundation();
+            BuildBoardTiles();
         }
 
         void BuildBoardFoundation()
         {
             Transform boardFoundation =
-                Instantiate(pm.PlayerCollection.Board.BoardFoundation.transform, new Vector3(0,0,0), Quaternion.identity) as Transform;
+                Instantiate(PrefabDictionary["BoardFoundation"], new Vector3(0,0,0), Quaternion.identity) as Transform;
 
             int boardSize = config.BoardSize;
 
@@ -78,14 +71,12 @@ namespace Com.aberrantGames.Tak.GameEngine
             for (int i = 0; i < numberOfTiles; i++)
             {
                 if (toggle)
-                    this.BoardState.Add(new Tile(pm.PlayerCollection.Board.TileLight.transform));
+                    this.BoardState.Add(new Tile(PrefabDictionary["TileLight"]));
                 else
-                    this.BoardState.Add(new Tile(pm.PlayerCollection.Board.TileDark.transform));
+                    this.BoardState.Add(new Tile(PrefabDictionary["TileDark"]));
 
-                toggle = !toggle;
-                
+                toggle = !toggle;                
             }
-
             
             for (int row = 0; row < config.BoardSize; row++)
             {
