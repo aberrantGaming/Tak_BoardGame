@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public class Board
+    public class Board : MonoBehaviour
     {
         #region Public Variables
 

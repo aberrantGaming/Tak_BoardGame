@@ -56,7 +56,7 @@ namespace Com.aberrantGames.Tak.Scenes
         {
             Debug.Log("Handling gameState transition to GAME.");
             
-            IDictionary<string, Transform> prefabDictionary = new Dictionary<string, Transform>
+            Dictionary<string, Transform> prefabDictionary = new Dictionary<string, Transform>
             {
                 { "BoardFoundation", pm.PlayerCollection.Board.BoardFoundation.transform },
                 { "TileLight", pm.PlayerCollection.Board.TileLight.transform },
