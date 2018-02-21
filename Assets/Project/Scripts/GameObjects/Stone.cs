@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public enum StoneColor { LIGHT, DARK }
-    public enum StoneType { FLAT, STANDING, CAPSTONE }
+    public enum StoneColor { NULL, LIGHT, DARK }
+    public enum StoneType { NULL, FLAT, STANDING, CAPSTONE }
 
     public class Stone : MonoBehaviour
     {
@@ -17,6 +17,11 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             Color = _color;
             Type = _type;
+        }
+        public Stone()
+        {
+            Color = StoneColor.NULL;
+            Type = StoneType.NULL;
         }
 
         public bool IsRoad()
@@ -40,6 +45,18 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             return c;
         }
+
+        internal StoneColor FlipColor()
+        {
+            if (Color == StoneColor.NULL)
+                return Color;
+
+            if (Color == StoneColor.LIGHT)
+                return StoneColor.DARK;
+            else
+                return StoneColor.LIGHT;
+        }
+
 
     }
 }
