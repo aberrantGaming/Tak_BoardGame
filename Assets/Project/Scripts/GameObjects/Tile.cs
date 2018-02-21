@@ -6,7 +6,14 @@ namespace Com.aberrantGames.Tak.GameEngine
 {
     public class Tile
     {
-        string tileID;
-        List<Stone> Stack;
+        public string tileID;
+        public List<Stone> Stack;
+        public Transform tilePrefab;
+        public Tile(Transform _prefab)
+        {
+            tilePrefab = _prefab;
+        }
     }
+
+    
 }
