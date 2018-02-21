@@ -14,7 +14,7 @@ namespace Com.aberrantGames.Tak.GameEngine
     {
         int X, Y;
         public MoveType MoveType;
-        Slide Slides;
+        Slides Slides;
 
         public bool Equals(Move rhs)
         {
@@ -55,14 +55,14 @@ namespace Com.aberrantGames.Tak.GameEngine
 
                 case (MoveType.SlideLeft):
                     _retVal = new int[] {
-                        X - Slides.Len(),
+                        X - Slides.Slide.Count,
                         Y
                     };
                     break;
 
                 case (MoveType.SlideRight):
                     _retVal = new int[] {
-                        X + Slides.Len(),
+                        X + Slides.Slide.Count,
                         Y
                     };
                     break;
@@ -70,14 +70,14 @@ namespace Com.aberrantGames.Tak.GameEngine
                 case (MoveType.SlideUp):
                     _retVal = new int[] {
                         X,
-                        Y + Slides.Len()
+                        Y + Slides.Slide.Count
                     };
                     break;
 
                 case (MoveType.SlideDown):
                     _retVal = new int[] {
                         X,
-                        Y - Slides.Len()
+                        Y - Slides.Slide.Count
                     };
                     break;
 
