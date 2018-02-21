@@ -19,6 +19,7 @@ namespace Com.aberrantGames.Tak.Scenes
         #region Private Variables
 
         GameManager gm;
+        PlayerManager pm;
 
         #endregion
 
@@ -27,7 +28,9 @@ namespace Com.aberrantGames.Tak.Scenes
         private void Awake()
         {
             gm = GameManager.Instance;
-            gm.OnStateChange += Gm_OnStateChange;            
+            gm.OnStateChange += Gm_OnStateChange;
+
+            pm = PlayerManager.Instance;
         }
 
         private void Start()
@@ -53,7 +56,15 @@ namespace Com.aberrantGames.Tak.Scenes
         {
             Debug.Log("Handling gameState transition to GAME.");
             
-            activeGame = new Board(selectedGamemode);
+            IDictionary<string, Transform> prefabDictionary = new Dictionary<string, Transform>
+            {
+                { "BoardFoundation", pm.PlayerCollection.Board.BoardFoundation.transform },
+                { "TileLight", pm.PlayerCollection.Board.TileLight.transform },
+                { "TileDark", pm.PlayerCollection.Board.TileDark.transform }
+            };
+
+            activeGame = new Board(selectedGamemode, prefabDictionary);
+
             Debug.Log("Gamemode Name : " + activeGame.config.GamemodeName + " ; " +
                       "Board Size : " + activeGame.config.BoardSize);
 
