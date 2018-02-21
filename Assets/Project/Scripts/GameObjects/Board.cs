@@ -70,12 +70,18 @@ namespace Com.aberrantGames.Tak.GameEngine
             int numberOfTiles = config.BoardSize * config.BoardSize;
             for (int i = 0; i < numberOfTiles; i++)
             {
+                if (config.BoardSize % 2 == 0 && i % config.BoardSize == 0)
+                {
+                    Debug.Log("toggled");
+                    toggle = !toggle;
+                }
                 if (toggle)
                     this.BoardState.Add(new Tile(PrefabDictionary["TileLight"]));
                 else
                     this.BoardState.Add(new Tile(PrefabDictionary["TileDark"]));
 
-                toggle = !toggle;                
+                toggle = !toggle;
+                
             }
             
             for (int row = 0; row < config.BoardSize; row++)
