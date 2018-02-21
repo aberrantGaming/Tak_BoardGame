@@ -59,6 +59,16 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             return _retVal;
         }
+        
+        public Position? Alloc(int size)
+        {
+            Position p = new Position {
+                cfg = ScriptableObject.CreateInstance<GameHolder>()
+            };
+            p.cfg.SetBoardSize(size);
+
+            return Alloc(p);
+        }
 
         public void CopyPosition(Position _p, Position _out)
         {
@@ -67,12 +77,21 @@ namespace Com.aberrantGames.Tak.GameEngine
             int[] g = _out.analysis.LightGroups;
 
             _out = _p;
+
             _out.Height = h;
             _out.Stacks = s;
             _out.analysis.LightGroups = g;                        
 
             _p.Height = _out.Height;
             _p.Stacks = _out.Stacks;
+        }
+
+        public StoneColor ToMove()
+        {
+            if (move == 0)
+                return StoneColor.LIGHT;
+
+            return StoneColor.DARK;
         }
 
         #endregion
@@ -111,6 +130,11 @@ namespace Com.aberrantGames.Tak.GameEngine
             alloc.Stacks = _position.Stacks;
 
             return alloc;
+        }
+
+        internal void analyze()
+        {
+            throw new NotImplementedException();
         }
 
         private Position Position5(Position _position)
