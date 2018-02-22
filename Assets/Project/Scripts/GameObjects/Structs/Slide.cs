@@ -1,24 +1,26 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-using Slides = System.Int32;
+﻿using UnityEngine;
 using SlideIterator = System.Int32;
+using Slides = System.Int32;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
     /// <summary>
     ///         Slides is essentially a packed [8]uint4, used to represent the
-    ///     slide counts in a Tak move in a space-efficient way. We store the
-    ///     first drop count in (s&0xf), the next in (s&0xf0), and so on.
+    ///     slide counts in a Tak move in a space-efficient way. 
     /// </summary>
     public struct Slide
     {
+        #region Private Variables
+
         private Slides s;
         private SlideIterator sI;
 
-        public Slides MkSlides(params int[] _drops) {
+        #endregion
+
+        #region Public Methods
+
+        public Slides MkSlides(params int[] _drops)
+        {
             Slides retVal = new Slides();
 
             for (int i = _drops.Length; i >= 0; i--)
@@ -31,6 +33,8 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             return retVal;
         }
+
+        #endregion
 
         #region Slide Methods
 
