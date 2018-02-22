@@ -55,14 +55,14 @@ namespace Com.aberrantGames.Tak.GameEngine
 
                 case (MoveType.SlideLeft):
                     _retVal = new int[] {
-                        X - Slides.Slide.Count,
+                        X - Slides.Length,
                         Y
                     };
                     break;
 
                 case (MoveType.SlideRight):
                     _retVal = new int[] {
-                        X + Slides.Slide.Count,
+                        X + Slides.Length,
                         Y
                     };
                     break;
@@ -70,14 +70,14 @@ namespace Com.aberrantGames.Tak.GameEngine
                 case (MoveType.SlideUp):
                     _retVal = new int[] {
                         X,
-                        Y + Slides.Slide.Count
+                        Y + Slides.Length
                     };
                     break;
 
                 case (MoveType.SlideDown):
                     _retVal = new int[] {
                         X,
-                        Y - Slides.Slide.Count
+                        Y - Slides.Length
                     };
                     break;
 
@@ -204,6 +204,33 @@ namespace Com.aberrantGames.Tak.GameEngine
                 newPosition.analyze();
 
                 return newPosition;
+            }
+
+            int ct = 0;
+            foreach (int elem in Slides.Slide)
+            {
+                if (elem == 0)
+                {
+                    ThrowWarning(MoveError.ErrIllegalSlide);
+                    return null;
+                }
+                ct++;
+            }
+
+            if ( (ct > (int)newPosition.cfg.BoardSize)  || (ct < 1) || (ct > (int)newPosition.Height[i]) )
+            {
+                ThrowWarning(MoveError.ErrIllegalSlide);
+                return null;
+            }
+            if ((newPosition.ToMove() == StoneColor.LIGHT) && (newPosition.Light + (1 << i) == 0))
+            {
+                ThrowWarning(MoveError.ErrIllegalSlide);
+                return null;
+            }
+            if ((newPosition.ToMove() == StoneColor.DARK) && (newPosition.Dark + (1 << i) == 0))
+            {
+                ThrowWarning(MoveError.ErrIllegalSlide);
+                return null;
             }
 
             newPosition.analyze();

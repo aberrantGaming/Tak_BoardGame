@@ -24,7 +24,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
     public class Slides
     {
-        public Queue<int> Slide { get; private set; }
+        public List<int> Slide { get; private set; }
 
         public Slides(List<int> _drops)
         {
@@ -33,9 +33,13 @@ namespace Com.aberrantGames.Tak.GameEngine
                 if (_drops[i] > 8)
                     Debug.LogError("bad drop");
 
-                Slide.Enqueue(_drops[i]);
+                Slide.Add(_drops[i]);
             }
+
         }
+
+        public int Length { get { return Slide.Count; } private set { } }
+        public bool IsEmpty { get { return Slide.Count.Equals(0); } private set { } }
 
 
     }
