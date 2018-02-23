@@ -20,11 +20,33 @@ namespace Com.aberrantGames.Tak.GameEngine
         // c bitboard.Constants
     }
 
-    public struct Position { }
+    public struct Position
+    {
+        Config? cgf;
 
-    public struct Analysis { }
+        byte WhiteStones, WhiteCapstones, BlackStones, BlackCapstones;
 
-    public struct WinDetails { }
+        int White, Black, Standing, Caps;
+        int move, hash;
+
+        int[] Height, Stacks;
+        
+        Analysis analysis;
+    }
+
+    public struct Analysis
+    {
+        int[] WhiteGroups;
+        int[] BlackGroups;
+    }
+
+    public struct WinDetails
+    {
+        bool Over;
+        WinReason Reason;
+        Color Winner;
+        int WhiteFlats, BlackFlats;
+    }
 
     public class Board
     {
@@ -67,11 +89,8 @@ namespace Com.aberrantGames.Tak.GameEngine
         #region Private Methods
 
         private void GameOver(bool _over, Color _winner) { }
-
         private Analysis? Analysis() { }
-
-        private int CountFlats(Color _c) { }                        // accomodate lack of System.Tuple
-        
+        private int CountFlats(Color _c) { }                        // accomodate lack of System.Tuple        
         private WinDetails WinDetails() { }
 
         #endregion
