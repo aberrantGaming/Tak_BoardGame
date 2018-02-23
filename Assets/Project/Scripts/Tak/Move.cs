@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Slides = System.Int32;
+using Com.aberrantGames.Tak.Utilities;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
@@ -288,47 +288,111 @@ namespace Com.aberrantGames.Tak.GameEngine
 
     public struct MoveDetail
     {
-        MoveType Type;
-        Slides Slides;
-        int X, Y;
+        public MoveType Type;
+        public Slide Slides;
+        public int X, Y;
+
+        public bool IsSlide { get { return Type >= MoveType.SlideLeft; } private set { } }
     }
 
     public class Move
     {
         #region Variables
 
-        public Slide[][] Slides { get; private set; }
-
+        public Slide[,] Slides;
         private Position? p;
+
         private MoveDetail m;
-
-        #endregion
-
-        #region Properties
-
-        public bool Equal() { }
-        public bool IsSlide() { }
-        public int[] Dest() { }
 
         #endregion
 
         #region Constructors
 
-        public Move() { }
+        public Move()
+        {
+              
+        }
 
         #endregion
 
         #region Public Methods
 
-        public Position? MoveTo(MoveDetail _move) { }
-        public Position? MovePreallocated(MoveDetail _move, Position? _next) { }
-        public Move[] AllMoves(Move[] _moves) { }
+        public bool Equal(MoveDetail _rhs)
+        {
+            if (m.X != _rhs.X || m.Y != _rhs.Y)
+                return false;
+            if (m.Type != _rhs.Type)
+                return false;
+            if (!m.IsSlide)
+                return true;
+            if (!m.Slides.Equals(_rhs.Slides))
+                return false;
+
+            return true;
+        }
+
+        public CoordPair Dest()
+        {
+            switch (m.Type)
+            {
+                case MoveType.PlaceFlat:
+                case MoveType.PlaceStanding:
+                case MoveType.PlaceCapstone:
+                    return new CoordPair() {
+                        X = m.X,
+                        Y = m.Y
+                    };
+                case MoveType.SlideLeft:
+                    return new CoordPair() {
+                        X = m.X - (int)m.Slides.Len(), 
+                        Y = m.Y
+                    };
+                case MoveType.SlideRight:
+                    return new CoordPair() {
+                        X = m.X + (int)m.Slides.Len(),
+                        Y = m.Y
+                    };
+                case MoveType.SlideUp:
+                    return new CoordPair()
+                    {
+                        X = m.X,
+                        Y = m.Y + (int)m.Slides.Len(),
+                    };
+                case MoveType.SlideDown:
+                    return new CoordPair()
+                    {
+                        X = m.X,
+                        Y = m.Y - (int)m.Slides.Len(),
+                    };
+                default:
+                    Debug.LogError("bad type");
+                    return new CoordPair();
+            }
+        }
+
+        public Position? MoveTo(MoveDetail _move)
+        {
+            return MovePreallocated(_move, null);
+        }
+
+        public Position? MovePreallocated(MoveDetail _move, Position? _next)
+        {
+
+        }
+
+        public Move[] AllMoves(Move[] _moves)
+        {
+
+        }
 
         #endregion
-        
+
         #region Private Methods
 
-        private Slides[] CalculateSlides(int _stack) { }
+        private Slide[] CalculateSlides(int _stack)
+        {
+
+        }
 
         #endregion
     }

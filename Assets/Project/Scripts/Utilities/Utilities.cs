@@ -5,6 +5,11 @@ using Com.aberrantGames.Tak.GameEngine;
 
 namespace Com.aberrantGames.Tak.Utilities
 {
+    public struct CoordPair
+    {
+        public int X, Y;
+    }
+
     public static class Utilities
     {
         private const string _gamemodesPath = "Gamemodes";
