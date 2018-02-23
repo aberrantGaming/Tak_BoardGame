@@ -7,5 +7,6 @@ namespace Com.aberrantGames.Tak.GameEngine
     public class Tile
     {
         string tileID;
+        Stone[] pieces;
     }
 }

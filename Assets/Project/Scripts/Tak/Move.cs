@@ -299,8 +299,8 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         public Slide[][] Slides { get; private set; }
 
-        public Position? p { get; private set; }
-        public MoveDetail m { get; private set; }
+        private Position? p;
+        private MoveDetail m;
 
         #endregion
 

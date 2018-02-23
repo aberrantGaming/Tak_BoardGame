@@ -5,7 +5,7 @@ using Type = System.Byte;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public struct Pieces
+    public struct Stone
     {
         #region Constant Variables
 
