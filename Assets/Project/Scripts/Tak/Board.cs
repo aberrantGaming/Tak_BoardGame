@@ -1,53 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using Square = Com.aberrantGames.Tak.GameEngine.Tile;
 
-
 namespace Com.aberrantGames.Tak.GameEngine
-{
-    enum WinReason {
-        RoadWin,
-        FlatsWin,
-        Resignation
-    }
-
-    public struct Config
+{    
+    public struct Config                    // TODO : Replace with GameHolder ScriptableObject
     {
-        int Size, Pieces, Capstones;
-        bool BlackWinsTies;
-        // c bitboard.Constants
+        public int Size, Pieces, Capstones;
+        public bool BlackWinsTies;
     }
-
-    public struct Position
-    {
-        Config? cgf;
-
-        byte WhiteStones, WhiteCapstones, BlackStones, BlackCapstones;
-
-        int White, Black, Standing, Caps;
-        int move, hash;
-
-        int[] Height, Stacks;
         
-        Analysis analysis;
-    }
-
-    public struct Analysis
-    {
-        int[] WhiteGroups;
-        int[] BlackGroups;
-    }
-
-    public struct WinDetails
-    {
-        bool Over;
-        WinReason Reason;
-        Color Winner;
-        int WhiteFlats, BlackFlats;
-    }
-
     public class Board
     {
         #region Variables
@@ -55,43 +18,89 @@ namespace Com.aberrantGames.Tak.GameEngine
         static int[] defualtPieces = new int[] { 0, 0, 0, 10, 15, 21, 30, 40, 50 };
         static int[] defaultCapstones = new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 2 };
 
-        Position p;
+        public Position P { get; private set; }
 
         #endregion
+        
+        #region Constructors
 
-        #region Properties
+        /// <summary>
+        ///     Initializes a new board based on the provided Configuration
+        /// </summary>
+        /// <param name="_g"></param>
+        /// <returns> Position? </returns>
+        public Board(Config _g)
+        {
+            if (_g.Pieces == 0)
+                _g.Pieces = defualtPieces[_g.Size];
+            if (_g.Capstones == 0)
+                _g.Capstones = defualtPieces[_g.Size];
 
-        public int Size() { }
-        public Config Config() { }
-        public Color ToMove() { }
-        public int MoveNumber() { }
-        public int WhiteStones() { }
-        public int BlackStones() { }
+            P = new Position()
+            {
+                cfg = _g,
+                WhiteStones = (byte)_g.Pieces,
+                WhiteCapstones = (byte)_g.Capstones,
+                BlackStones = (byte)_g.Pieces,
+                BlackCapstones = (byte)_g.Capstones,                
+                move = 0,
 
+                //hash = fnvBasis           // TO DO : Implement hash struct
+            };
+        }
         #endregion
 
         #region Public Methods
 
-        public Position? New(Config _game) { }
-        public Position? Clone() { }
-        public Position? FromSquares() { }
+        /// <summary>
+        ///     Initializes a position with the specified tiles and move number.
+        /// </summary>
+        /// <returns></returns>
+        public Position FromSquares(Config _cfg, Square[][] _board, int _move) { }
 
-        public Square At(int x, int y) { }
-        public Stone Top(int x, int y) { }
-        public Color FlatsWinner() { }
-        public bool HasRoadAt(Color _c, int _x, int _y) { }        // accomodate lack of System.Tuple
+        /// <summary>
+        ///     Set's a piece to the specified location
+        /// </summary>
+        /// <param name="p">Position</param>
+        /// <param name="x">Position.X</param>
+        /// <param name="x">Position.Y</param>
+        /// <param name="_s">Tile to set</param>
+        public void Set(Position p, int x, int y, Square s)
+        {
+            int i = (y * p.cfg.Size + x);
+            p.White &= p.White ^ (1 << i);
+            p.Black &= p.Black ^ (1 << i);
+            p.Standing &= p.Standing ^ (1 << i);
+            p.Caps &= p.Caps ^ (1 << i);
+            if (s.Stack.Length == 0)
+            {
+                p.Height[i] = 0;
+                return;
+            }
 
-        public void Set(Position? _p, int _x, int _y, Square _s) { }
-        public void Analyze() { }
+            switch (s.Stack[0].Color())
+            {
+                case (Stone.White): p.White |= (1 << i); break;
+                case (Stone.Black): p.Black |= (1 << i); break;
+            }
 
-        #endregion
+            switch (s.Stack[0].Type())
+            {
+                case (Stone.Standing): p.Standing |= (1 << i); break;
+                case (Stone.Capstone): p.Caps |= (1 << i); break;
+            }
 
-        #region Private Methods
+            //p.hash ^= p.hashAt(i);
 
-        private void GameOver(bool _over, Color _winner) { }
-        private Analysis? Analysis() { }
-        private int CountFlats(Color _c) { }                        // accomodate lack of System.Tuple        
-        private WinDetails WinDetails() { }
+            p.Height[i] = s.Stack.Length;
+            p.Stacks[i] = 0;            
+            for (int j = 0; j <= s.Stack.Length; j++)                   //for j, piece := range s[1:]
+            { 
+                if (s.Stack[j].Color() == Stone.Black)                  //  if (piece.Color() == Black)                    
+                    p.Stacks[i] |= (1 << j);                            //      p.Stacks[i] |= (1 << uint(j))
+            }
+            //p.hash ^= p.hashAt(i);
+        }
 
         #endregion
     }
