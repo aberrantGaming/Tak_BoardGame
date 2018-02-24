@@ -5,7 +5,7 @@ using Type = System.Byte;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public struct Stone
+    public class Stone
     {
         #region Constant Variables
 
@@ -20,6 +20,15 @@ namespace Com.aberrantGames.Tak.GameEngine
         private const byte colorMask = 3 << 6;
         private const byte typeMask = 1 << 2 - 1;
 
+        #endregion
+
+        #region Properties
+
+        public Piece WhiteCapstone { get { return MakePiece(White, Capstone); } private set { } }
+        public Piece WhiteStanding { get { return MakePiece(White, Standing); } private set { } }
+        public Piece BlackCapstone { get { return MakePiece(Black, Capstone); } private set { } }
+        public Piece BlackStanding { get { return MakePiece(Black, Standing); } private set { } }
+                
         #endregion
 
         #region Private Variables
