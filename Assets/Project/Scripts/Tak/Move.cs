@@ -282,27 +282,29 @@ namespace Com.aberrantGames.Tak.GameEngine
     //}
 
     //#endregion
-    
+
     public enum MoveType { Pass, PlaceFlat, PlaceStanding, PlaceCapstone, SlideLeft, SlideRight, SlideUp, SlideDown }
     public enum MoveError { ErrOccupied, ErrIllegalSlide, ErrNoCapstone, ErrIllegalOpening }
 
-    public struct MoveDetail
-    {
-        public MoveType Type;
-        public Slide Slides;
-        public int X, Y;
-
-        public bool IsSlide { get { return Type >= MoveType.SlideLeft; } private set { } }
-    }
 
     public class Move
     {
+        struct Move_
+        {
+            public MoveType Type;
+            public Slide Slides;
+            public int X, Y;
+
+            public bool IsSlide { get { return Type >= MoveType.SlideLeft; } private set { } }
+        }
+
+
         #region Variables
 
         public Slide[,] Slides;
         private Position? p;
 
-        private MoveDetail m;
+        private Move_ m;
 
         #endregion
 
@@ -310,14 +312,14 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         public Move()
         {
-              
+
         }
 
         #endregion
 
         #region Public Methods
 
-        public bool Equal(MoveDetail _rhs)
+        public bool Equal(Move_ _rhs)
         {
             if (m.X != _rhs.X || m.Y != _rhs.Y)
                 return false;
@@ -338,17 +340,20 @@ namespace Com.aberrantGames.Tak.GameEngine
                 case MoveType.PlaceFlat:
                 case MoveType.PlaceStanding:
                 case MoveType.PlaceCapstone:
-                    return new CoordPair() {
+                    return new CoordPair()
+                    {
                         X = m.X,
                         Y = m.Y
                     };
                 case MoveType.SlideLeft:
-                    return new CoordPair() {
-                        X = m.X - (int)m.Slides.Len(), 
+                    return new CoordPair()
+                    {
+                        X = m.X - (int)m.Slides.Len(),
                         Y = m.Y
                     };
                 case MoveType.SlideRight:
-                    return new CoordPair() {
+                    return new CoordPair()
+                    {
                         X = m.X + (int)m.Slides.Len(),
                         Y = m.Y
                     };
@@ -370,11 +375,13 @@ namespace Com.aberrantGames.Tak.GameEngine
             }
         }
 
-        public Position? MoveTo(MoveDetail _move)
+        //Extension Method for Position
+        public Position? Move(MoveDetail _move)
         {
             return MovePreallocated(_move, null);
         }
 
+        //Extension Method for Position
         public Position? MovePreallocated(MoveDetail _move, Position? _next)
         {
 

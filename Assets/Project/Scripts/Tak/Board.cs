@@ -9,6 +9,7 @@ namespace Com.aberrantGames.Tak.GameEngine
     {
         public int Size, Pieces, Capstones;
         public bool BlackWinsTies;
+        public Bitboard.Constants c;
     }
         
     public class Board
@@ -41,11 +42,10 @@ namespace Com.aberrantGames.Tak.GameEngine
                 WhiteCapstones = (byte)_g.Capstones,
                 BlackStones = (byte)_g.Pieces,
                 BlackCapstones = (byte)_g.Capstones,
-                move = 0,
+                turn = 0,
 
                 //hash = fnvBasis           // TO DO : Implement hash struct
             };
-
             return p;
         }
 
@@ -56,7 +56,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         public Position FromSquares(Config _cfg, Square[][] _board, int _move)
         {
             Position p = New(_cfg);
-            p.move = _move;
+            p.turn = _move;
 
             for (int y = 0; y < p.Size(); y++)
             {
