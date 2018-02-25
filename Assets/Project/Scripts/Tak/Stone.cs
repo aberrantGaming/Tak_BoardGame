@@ -22,83 +22,53 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         #endregion
 
-        #region Properties
-
-        public Piece WhiteCapstone { get { return MakePiece(White, Capstone); } private set { } }
-        public Piece WhiteStanding { get { return MakePiece(White, Standing); } private set { } }
-        public Piece BlackCapstone { get { return MakePiece(Black, Capstone); } private set { } }
-        public Piece BlackStanding { get { return MakePiece(Black, Standing); } private set { } }
-                
-        #endregion
-
         #region Private Variables
 
-        Piece p;
+        protected Piece p;
+
+        #endregion
+
+        #region Properties
+
+        public Piece Piece { get { return p; } set { p = value; } }
+
+        public Color Color { get { return (Color)(Piece & colorMask); } private set { } }
+        public Type Type { get { return (Type)(Piece & typeMask); } private set { } }
+        public bool IsRoad { get { return Type == Flat || Type == Capstone; } private set { } }
+        public string Notation { get { return NotationString(); } private set { } }
+        public string ColorName { get { return ColorString(); } private set { } }
+
+        #endregion
+
+        #region Constructors
+
+        public Stone(Piece _piece)
+        {
+            Piece = _piece;
+        }
 
         #endregion
 
         #region Public Methods
 
-        public Piece MakePiece(Color _color, Type _kind)
+        /// <summary>
+        /// Used to combine a Color and Type byte into a Piece
+        /// </summary>
+        /// <param name="_color"></param>
+        /// <param name="_kind"></param>
+        /// <returns>Piece</returns>
+        public static Piece MakePiece(Color _color, Type _kind)
         {
             return (Piece)((byte)_color | (byte)_kind);
         }
 
-        #endregion
-
-        #region Piece Methods
-
-        public Color Color()
+        /// <summary>
+        /// Used to get the color opposite to this stones color
+        /// </summary>
+        /// <returns>Color</returns>
+        public Color FlipColor()
         {
-            return (Color)((byte)p & colorMask);
-        }
-
-        public Type Type()
-        {
-            return (Type)((byte)p & typeMask);
-        }
-
-        public bool IsRoad()
-        {
-            return Type() == Flat || Type() == Capstone;
-        }
-
-        public string String()
-        {
-            string n = "";
-            if (Color() == White)
-                n = "W";
-            else
-                n = "B";
-            switch (Type())
-            {
-                case (Capstone): n += "C"; break;
-                case (Standing): n += "S"; break;
-            }
-            return n;
-        }
-
-        #endregion
-
-        #region Color Methods
-
-        public string ColorString()
-        {
-            Color c = Color();
-            switch (c)
-            {
-                case (White): return "White";
-                case (Black): return "Black";
-                case (NoColor): return "No Color";
-                default:
-                    Debug.LogError("bad color" + (int)c);
-                    return "";
-            }
-        }
-
-        public Color Flip()
-        {
-            Color c = Color();
+            Color c = Color;
             switch (c)
             {
                 case (White): return Black;
@@ -107,6 +77,39 @@ namespace Com.aberrantGames.Tak.GameEngine
                 default:
                     Debug.LogError("bad color" + (int)c);
                     return 0;
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        protected string NotationString()
+        {
+            string n = "";
+            if (Color == White)
+                n = "W";
+            else
+                n = "B";
+            switch (Type)
+            {
+                case (Capstone): n += "C"; break;
+                case (Standing): n += "S"; break;
+            }
+            return n;
+        }
+
+        protected string ColorString()
+        {
+            Color c = Color;
+            switch (c)
+            {
+                case (White): return "White";
+                case (Black): return "Black";
+                case (NoColor): return "No Color";
+                default:
+                    Debug.LogError("bad color" + (int)c);
+                    return "";
             }
         }
 
