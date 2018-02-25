@@ -58,20 +58,20 @@ namespace Com.aberrantGames.Tak.GameEngine
             Position p = New(_cfg);
             p.turn = _move;
 
-            for (int y = 0; y < p.Size(); y++)
+            for (int y = 0; y < p.Size; y++)
             {
-                for (int x = 0; x < p.Size(); x++)
+                for (int x = 0; x < p.Size; x++)
                 {
                     Square sq = _board[y][x];
                     if (sq.Stack.Length == 0)
                         continue;
-                    int i = x + y * p.Size();
-                    switch (sq.Stack[0].Color())
+                    int i = x + y * p.Size;
+                    switch (sq.Stack[0].Color)
                     {
                         case Stone.White: p.White |= (1 << i); break;
                         case Stone.Black: p.Black |= (1 << i); break;
                     }
-                    switch (sq.Stack[0].Type())
+                    switch (sq.Stack[0].Type)
                     {
                         case Stone.Capstone: p.Caps |= (1 << i); break;
                         case Stone.Standing: p.Standing |= (1 << i); break;
@@ -132,13 +132,13 @@ namespace Com.aberrantGames.Tak.GameEngine
                 return;
             }
 
-            switch (_s.Stack[0].Color())
+            switch (_s.Stack[0].Color)
             {
                 case (Stone.White): _p.White |= (1 << i); break;
                 case (Stone.Black): _p.Black |= (1 << i); break;
             }
 
-            switch (_s.Stack[0].Type())
+            switch (_s.Stack[0].Type)
             {
                 case (Stone.Standing): _p.Standing |= (1 << i); break;
                 case (Stone.Capstone): _p.Caps |= (1 << i); break;
@@ -150,7 +150,7 @@ namespace Com.aberrantGames.Tak.GameEngine
             _p.Stacks[i] = 0;            
             for (int j = 0; j <= _s.Stack.Length; j++)                   //for j, piece := range s[1:]
             { 
-                if (_s.Stack[j].Color() == Stone.Black)                  //  if (piece.Color() == Black)                    
+                if (_s.Stack[j].Color == Stone.Black)                  //  if (piece.Color() == Black)                    
                     _p.Stacks[i] |= (1 << j);                            //      p.Stacks[i] |= (1 << uint(j))
             }
             //p.hash ^= p.hashAt(i);
