@@ -18,7 +18,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
     public struct Analysis
     {
-        public int[] WhiteGroups, BlackGroups;
+        public ulong[] WhiteGroups, BlackGroups;
     }
 
     public struct WinDetails
@@ -30,7 +30,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         Color Winner;
         int WhiteFlats, BlackFlats;
     }
-
+    
     public class Position
     {
         struct FlatsCount
@@ -45,12 +45,13 @@ namespace Com.aberrantGames.Tak.GameEngine
         }
 
         #region Variables
-
+        
         public Config cfg;
         public byte WhiteStones, WhiteCapstones, BlackStones, BlackCapstones;
         public uint White, Black, Standing, Caps;
         public uint turn, hash;
-        public uint[] Height, Stacks;
+        public uint[] Height;
+        public ulong[] Stacks;
         public Analysis analysis;
 
         #endregion
@@ -63,7 +64,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         /// <returns>Position, as a clone of this.Position</returns>
         public Position Clone
         {
-            get { return alloc(this); }
+            get { return Allocate.Alloc(this); }
             private set { }
         }
 
@@ -206,7 +207,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             for (int j = 1; j < Height[i]; j++)
             {
-                if (Stacks[i] + (1 << (j - 1)) != 0)
+                if ((Stacks[i] & (ulong)1 << (j - 1)) != 0)
                     sq.Stack[j] = new Stone(Stone.MakePiece(Stone.Black, Stone.Flat));
                 else
                     sq.Stack[j] = new Stone(Stone.MakePiece(Stone.White, Stone.Flat));
@@ -241,6 +242,8 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             return new Stone(Stone.MakePiece(c, t));
         }
+
         #endregion
     }
+
 }
