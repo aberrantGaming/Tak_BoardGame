@@ -8,7 +8,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 {
     public class Tile
     {
-        public Tile(int _height)
+        public Tile(uint _height)
         {            
             Stack = new Stone[_height];
         }
@@ -30,7 +30,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         Color Winner;
         int WhiteFlats, BlackFlats;
     }
-    
+
     public class Position
     {
         struct FlatsCount
@@ -45,12 +45,12 @@ namespace Com.aberrantGames.Tak.GameEngine
         }
 
         #region Variables
-        
+
         public Config cfg;
         public byte WhiteStones, WhiteCapstones, BlackStones, BlackCapstones;
-        public int White, Black, Standing, Caps;
-        public int turn, hash;
-        public int[] Height, Stacks;
+        public uint White, Black, Standing, Caps;
+        public uint turn, hash;
+        public uint[] Height, Stacks;
         public Analysis analysis;
 
         #endregion
@@ -97,7 +97,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         /// <summary>
         /// Returns the current turn number
         /// </summary>
-        public int TurnCount
+        public uint TurnCount
         {
             get { return this.turn; }
             private set { }
@@ -108,7 +108,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         /// </summary>
         public int WhiteStonesCount
         {
-            get { return (int)this.WhiteStones; }
+            get { return this.WhiteStones; }
             private set { }
         }
 
@@ -117,7 +117,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         /// </summary>
         public int BlackStonesCount
         {
-            get { return (int)this.BlackStones; }
+            get { return this.BlackStones; }
             private set { }
         }
 
@@ -241,8 +241,6 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             return new Stone(Stone.MakePiece(c, t));
         }
-
         #endregion
     }
-
 }
