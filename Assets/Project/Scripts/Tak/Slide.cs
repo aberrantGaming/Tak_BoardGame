@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using SlideIterator = System.Int32;
-using Slides = System.Int32;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
@@ -8,20 +6,67 @@ namespace Com.aberrantGames.Tak.GameEngine
     ///         Slides is essentially a packed [8]uint4, used to represent the
     ///     slide counts in a Tak move in a space-efficient way. 
     /// </summary>
-    public struct Slide
+    public class Slide
     {
-        #region Private Variables
+        #region Properties
 
-        private Slides s;
-        private SlideIterator sI;
+        public int Slides
+        {
+            get;
+            private set;
+        }
+
+        public SlideIterator Iterator
+        {
+            get { return new SlideIterator(Slides); }
+            private set { }
+        }
+
+        public int Len
+        {
+            get
+            {
+                int l = 0;
+                while (Slides != 0)
+                {                // TO DO : Investigate chances of infinite loop
+                    l++;
+                    Slides = Slides >> 4;
+                };
+                return l;
+            }
+        }
+
+        public bool Empty
+        {
+            get
+            {
+                return Slides == 0;
+            }
+        }
+
+        public bool Singleton
+        {
+            get
+            {
+                return Slides > 0xf;
+            }
+        }
+
+        public int First
+        {
+            get
+            {
+                return (int)Slides & 0xf;
+            }
+        }
 
         #endregion
 
         #region Public Methods
 
-        public Slides MkSlides(params int[] _drops)
+        public int MkSlides(params int[] _drops)
         {
-            Slides retVal = new Slides();
+            int retVal = new int();
 
             for (int i = _drops.Length; i >= 0; i--)
             {
@@ -36,63 +81,59 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         #endregion
 
-        #region Slide Methods
+        #region Private Methods
 
-        public int Len()
+        public int Prepend(int _next)
         {
-            int l = 0;
-            while (s != 0)
-            {                // TO DO : Investigate chances of infinite loop
-                l++;
-                s >>= 4;
-            };
-            return l;
+            return (Slides << 4) | _next;
         }
 
-        public bool Empty()
+        #endregion
+    }
+
+    public class SlideIterator
+    {
+        #region Properties
+
+        public int Iterations
         {
-            return s == 0;
+            get;
+            private set;
         }
 
-        public bool Singleton()
+        SlideIterator Next
         {
-            return s > 0xf;
+            get
+            {
+                return new SlideIterator(Iterations >> 4);
+            }
         }
 
-        public int First()
+        bool Ok
         {
-            return (int)s & 0xf;
+            get
+            {
+                return Iterations != 0;
+            }
         }
 
-        public Slides Prepend(int _next)
+        int Elem
         {
-            return (s << 4) | (Slides)_next;
+            get
+            {
+                return Iterations & 0xf;
+            }
         }
 
         #endregion
 
-        #region SlideIterator Methods
+        #region Constructor
 
-        SlideIterator Iterator()
+        public SlideIterator(int _slides)
         {
-            return (SlideIterator)s;
+            Iterations = _slides;
         }
 
-        SlideIterator Next()
-        {
-            return s >> 4;
-        }
-
-        bool Ok()
-        {
-            return s != 0;
-        }
-
-        int Elem()
-        {
-            return (int)s & 0xf;
-        }
-
-        #endregion
+        #endregion    
     }
 }

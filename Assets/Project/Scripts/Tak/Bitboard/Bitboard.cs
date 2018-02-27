@@ -14,18 +14,26 @@ namespace Com.aberrantGames.Tak.Bitboard
 
     public class Bitboard
     {
+        #region Variables
+
+        // Struct
         struct Dimensions
         {
             public int W, H;
 
-            public Dimensions(int _w = 0, int _h=0)
+            public Dimensions(int _w = 0, int _h = 0)
             {
                 W = _w;
                 H = _h;
             }
         }
-                
+
+        // Private
         protected ulong next;
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Used to count the population of bits on a bitboard
@@ -44,6 +52,10 @@ namespace Com.aberrantGames.Tak.Bitboard
             _x *= 0x0101010101010101;
             return (long)(_x >> 56);
         }
+
+        #endregion
+
+        #region Private 
 
         /// <summary>
         /// Predetermines constants from provided _size
@@ -135,7 +147,7 @@ namespace Com.aberrantGames.Tak.Bitboard
 
             return _out;
         }
-        
+
         ulong Flood(Constants _c, ulong _within, ulong _seed)
         {
             while (true)
@@ -159,4 +171,5 @@ namespace Com.aberrantGames.Tak.Bitboard
             return next & _within;
         }
     }
+    #endregion
 }

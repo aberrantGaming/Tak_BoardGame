@@ -348,26 +348,26 @@ namespace Com.aberrantGames.Tak.GameEngine
                 case MoveType.SlideLeft:
                     return new CoordPair()
                     {
-                        X = m.X - (int)m.Slides.Len(),
+                        X = m.X - (int)m.Slides.Len,
                         Y = m.Y
                     };
                 case MoveType.SlideRight:
                     return new CoordPair()
                     {
-                        X = m.X + (int)m.Slides.Len(),
+                        X = m.X + (int)m.Slides.Len,
                         Y = m.Y
                     };
                 case MoveType.SlideUp:
                     return new CoordPair()
                     {
                         X = m.X,
-                        Y = m.Y + (int)m.Slides.Len(),
+                        Y = m.Y + (int)m.Slides.Len,
                     };
                 case MoveType.SlideDown:
                     return new CoordPair()
                     {
                         X = m.X,
-                        Y = m.Y - (int)m.Slides.Len(),
+                        Y = m.Y - (int)m.Slides.Len,
                     };
                 default:
                     Debug.LogError("bad type");
