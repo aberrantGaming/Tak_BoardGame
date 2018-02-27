@@ -1,15 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Square = Com.aberrantGames.Tak.GameEngine.Tile;
+﻿using Square = Com.aberrantGames.Tak.GameEngine.Tile;
 
 namespace Com.aberrantGames.Tak.GameEngine
-{    
+{
     public struct Config                    // TODO : Replace with GameHolder ScriptableObject
     {
+        #region Variables
+
         public int Size, Pieces, Capstones;
         public bool BlackWinsTies;
-        public Bitboard.Constants c;
+        public Bits.Constants c;
+
+        #endregion
     }
         
     public class Board
@@ -68,13 +69,13 @@ namespace Com.aberrantGames.Tak.GameEngine
                     int i = x + y * p.Size;
                     switch (sq.Stack[0].Color)
                     {
-                        case Stone.White: p.White |= (1 << i); break;
-                        case Stone.Black: p.Black |= (1 << i); break;
+                        case Stone.White: p.White |= (uint)(1 << i); break;
+                        case Stone.Black: p.Black |= (uint)(1 << i); break;
                     }
                     switch (sq.Stack[0].Type)
                     {
-                        case Stone.Capstone: p.Caps |= (1 << i); break;
-                        case Stone.Standing: p.Standing |= (1 << i); break;
+                        case Stone.Capstone: p.Caps |= (uint)(1 << i); break;
+                        case Stone.Standing: p.Standing |= (uint)(1 << i); break;
                     }
 
                     for (int j = 0; j < sq.Stack.Length; j++)   //for j, piece := range sq {
@@ -103,7 +104,7 @@ namespace Com.aberrantGames.Tak.GameEngine
                         //p.Stacks[i] |= 1 << uint(j - 1)
                     }
 
-                    p.Height[i] = (int)sq.Stack.Length;
+                    p.Height[i] = (uint)sq.Stack.Length;
                     //p.hash ^= p.hashAt(i);
                 }
             }
@@ -122,10 +123,10 @@ namespace Com.aberrantGames.Tak.GameEngine
         public void Set(Position _p, int _x, int _y, Square _s)
         {
             int i = (_y * _p.cfg.Size + _x);
-            _p.White &= _p.White ^ (1 << i);
-            _p.Black &= _p.Black ^ (1 << i);
-            _p.Standing &= _p.Standing ^ (1 << i);
-            _p.Caps &= _p.Caps ^ (1 << i);
+            _p.White &= _p.White ^ (uint)(1 << i);
+            _p.Black &= _p.Black ^ (uint)(1 << i);
+            _p.Standing &= _p.Standing ^ (uint)(1 << i);
+            _p.Caps &= _p.Caps ^ (uint)(1 << i);
             if (_s.Stack.Length == 0)
             {
                 _p.Height[i] = 0;
@@ -134,24 +135,24 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             switch (_s.Stack[0].Color)
             {
-                case (Stone.White): _p.White |= (1 << i); break;
-                case (Stone.Black): _p.Black |= (1 << i); break;
+                case (Stone.White): _p.White |= (uint)(1 << i); break;
+                case (Stone.Black): _p.Black |= (uint)(1 << i); break;
             }
 
             switch (_s.Stack[0].Type)
             {
-                case (Stone.Standing): _p.Standing |= (1 << i); break;
-                case (Stone.Capstone): _p.Caps |= (1 << i); break;
+                case (Stone.Standing): _p.Standing |= (uint)(1 << i); break;
+                case (Stone.Capstone): _p.Caps |= (uint)(1 << i); break;
             }
 
             //p.hash ^= p.hashAt(i);
 
-            _p.Height[i] = _s.Stack.Length;
+            _p.Height[i] = (uint)_s.Stack.Length;
             _p.Stacks[i] = 0;            
             for (int j = 0; j <= _s.Stack.Length; j++)                   //for j, piece := range s[1:]
             { 
                 if (_s.Stack[j].Color == Stone.Black)                  //  if (piece.Color() == Black)                    
-                    _p.Stacks[i] |= (1 << j);                            //      p.Stacks[i] |= (1 << uint(j))
+                    _p.Stacks[i] |= (uint)(1 << j);                            //      p.Stacks[i] |= (1 << uint(j))
             }
             //p.hash ^= p.hashAt(i);
         }

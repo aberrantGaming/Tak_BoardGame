@@ -1,15 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
-namespace Com.aberrantGames.Tak.Bitboard
+namespace Com.aberrantGames.Tak.Bits
 {
     public class Constants
     {
+        #region Variables
+
         public uint Size;
         public ulong L, R, T, B;
         public ulong Edge;
         public ulong Mask;
+
+        #endregion
     }
 
     public class Bitboard
@@ -51,6 +53,35 @@ namespace Com.aberrantGames.Tak.Bitboard
             _x &= 0x0f0f0f0f0f0f0f0f;
             _x *= 0x0101010101010101;
             return (long)(_x >> 56);
+        }
+
+        /// <summary>
+        /// Used to get the list of flood groups from this board
+        /// </summary>
+        /// <param name="_c">constants</param>
+        /// <param name="_bits">bitboard</param>
+        /// <param name="_out"></param>
+        /// <returns></returns>
+        public static List<ulong> FloodGroups(Constants _c, ulong _bits, List<ulong> _out)    // TO DO : Verify conversion to list
+        {
+            ulong seen = new ulong();
+            while (_bits != 0)
+            {
+                ulong next = _bits & (_bits - 1);
+                ulong bit = _bits & ~next;
+
+                if ((seen & bit) == 0)
+                {
+                    ulong g = Flood(_c, _bits, bit);
+                    if (g != bit)
+                        _out.Add(g);
+                    seen |= g;
+                }
+
+                _bits = next;
+            }
+
+            return _out;
         }
 
         #endregion
@@ -119,40 +150,12 @@ namespace Com.aberrantGames.Tak.Bitboard
             return retVal;
         }
 
-        /// <summary>
-        /// Used to get the list of flood groups from this board
-        /// </summary>
-        /// <param name="_c">constants</param>
-        /// <param name="_bits">bitboard</param>
-        /// <param name="_out"></param>
-        /// <returns></returns>
-        List<ulong> FloodGroups(Constants _c, ulong _bits, List<ulong> _out)    // TO DO : Verify conversion to list
-        {
-            ulong seen = new ulong();
-            while (_bits != 0)
-            {
-                next = _bits & (_bits - 1);
-                ulong bit = _bits & ~next;
 
-                if ((seen & bit) == 0)
-                {
-                    ulong g = Flood(_c, _bits, bit);
-                    if (g != bit)
-                        _out.Add(g);
-                    seen |= g;
-                }
-
-                _bits = next;
-            }
-
-            return _out;
-        }
-
-        ulong Flood(Constants _c, ulong _within, ulong _seed)
+        public static ulong Flood(Constants _c, ulong _within, ulong _seed)
         {
             while (true)
             {
-                next = Grow(_c, _within, _seed);
+                ulong next = Grow(_c, _within, _seed);
                 if (next == _seed)
                 {
                     return next;
@@ -161,9 +164,9 @@ namespace Com.aberrantGames.Tak.Bitboard
             }
         }
 
-        ulong Grow(Constants _c, ulong _within, ulong _seed)
+        public static ulong Grow(Constants _c, ulong _within, ulong _seed)
         {
-            next = _seed;
+            ulong next = _seed;
             next |= (_seed << 1) & ~_c.R;
             next |= (_seed >> 1) & ~_c.L;
             next |= (_seed >> (byte)_c.Size);       // TO DO : Confirm use of type cast
