@@ -7,10 +7,10 @@ namespace Com.aberrantGames.Tak.GameEngine
     public class Tile
     {
         public Tile(uint _height)
-        {            
+        {
             Stack = new Stone[_height];
         }
-        
+
         public Stone[] Stack;
     }
 
@@ -18,38 +18,46 @@ namespace Com.aberrantGames.Tak.GameEngine
     {
         public List<ulong> WhiteGroups, BlackGroups;
 
-        public void SetGroups(ulong[] _groups)
+        public void SetGroups(List<ulong> _groups)
         {
             WhiteGroups = _groups;
             BlackGroups = _groups;
         }
     }
 
-    public struct WinDetails
-    {
-        enum WinReason { RoadWin, FlatsWin, Resignation }
-
-        bool Over;
-        WinReason Reason;
-        Color Winner;
-        int WhiteFlats, BlackFlats;
-    }
-    
     public class Position
     {
         #region Variables
 
+        // Structs
         struct FlatsCount
         {
-            public int White, Black;
+            public int White, Black;            
         }
 
         struct PlayerResult
         {
             public Color Player;
             public bool Result;
+
+            public PlayerResult(bool _result, Color _player)
+            {
+                Result = _result;
+                Player = _player;
+            }
         }
 
+        struct WinDetails
+        {
+            public enum WinReason { RoadWin, FlatsWin, Resignation }
+
+            public bool Over;
+            public WinReason Reason;
+            public Color Winner;
+            public int WhiteFlats, BlackFlats;
+        }
+        
+        // Public Variables
         public Config cfg;
 
         public byte WhiteStones, WhiteCapstones, BlackStones, BlackCapstones;
@@ -57,11 +65,14 @@ namespace Com.aberrantGames.Tak.GameEngine
         public int turn;
 
         public ulong White, Black, Standing, Caps;
-        public uint[] Height;
-        public ulong[] Stacks;
-        
-        protected Analysis analysis;
 
+        public uint[] Height;
+
+        public ulong[] Stacks;
+
+        public Analysis analysis;
+
+        // Private Variables
         private ulong hash;
 
         #endregion
@@ -309,8 +320,57 @@ namespace Com.aberrantGames.Tak.GameEngine
             alloc = new List<ulong>(alloc.Capacity);
             analysis.BlackGroups = Bitboard.FloodGroups(cfg.c, br, alloc);
         }
+        
+        /// <summary>
+        /// Determines if the game is over and returns a winner if so.
+        /// </summary>
+        /// <param name="_over"></param>
+        /// <param name="_winner"></param>
+        /// <returns>PlayerResult</returns>
+        private PlayerResult GameOver
+        {
+            get
+            {
+                if (HasRoad.Result == true)
+                    return new PlayerResult(true, HasRoad.Player);
+
+                if ((WhiteStones + WhiteCapstones) != 0 &&
+                        (BlackStones + BlackCapstones) != 0 &&
+                        (White | Black) != cfg.c.Mask)
+                {
+                    return new PlayerResult(false, Stone.NoColor);
+                }
+
+                return new PlayerResult(true, FlatsWinner);
+            }
+        }
+
+        /// <summary>
+        /// Returns the match results.
+        /// </summary>
+        /// <returns></returns>
+        private WinDetails WinResults
+        {
+            get
+            {
+                PlayerResult check = GameOver;
+
+                WinDetails retVal;
+
+                retVal.Over = check.Result;
+                retVal.Winner = check.Player;
+                retVal.WhiteFlats = CountFlats.White;
+                retVal.BlackFlats = CountFlats.Black;
+
+                if (HasRoad.Result == true)
+                    retVal.Reason = WinDetails.WinReason.RoadWin;
+                else
+                    retVal.Reason = WinDetails.WinReason.FlatsWin;
+
+                return retVal;
+            }
+        }
 
         #endregion
     }
-
 }
