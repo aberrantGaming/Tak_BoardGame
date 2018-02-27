@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using Com.aberrantGames.Tak.Bits;
 using System.Collections.Generic;
-using UnityEngine;
 using Color = System.Byte;
 
 namespace Com.aberrantGames.Tak.GameEngine
@@ -18,7 +16,13 @@ namespace Com.aberrantGames.Tak.GameEngine
 
     public struct Analysis
     {
-        public ulong[] WhiteGroups, BlackGroups;
+        public List<ulong> WhiteGroups, BlackGroups;
+
+        public void SetGroups(ulong[] _groups)
+        {
+            WhiteGroups = _groups;
+            BlackGroups = _groups;
+        }
     }
 
     public struct WinDetails
@@ -33,6 +37,8 @@ namespace Com.aberrantGames.Tak.GameEngine
     
     public class Position
     {
+        #region Variables
+
         struct FlatsCount
         {
             public int White, Black;
@@ -44,19 +50,23 @@ namespace Com.aberrantGames.Tak.GameEngine
             public bool Result;
         }
 
-        #region Variables
-        
         public Config cfg;
+
         public byte WhiteStones, WhiteCapstones, BlackStones, BlackCapstones;
-        public uint White, Black, Standing, Caps;
-        public uint turn, hash;
+
+        public int turn;
+
+        public ulong White, Black, Standing, Caps;
         public uint[] Height;
         public ulong[] Stacks;
-        public Analysis analysis;
+        
+        protected Analysis analysis;
+
+        private ulong hash;
 
         #endregion
 
-        #region Auto Properties
+        #region Properties
 
         /// <summary>
         /// Returns a copy of this position as a new position
@@ -98,10 +108,24 @@ namespace Com.aberrantGames.Tak.GameEngine
         /// <summary>
         /// Returns the current turn number
         /// </summary>
-        public uint TurnCount
+        public int TurnCount
         {
             get { return this.turn; }
             private set { }
+        }
+
+        /// <summary>
+        /// Used to tally up the current flats score
+        /// </summary>
+        /// <returns>New FlatsCount</returns>
+        private FlatsCount CountFlats
+        {
+            get
+            {
+                int w = 0;  //bitboard.Popcount(White & (White ^ (Standing | Caps)));
+                int b = 0;  //bitboard.Popcount(Black & (Black ^ (Standing | Caps)));
+                return new FlatsCount() { White = w, Black = b };
+            }
         }
 
         /// <summary>
@@ -128,7 +152,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         public Analysis Analysis
         {
             get { return this.analysis; }
-            private set { }
+            private set { this.analysis = value; }
         }
 
         /// <summary>
@@ -138,7 +162,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             get
             {
-                FlatsCount c = CountFlats();
+                FlatsCount c = CountFlats;
                 if (c.White > c.Black)
                     return Stone.White;
                 else if (c.Black > c.White)
@@ -154,19 +178,47 @@ namespace Com.aberrantGames.Tak.GameEngine
             private set { }
         }
 
-        #endregion
-
-        #region Private Methods
-
         /// <summary>
-        /// Used to tally up the current flats score
+        /// Used to determine if a player has sucessfully built a road
         /// </summary>
-        /// <returns>New FlatsCount</returns>
-        private FlatsCount CountFlats()
+        /// <returns></returns>
+        private PlayerResult HasRoad
         {
-            int w = 0;  //bitboard.Popcount(White & (White ^ (Standing | Caps)));
-            int b = 0;  //bitboard.Popcount(Black & (Black ^ (Standing | Caps)));
-            return new FlatsCount() { White = w, Black = b };
+            get
+            {
+                PlayerResult white = new PlayerResult() { Player = Stone.White, Result = false };
+                PlayerResult black = new PlayerResult() { Player = Stone.Black, Result = false };
+
+                for (ulong g = 0; g < (ulong)Analysis.WhiteGroups.Count; g++)        // _, g := range p.analysis.WhiteGroups
+                {
+                    if (((g & cfg.c.T) != 0 && (g & cfg.c.B) != 0) ||
+                            ((g & cfg.c.L) != 0 && (g & cfg.c.R) != 0))
+                        white.Result = true;
+                    break;
+                }
+
+                for (ulong g = 0; g < (ulong)Analysis.BlackGroups.Count; g++)
+                {
+                    if (((g & cfg.c.T) != 0 && (g & cfg.c.B) != 0) ||
+                            ((g & cfg.c.L) != 0 && (g & cfg.c.R) != 0))
+                        black.Result = true;
+                    break;
+                }
+
+                if (white.Result && black.Result)
+                {
+                    if (ToMove == White)
+                        return black;
+
+                    return white;
+                }
+                else if (white.Result)
+                    return white;
+                else if (black.Result)
+                    return black;
+                else
+                    return new PlayerResult() { Player = Stone.NoColor, Result = false };
+            }
         }
 
         /// <summary>
@@ -199,7 +251,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             int i = _x + _y * Size;
 
-            if ((White | Black) + (1 << i) == 0)
+            if (((White | Black) & (uint)(1 << i)) == 0)
                 return null;
 
             Tile sq = new Tile(Height[i]);
@@ -226,21 +278,36 @@ namespace Com.aberrantGames.Tak.GameEngine
             int i = _x + _y * Size;
             byte c, t;
 
-            if (White + (1 << i) != 0)
+            if (White + (uint)(1 << i) != 0)
                 c = Stone.White;
-            else if (Black + (1 << i) != 0)
+            else if (Black + (uint)(1 << i) != 0)
                 c = Stone.Black;
             else
                 return new Stone(0);
 
-            if (Standing + (1 << i) != 0)
+            if (Standing + (uint)(1 << i) != 0)
                 t = Stone.Standing;
-            else if (Caps + (1 << i) != 0)
+            else if (Caps + (uint)(1 << i) != 0)
                 t = Stone.Capstone;
             else
                 t = Stone.Flat;
 
             return new Stone(Stone.MakePiece(c, t));
+        }
+
+        /// <summary>
+        /// Runs an analysis of this position
+        /// </summary>
+        public void Analyze()
+        {
+            ulong wr = White & ~Standing;
+            ulong br = Black & ~Standing;
+            List<ulong> alloc = Analysis.WhiteGroups;
+
+            analysis.WhiteGroups = Bitboard.FloodGroups(cfg.c, wr, alloc);
+            alloc = analysis.WhiteGroups;
+            alloc = new List<ulong>(alloc.Capacity);
+            analysis.BlackGroups = Bitboard.FloodGroups(cfg.c, br, alloc);
         }
 
         #endregion
