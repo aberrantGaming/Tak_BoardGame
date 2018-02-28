@@ -1,162 +1,152 @@
-﻿using Square = Com.aberrantGames.Tak.GameEngine.Tile;
+﻿//using Square = Com.aberrantGames.Tak.GameEngine.Tile;
 
-namespace Com.aberrantGames.Tak.GameEngine
-{
-    public struct Config                    // TODO : Replace with GameHolder ScriptableObject
-    {
-        #region Variables
+//namespace Com.aberrantGames.Tak.Old
+//{
+//    public class Board
+//    {
+//        #region Variables
 
-        public int Size, Pieces, Capstones;
-        public bool BlackWinsTies;
-        public Bits.Constants c;
+//        static int[] defualtPieces = new int[] { 0, 0, 0, 10, 15, 21, 30, 40, 50 };
+//        static int[] defaultCapstones = new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 2 };
 
-        #endregion
-    }
-        
-    public class Board
-    {
-        #region Variables
+//        #endregion
 
-        static int[] defualtPieces = new int[] { 0, 0, 0, 10, 15, 21, 30, 40, 50 };
-        static int[] defaultCapstones = new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 2 };
+//        #region Public Methods
 
-        #endregion
+//        /// <summary>
+//        ///     Initializes a new board position on the provided Configuration
+//        /// </summary>
+//        /// <param name="_g"></param>
+//        /// <returns> Position? </returns>
+//        public Position New(Config _g)
+//        {
+//            if (_g.Pieces == 0)
+//                _g.Pieces = defualtPieces[_g.Size];
+//            if (_g.Capstones == 0)
+//                _g.Capstones = defualtPieces[_g.Size];
 
-        #region Public Methods
+//            Position p = new Position()
+//            {
+//                cfg = _g,
+//                WhiteStones = (byte)_g.Pieces,
+//                WhiteCapstones = (byte)_g.Capstones,
+//                BlackStones = (byte)_g.Pieces,
+//                BlackCapstones = (byte)_g.Capstones,
+//                turn = 0,
 
-        /// <summary>
-        ///     Initializes a new board position on the provided Configuration
-        /// </summary>
-        /// <param name="_g"></param>
-        /// <returns> Position? </returns>
-        public Position New(Config _g)
-        {
-            if (_g.Pieces == 0)
-                _g.Pieces = defualtPieces[_g.Size];
-            if (_g.Capstones == 0)
-                _g.Capstones = defualtPieces[_g.Size];
+//                //hash = fnvBasis           // TO DO : Implement hash struct
+//            };
+//            return p;
+//        }
 
-            Position p = new Position()
-            {
-                cfg = _g,
-                WhiteStones = (byte)_g.Pieces,
-                WhiteCapstones = (byte)_g.Capstones,
-                BlackStones = (byte)_g.Pieces,
-                BlackCapstones = (byte)_g.Capstones,
-                turn = 0,
+//        /// <summary>
+//        ///     Initializes a position with the specified tiles and move number.
+//        /// </summary>
+//        /// <returns></returns>
+//        public Position FromSquares(Config _cfg, Square[][] _board, int _move)
+//        {
+//            Position p = New(_cfg);
+//            p.turn = _move;
 
-                //hash = fnvBasis           // TO DO : Implement hash struct
-            };
-            return p;
-        }
+//            for (int y = 0; y < p.Size; y++)
+//            {
+//                for (int x = 0; x < p.Size; x++)
+//                {
+//                    Square sq = _board[y][x];
+//                    if (sq.Stack.Length == 0)
+//                        continue;
+//                    int i = x + y * p.Size;
+//                    switch (sq.Stack[0].Color)
+//                    {
+//                        case Stone.White: p.White |= (uint)(1 << i); break;
+//                        case Stone.Black: p.Black |= (uint)(1 << i); break;
+//                    }
+//                    switch (sq.Stack[0].Type)
+//                    {
+//                        case Stone.Capstone: p.Caps |= (uint)(1 << i); break;
+//                        case Stone.Standing: p.Standing |= (uint)(1 << i); break;
+//                    }
 
-        /// <summary>
-        ///     Initializes a position with the specified tiles and move number.
-        /// </summary>
-        /// <returns></returns>
-        public Position FromSquares(Config _cfg, Square[][] _board, int _move)
-        {
-            Position p = New(_cfg);
-            p.turn = _move;
+//                    for (int j = 0; j < sq.Stack.Length; j++)   //for j, piece := range sq {
+//                    {
+//                        //switch piece {
+//                        //case MakePiece(White, Capstone):
+//                        //p.whiteCaps--
 
-            for (int y = 0; y < p.Size; y++)
-            {
-                for (int x = 0; x < p.Size; x++)
-                {
-                    Square sq = _board[y][x];
-                    if (sq.Stack.Length == 0)
-                        continue;
-                    int i = x + y * p.Size;
-                    switch (sq.Stack[0].Color)
-                    {
-                        case Stone.White: p.White |= (uint)(1 << i); break;
-                        case Stone.Black: p.Black |= (uint)(1 << i); break;
-                    }
-                    switch (sq.Stack[0].Type)
-                    {
-                        case Stone.Capstone: p.Caps |= (uint)(1 << i); break;
-                        case Stone.Standing: p.Standing |= (uint)(1 << i); break;
-                    }
+//                        //case MakePiece(Black, Capstone):
+//                        //p.blackCaps--
 
-                    for (int j = 0; j < sq.Stack.Length; j++)   //for j, piece := range sq {
-                    {
-                        //switch piece {
-                            //case MakePiece(White, Capstone):
-                            //p.whiteCaps--
-            
-                            //case MakePiece(Black, Capstone):
-                            //p.blackCaps--
-            
-                            //case MakePiece(White, Flat), MakePiece(White, Standing):
-                            //p.whiteStones--
-            
-                            //case MakePiece(Black, Flat), MakePiece(Black, Standing):
-                            //p.blackStones--
-            
-                            //default:
-                            //return nil, errors.New("bad stone")            
-                        //}
+//                        //case MakePiece(White, Flat), MakePiece(White, Standing):
+//                        //p.whiteStones--
 
-                        //if (j == 0)
-                            //continue
+//                        //case MakePiece(Black, Flat), MakePiece(Black, Standing):
+//                        //p.blackStones--
 
-                        //if piece.Color() == Black {
-                        //p.Stacks[i] |= 1 << uint(j - 1)
-                    }
+//                        //default:
+//                        //return nil, errors.New("bad stone")            
+//                        //}
 
-                    p.Height[i] = (uint)sq.Stack.Length;
-                    //p.hash ^= p.hashAt(i);
-                }
-            }
+//                        //if (j == 0)
+//                        //continue
 
-            p.Analyze();
-            return p;
-        }
 
-        /// <summary>
-        ///     Set's a piece to a tile at a specified location on the referenced position
-        /// </summary>
-        /// <param name="_p">Position</param>
-        /// <param name="_x">Position.X</param>
-        /// <param name="_x">Position.Y</param>
-        /// <param name="_s">Tile to set</param>
-        public void Set(Position _p, int _x, int _y, Square _s)
-        {
-            int i = (_y * _p.cfg.Size + _x);
-            _p.White &= _p.White ^ (uint)(1 << i);
-            _p.Black &= _p.Black ^ (uint)(1 << i);
-            _p.Standing &= _p.Standing ^ (uint)(1 << i);
-            _p.Caps &= _p.Caps ^ (uint)(1 << i);
-            if (_s.Stack.Length == 0)
-            {
-                _p.Height[i] = 0;
-                return;
-            }
+//                        //if piece.Color() == Black {
+//                        //p.Stacks[i] |= 1 << uint(j - 1)
+//                    }
 
-            switch (_s.Stack[0].Color)
-            {
-                case (Stone.White): _p.White |= (uint)(1 << i); break;
-                case (Stone.Black): _p.Black |= (uint)(1 << i); break;
-            }
+//                    p.Height[i] = (uint)sq.Stack.Length;
+//                    //p.hash ^= p.hashAt(i);
+//                }
+//            }
 
-            switch (_s.Stack[0].Type)
-            {
-                case (Stone.Standing): _p.Standing |= (uint)(1 << i); break;
-                case (Stone.Capstone): _p.Caps |= (uint)(1 << i); break;
-            }
+//            p.Analyze();
+//            return p;
+//        }
 
-            //p.hash ^= p.hashAt(i);
+//        /// <summary>
+//        ///     Set's a piece to a tile at a specified location on the referenced position
+//        /// </summary>
+//        /// <param name="_p">Position</param>
+//        /// <param name="_x">Position.X</param>
+//        /// <param name="_x">Position.Y</param>
+//        /// <param name="_s">Tile to set</param>
+//        public void Set(Position _p, int _x, int _y, Square _s)
+//        {
+//            int i = (_y * _p.cfg.Size + _x);
+//            _p.White &= _p.White ^ (uint)(1 << i);
+//            _p.Black &= _p.Black ^ (uint)(1 << i);
+//            _p.Standing &= _p.Standing ^ (uint)(1 << i);
+//            _p.Caps &= _p.Caps ^ (uint)(1 << i);
+//            if (_s.Stack.Length == 0)
+//            {
+//                _p.Height[i] = 0;
+//                return;
+//            }
 
-            _p.Height[i] = (uint)_s.Stack.Length;
-            _p.Stacks[i] = 0;            
-            for (int j = 0; j <= _s.Stack.Length; j++)                   //for j, piece := range s[1:]
-            { 
-                if (_s.Stack[j].Color == Stone.Black)                  //  if (piece.Color() == Black)                    
-                    _p.Stacks[i] |= (uint)(1 << j);                            //      p.Stacks[i] |= (1 << uint(j))
-            }
-            //p.hash ^= p.hashAt(i);
-        }
+//            switch (_s.Stack[0].Color)
+//            {
+//                case (Stone.White): _p.White |= (uint)(1 << i); break;
+//                case (Stone.Black): _p.Black |= (uint)(1 << i); break;
+//            }
 
-        #endregion
-    }
-}
+//            switch (_s.Stack[0].Type)
+//            {
+//                case (Stone.Standing): _p.Standing |= (uint)(1 << i); break;
+//                case (Stone.Capstone): _p.Caps |= (uint)(1 << i); break;
+//            }
+
+//            //p.hash ^= p.hashAt(i);
+
+//            _p.Height[i] = (uint)_s.Stack.Length;
+//            _p.Stacks[i] = 0;
+//            for (int j = 0; j <= _s.Stack.Length; j++)                   //for j, piece := range s[1:]
+//            {
+//                if (_s.Stack[j].Color == Stone.Black)                  //  if (piece.Color() == Black)                    
+//                    _p.Stacks[i] |= (uint)(1 << j);                            //      p.Stacks[i] |= (1 << uint(j))
+//            }
+//            //p.hash ^= p.hashAt(i);
+//        }
+
+//        #endregion
+//    }
+//}

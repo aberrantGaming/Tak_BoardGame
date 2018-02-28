@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Com.aberrantGames.Tak.Bits
+namespace Com.aberrantGames.Tak.Bitboard
 {
     public class Constants
     {
