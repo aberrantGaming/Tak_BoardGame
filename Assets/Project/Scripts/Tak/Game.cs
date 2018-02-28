@@ -22,7 +22,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         public Constants c;
     }
 
-    public struct Position
+    public class Position
     {
         // Public Variables
         public Config cfg;
@@ -183,6 +183,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         }
 
         #endregion
+
         #region Position Extension Methods
 
         public static int Size(this Position p)

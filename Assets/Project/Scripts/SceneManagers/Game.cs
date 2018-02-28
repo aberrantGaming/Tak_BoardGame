@@ -11,9 +11,7 @@ namespace Com.aberrantGames.Tak.Scenes
         #region Public Variables
 
         public GameHolder selectedGamemode;
-
-        public Board activeGame;
-
+        
         #endregion
 
         #region Private Variables
@@ -52,13 +50,6 @@ namespace Com.aberrantGames.Tak.Scenes
         private void OnEnterState_GAME()
         {
             Debug.Log("Handling gameState transition to GAME.");
-            
-            //activeGame = new Board(selectedGamemode);
-            //Debug.Log("Gamemode Name : " + activeGame.config.GamemodeName + " ; " +
-            //          "Board Size : " + activeGame.config.BoardSize);
-
-            // Transition to next game phase:
-            // gm.SetGameState();
         }
 
         #endregion

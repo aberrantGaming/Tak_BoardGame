@@ -41,12 +41,12 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             Prealloc _alloc;
 
-            if ((_position.Size >= 3) && (_position.Size <= 8))
+            if ((_position.Size() >= 3) && (_position.Size() <= 8))
             {
-                _alloc = new Prealloc(_position, _position.Size);
+                _alloc = new Prealloc(_position, _position.Size());
                 _alloc.Position.Height = _alloc.Height;
                 _alloc.Position.Stacks = _alloc.Stacks;
-                _alloc.Position.Analysis.SetGroups(_alloc.Groups);
+                _alloc.Position.analysis.WhiteGroups = _alloc.Groups;
 
                 _alloc.Height = _position.Height;
                 _alloc.Stacks = _position.Stacks;
@@ -54,7 +54,7 @@ namespace Com.aberrantGames.Tak.GameEngine
                 return _alloc.Position;
             }
             else
-                Debug.LogError("illegal size : " + _position.Size);
+                Debug.LogError("illegal size : " + _position.Size());
 
             return null;
         }
