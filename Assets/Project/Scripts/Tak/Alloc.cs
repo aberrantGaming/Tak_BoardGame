@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
@@ -13,7 +14,8 @@ namespace Com.aberrantGames.Tak.GameEngine
             public Position Position;
 
             public uint[] Height;
-            public ulong[] Stacks, Groups;
+            public ulong[] Stacks;
+            public List<ulong> Groups;
 
             #endregion
 
@@ -25,7 +27,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
                 Height = new uint[_s * _s];
                 Stacks = new ulong[_s * _s];
-                Groups = new ulong[2 * _s];
+                Groups = new List<ulong>(2 * _s);
             }
 
             #endregion

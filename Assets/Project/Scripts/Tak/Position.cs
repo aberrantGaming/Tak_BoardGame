@@ -56,7 +56,13 @@ namespace Com.aberrantGames.Tak.GameEngine
             public Color Winner;
             public int WhiteFlats, BlackFlats;
         }
-        
+
+        struct Dircnt
+        {
+            public MoveType d;
+            public int c;
+        }
+
         // Public Variables
         public Config cfg;
 
@@ -370,6 +376,82 @@ namespace Com.aberrantGames.Tak.GameEngine
                 return retVal;
             }
         }
+
+        #endregion
+
+        #region Public Methods
+
+        public static Position Move(Move _m)
+        {
+            return MovePreallocated(_m, null);
+        }
+
+        public List<Move> AllMoves(List<Move> _moves)
+        {
+            Color next = ToMove;
+            bool cap = false;
+
+            if (next == White)
+                cap = WhiteCapstones > 0;
+            else
+                cap = BlackCapstones > 0;
+
+            for (int x = 0; x < cfg.Size; x++)
+            {
+                for (int y = 0; y < cfg.Size; y++)
+                {
+                    uint i = (uint)(y * cfg.Size + x);
+
+                    if (Height[i] == 0)
+                    {
+                        _moves.Add(new Move() { X = x, Y = y, Type = MoveType.PlaceFlat });
+                        if (turn >= 2)
+                        {
+                            _moves.Add(new Move() { X = x, Y = y, Type = MoveType.PlaceStanding });
+                            if (cap)
+                                _moves.Add(new Move() { X = x, Y = y, Type = MoveType.PlaceCapstone });
+                        }
+                        continue;
+                    }
+
+                    if (turn < 2)
+                        continue;
+
+                    if ((next == Stone.White) && (White & (uint)(1 << (int)i)) == 0)
+                        continue;
+                    else if ((next == Stone.Black) && (Black & (uint)(1 << (int)i)) == 0)
+                        continue;
+
+                    Dircnt[] dirs = new Dircnt[4];
+                    dirs[0] = new Dircnt() { d = MoveType.SlideLeft, c = x };
+                    dirs[0] = new Dircnt() { d = MoveType.SlideRight, c = x - 1 };
+                    dirs[0] = new Dircnt() { d = MoveType.SlideDown, c = y };
+                    dirs[0] = new Dircnt() { d = MoveType.SlideUp, c = y - 1 };
+
+                    for (int d = 0; d < dirs.Length; d++)
+                    {
+                        uint h = Height[i];
+                        if (h > (uint)cfg.Size)
+                            h = (uint)cfg.Size;
+
+                        Slide mask = new Slide((1 << (4 * (int)dirs[d].c) - 1));
+
+                        foreach (Slide s in GameEngine.Move.possibleSlides[(int)h])
+                        {
+                            if (s == mask)
+                                _moves.Add(new GameEngine.Move() { X = x, Y = y, Type = dirs[d].d, Slide = s });
+                        }
+                    }
+                }
+            }
+            return _moves;
+        }
+
+        public static Position MovePreallocated(Move _move, Position _next)
+        {
+
+        }
+        
 
         #endregion
     }

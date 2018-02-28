@@ -10,7 +10,7 @@ namespace Com.aberrantGames.Tak.GameEngine
     {
         #region Properties
 
-        public int Slides
+        public int S
         {
             get;
             private set;
@@ -18,7 +18,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         public SlideIterator Iterator
         {
-            get { return new SlideIterator(Slides); }
+            get { return new SlideIterator(S); }
             private set { }
         }
 
@@ -27,10 +27,10 @@ namespace Com.aberrantGames.Tak.GameEngine
             get
             {
                 int l = 0;
-                while (Slides != 0)
+                while (S != 0)
                 {                // TO DO : Investigate chances of infinite loop
                     l++;
-                    Slides = Slides >> 4;
+                    S = S >> 4;
                 };
                 return l;
             }
@@ -40,7 +40,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             get
             {
-                return Slides == 0;
+                return S == 0;
             }
         }
 
@@ -48,7 +48,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             get
             {
-                return Slides > 0xf;
+                return S > 0xf;
             }
         }
 
@@ -56,8 +56,17 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             get
             {
-                return (int)Slides & 0xf;
+                return (int)S & 0xf;
             }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public Slide(int i)
+        {
+            S = MkSlides(i);
         }
 
         #endregion
@@ -85,7 +94,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         public int Prepend(int _next)
         {
-            return (Slides << 4) | _next;
+            return (S << 4) | _next;
         }
 
         #endregion
