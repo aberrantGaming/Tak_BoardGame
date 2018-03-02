@@ -1,148 +1,124 @@
 ﻿using UnityEngine;
+using Slides = System.UInt32;
+using SlideIterator = System.UInt32;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    /// <summary>
-    ///         Slides is essentially a packed [8]uint4, used to represent the
-    ///     slide counts in a Tak move in a space-efficient way. 
-    /// </summary>
-    public class Slide
+    public static class Slide
     {
-        #region Properties
-
-        public int S
+        /// <summary>
+        /// Create new Slides from list of drops
+        /// </summary>
+        /// <param name="_drops"></param>
+        /// <returns></returns>
+        public static Slides MakeSlides(params int[] _drops)
         {
-            get;
-            private set;
-        }
-
-        public SlideIterator Iterator
-        {
-            get { return new SlideIterator(S); }
-            private set { }
-        }
-
-        public int Len
-        {
-            get
-            {
-                int l = 0;
-                while (S != 0)
-                {                // TO DO : Investigate chances of infinite loop
-                    l++;
-                    S = S >> 4;
-                };
-                return l;
-            }
-        }
-
-        public bool Empty
-        {
-            get
-            {
-                return S == 0;
-            }
-        }
-
-        public bool Singleton
-        {
-            get
-            {
-                return S > 0xf;
-            }
-        }
-
-        public int First
-        {
-            get
-            {
-                return (int)S & 0xf;
-            }
-        }
-
-        #endregion
-
-        #region Constructors
-
-        public Slide(int i)
-        {
-            S = MkSlides(i);
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        public int MkSlides(params int[] _drops)
-        {
-            int retVal = new int();
-
+            Slides retVal = new Slides();
             for (int i = _drops.Length; i >= 0; i--)
             {
                 if (_drops[i] > 8)
                     Debug.LogError("bad drop");
 
-                retVal = Prepend(_drops[i]);
+                retVal = retVal.Prepend(_drops[i]);
             }
-
             return retVal;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        public int Prepend(int _next)
+        /// <summary>
+        /// Get the length of this slide
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static int Len(this Slides s)
         {
-            return (S << 4) | _next;
-        }
-
-        #endregion
-    }
-
-    public class SlideIterator
-    {
-        #region Properties
-
-        public int Iterations
-        {
-            get;
-            private set;
-        }
-
-        SlideIterator Next
-        {
-            get
+            int retVal = 0;
+            while (s != 0)
             {
-                return new SlideIterator(Iterations >> 4);
+                retVal++;
+                s = s >> 4;
             }
+            return retVal;
         }
 
-        bool Ok
+        /// <summary>
+        /// Determine if this slide is empty
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool Empty(this Slides s)
         {
-            get
-            {
-                return Iterations != 0;
-            }
+            return s == 0;
         }
 
-        int Elem
+        /// <summary>
+        /// Determine if this slide is a singleton
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool Singleton(this Slides s)
         {
-            get
-            {
-                return Iterations & 0xf;
-            }
+            return s > 0xf;
         }
 
-        #endregion
-
-        #region Constructor
-
-        public SlideIterator(int _slides)
+        /// <summary>
+        /// Get the first drop of this slide
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static int First(this Slides s)
         {
-            Iterations = _slides;
+            return (int)(s & 0xf);
         }
 
-        #endregion    
+        /// <summary>
+        /// Add a drop to the front of this slide
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="_next"></param>
+        /// <returns></returns>
+        public static Slides Prepend(this Slides s, int _next)
+        {
+            return (s << 4) | (Slides)_next;
+        }
+
+        /// <summary>
+        /// Get the SlideIterator for this slide
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static SlideIterator Iterator(this Slides s)
+        {
+            return (SlideIterator)s;
+        }
+
+        /// <summary>
+        /// Get the next Iteration for this Slide Iterator
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static SlideIterator Next(this SlideIterator s)
+        {
+            return s >> 4;
+        }
+
+        /// <summary>
+        /// Determine if this Slide Iterator is active/inactive
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static bool Ok(this SlideIterator s)
+        {
+            return s != 0;
+        }
+
+        /// <summary>
+        /// Get the base element of this Slide Iterator
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static int Elem(this SlideIterator s)
+        {
+            return (int)(s & 0xf);
+        }
     }
 }
