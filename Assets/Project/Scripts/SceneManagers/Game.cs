@@ -11,9 +11,7 @@ namespace Com.aberrantGames.Tak.Scenes
         #region Public Variables
 
         public GameHolder selectedGamemode;
-
-        public Board activeGame;
-
+        
         #endregion
 
         #region Private Variables
@@ -55,6 +53,7 @@ namespace Com.aberrantGames.Tak.Scenes
         private void OnEnterState_GAME()
         {
             Debug.Log("Handling gameState transition to GAME.");
+<<<<<<< HEAD
             
             Dictionary<string, Transform> prefabDictionary = new Dictionary<string, Transform>
             {
@@ -70,6 +69,8 @@ namespace Com.aberrantGames.Tak.Scenes
 
             // Transition to next game phase:
             // gm.SetGameState();
+=======
+>>>>>>> b67d07367ac08042a16ff980e223a6e59d56dc47
         }
 
         #endregion
