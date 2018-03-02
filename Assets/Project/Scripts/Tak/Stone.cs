@@ -5,54 +5,19 @@ using Type = System.Byte;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public class Stone
+    public static class Stones
     {
-        #region Constant Variables
-
         public const Color White = 1 << 7;
         public const Color Black = 1 << 6;
         public const Color NoColor = 0;
-
         public const Type Flat = 1;
         public const Type Standing = 2;
         public const Type Capstone = 3;
-
-        private const byte colorMask = 3 << 6;
-        private const byte typeMask = 1 << 2 - 1;
-
-        #endregion
-
-        #region Private Variables
-
-        protected Piece p;
-
-        #endregion
-
-        #region Properties
-
-        public Piece Piece { get { return p; } set { p = value; } }
-
-        public Color Color { get { return (Color)(Piece & colorMask); } private set { } }
-        public Type Type { get { return (Type)(Piece & typeMask); } private set { } }
-        public bool IsRoad { get { return Type == Flat || Type == Capstone; } private set { } }
-        public string Notation { get { return NotationString(); } private set { } }
-        public string ColorName { get { return ColorString(); } private set { } }
-
-        #endregion
-
-        #region Constructors
-
-        public Stone(Piece _piece)
-        {
-            Piece = _piece;
-        }
-
-        #endregion
-
-        #region Public Methods
-
+        public const byte ColorMask = 3 << 6;
+        public const byte TypeMask = 1 << 2 - 1;
+        
         /// <summary>
-        /// Used to combine a Color and Type byte into a Piece
+        /// Create a new piece by type and color
         /// </summary>
         /// <param name="_color"></param>
         /// <param name="_kind"></param>
@@ -63,35 +28,48 @@ namespace Com.aberrantGames.Tak.GameEngine
         }
 
         /// <summary>
-        /// Used to get the color opposite to this stones color
+        /// Get the color of this piece
         /// </summary>
-        /// <returns>Color</returns>
-        public Color FlipColor()
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static Color Color(this Piece p)
         {
-            Color c = Color;
-            switch (c)
-            {
-                case (White): return Black;
-                case (Black): return White;
-                case (NoColor): return NoColor;
-                default:
-                    Debug.LogError("bad color" + (int)c);
-                    return 0;
-            }
+            return (Color)((byte)p & ColorMask);
         }
 
-        #endregion
+        /// <summary>
+        /// Get the type of this piece
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static Type Type(this Piece p)
+        {
+            return (Type)((byte)p & TypeMask);
+        }
 
-        #region Private Methods
+        /// <summary>
+        /// Determine if this piece is a valid road
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static bool IsRoad(this Piece p)
+        {
+            return (p.Type() == Flat) || (p.Type() == Capstone);
+        }
 
-        protected string NotationString()
+        /// <summary>
+        /// Get the notation of this piece
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string StringNotation(this Piece p)
         {
             string n = "";
-            if (Color == White)
+            if (p.Color() == White)
                 n = "W";
             else
                 n = "B";
-            switch (Type)
+            switch (p.Type())
             {
                 case (Capstone): n += "C"; break;
                 case (Standing): n += "S"; break;
@@ -99,9 +77,13 @@ namespace Com.aberrantGames.Tak.GameEngine
             return n;
         }
 
-        protected string ColorString()
+        /// <summary>
+        /// Get the name of this color
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static string StringColor(this Color c)
         {
-            Color c = Color;
             switch (c)
             {
                 case (White): return "White";
@@ -113,6 +95,21 @@ namespace Com.aberrantGames.Tak.GameEngine
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Get the color opposite of this color
+        /// </summary>
+        /// <returns>Color</returns>
+        public static Color Flip(this Color c)
+        {
+            switch (c)
+            {
+                case (White): return Black;
+                case (Black): return White;
+                case (NoColor): return NoColor;
+                default:
+                    Debug.LogError("bad color" + (int)c);
+                    return 0;
+            }
+        }
     }
 }
