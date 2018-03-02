@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public class Allocate
+    public static class Allocation
     {
-        #region Variables
-
         struct Prealloc
         {
             #region Variables
@@ -32,9 +31,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             #endregion
         }
-
-        #endregion
-
+        
         #region Public Methods
 
         public static Position Alloc(Position _position = null)
@@ -57,6 +54,27 @@ namespace Com.aberrantGames.Tak.GameEngine
                 Debug.LogError("illegal size : " + _position.Size());
 
             return null;
+        }
+
+        public static void CopyPosition(Position _p, Position _out)
+        {
+            uint[] h = _out.Height;
+            ulong[] s = _out.Stacks;
+            List<ulong> g = _out.analysis.WhiteGroups;
+
+            _out = _p;
+            _out.Height = h;
+            _out.Stacks = s;
+            _out.analysis.WhiteGroups = g;
+
+            Array.Copy(_p.Height, _out.Height, _p.Height.Length);
+            Array.Copy(_p.Stacks, _out.Stacks, _p.Stacks.Length);
+        }
+
+        public static Position Alloc(int size)
+        {
+            Position p = new Position() { cfg = new Config() { Size = size } };
+            return Alloc(p);
         }
 
         #endregion
