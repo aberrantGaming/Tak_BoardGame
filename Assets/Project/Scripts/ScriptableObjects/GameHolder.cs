@@ -41,7 +41,7 @@ namespace Com.aberrantGames.Tak.GameEngine
             // Apply default cfg
 
             this.gamemodeName = "Default";
-
+            
             this.boardSize = 3;
             this.playerCount = 1;
             this.blackWinsTies = true;
@@ -52,6 +52,11 @@ namespace Com.aberrantGames.Tak.GameEngine
         #endregion
 
         #region Public Methods
+
+        public void SetBoardSize(int size)
+        {
+            boardSize = size;
+        }
 
         public void SetStonesCount(int c)
         {
