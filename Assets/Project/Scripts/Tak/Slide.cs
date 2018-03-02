@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using Slides = System.UInt32;
 using SlideIterator = System.UInt32;
+using Slides = System.UInt32;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {

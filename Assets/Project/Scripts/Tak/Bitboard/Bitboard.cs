@@ -1,111 +1,93 @@
 ﻿using System.Collections.Generic;
 
-namespace Com.aberrantGames.Tak.Bitboard
+namespace Com.aberrantGames.Tak.Bits
 {
+    public struct Dimensions
+    {
+        public int W, H;
+
+        public Dimensions(int _w = 0, int _h = 0)
+        {
+            W = _w;
+            H = _h;
+        }
+    }
+
     public class Constants
     {
-        #region Variables
-
         public uint Size;
         public ulong L, R, T, B;
         public ulong Edge;
         public ulong Mask;
-
-        #endregion
     }
 
-    public class Bitboard
+    public static class Bitboard
     {
-        #region Variables
-
-        // Struct
-        struct Dimensions
-        {
-            public int W, H;
-
-            public Dimensions(int _w = 0, int _h = 0)
-            {
-                W = _w;
-                H = _h;
-            }
-        }
-
-        // Private
-        protected ulong next;
-
-        #endregion
-
-        #region Public Methods
-
         /// <summary>
         /// Used to count the population of bits on a bitboard
         /// </summary>
-        /// <param name="_x"></param>
+        /// <param name="x"></param>
         /// <returns>uLong = population count</returns>
-        public static long Popcount(ulong _x)
+        public static long Popcount(ulong x)
         {
-            if (_x == 0)
+            if (x == 0)
                 return 0;
 
-            _x -= (_x >> 1) & 0x5555555555555555;
-            _x = (_x >> 2) & 0x3333333333333333 + _x & 0x3333333333333333;
-            _x += _x >> 4;
-            _x &= 0x0f0f0f0f0f0f0f0f;
-            _x *= 0x0101010101010101;
-            return (long)(_x >> 56);
+            x -= (x >> 1) & 0x5555555555555555;
+            x = (x >> 2) & 0x3333333333333333 + x & 0x3333333333333333;
+            x += x >> 4;
+            x &= 0x0f0f0f0f0f0f0f0f;
+            x *= 0x0101010101010101;
+            return (long)(x >> 56);
         }
 
         /// <summary>
         /// Used to get the list of flood groups from this board
         /// </summary>
-        /// <param name="_c">constants</param>
-        /// <param name="_bits">bitboard</param>
+        /// <param name="c">constants</param>
+        /// <param name="bits">bitboard</param>
         /// <param name="_out"></param>
         /// <returns></returns>
-        public static List<ulong> FloodGroups(Constants _c, ulong _bits, List<ulong> _out)    // TO DO : Verify conversion to list
+        public static List<ulong> FloodGroups(Constants c, ulong bits, List<ulong> _out)    // TO DO : Verify conversion to list
         {
             ulong seen = new ulong();
-            while (_bits != 0)
+            while (bits != 0)
             {
-                ulong next = _bits & (_bits - 1);
-                ulong bit = _bits & ~next;
+                ulong next = bits & (bits - 1);
+                ulong bit = bits & ~next;
 
                 if ((seen & bit) == 0)
                 {
-                    ulong g = Flood(_c, _bits, bit);
+                    ulong g = Flood(c, bits, bit);
                     if (g != bit)
                         _out.Add(g);
                     seen |= g;
                 }
 
-                _bits = next;
+                bits = next;
             }
 
             return _out;
         }
-
-        #endregion
-
-        #region Private 
-
+        
         /// <summary>
-        /// Predetermines constants from provided _size
+        /// Predetermines constants from provided size
         /// </summary>
-        /// <param name="_size">uint representing board size</param>
+        /// <param name="size">uint representing board size</param>
         /// <returns></returns>
-        Constants Precompute(uint _size)
+        public static Constants Precompute(uint size)
         {
             Constants c = new Constants();
-            for (int i = 0; i < _size; i++)
+            for (int i = 0; i < size; i++)
             {
-                c.R |= (ulong)1 << (int)(i * _size);        // TO DO : Confirm use of type casts
+                c.R |= (ulong)1 << (int)(i * size);
             }
 
-            c.Size = _size;
-            c.L = c.R << (int)(_size - 1);                                          // TO DO : Confirm use of type casts
-            c.T = (ulong)((1 << (int)_size) - 1) << (int)(_size * (_size - 1));     // TO DO : Confirm use of type casts
-            c.B = (ulong)(1 << (int)_size) - 1;                                     // TO DO : Confirm use of type casts
-            c.Mask = (ulong)(1 << (int)(_size * _size) - 1);                        // TO DO : Confirm use of type casts
+            c.Size = size;
+            c.L = c.R << (int)(size - 1);
+            c.T = (ulong)((1 << (int)size) - 1) << (int)(size * (size - 1));
+            c.B = (ulong)(1 << (int)size) - 1;
+            c.Mask = (ulong)(1 << (int)(size * size) - 1);
             c.Edge = c.L | c.R | c.B | c.T;
 
             return c;
@@ -114,65 +96,63 @@ namespace Com.aberrantGames.Tak.Bitboard
         /// <summary>
         /// Used to get the dimensions of this board
         /// </summary>
-        /// <param name="_c">constants</param>
-        /// <param name="_bits">bitboard</param>
+        /// <param name="c">constants</param>
+        /// <param name="bits">bitboard</param>
         /// <returns></returns>
-        Dimensions GetDimensions(Constants _c, ulong _bits)
+        public static Dimensions GetDimensions(Constants c, ulong bits)
         {
             Dimensions retVal = new Dimensions(0, 0);
             ulong b = new ulong();
 
-            if (_bits == 0)
+            if (bits == 0)
                 return retVal;
 
-            b = _c.L;
-            while ((_bits & b) == 0)
+            b = c.L;
+            while ((bits & b) == 0)
             {
                 b = (b >> 1);
             }
-            while ((b != 0) && ((_bits & b) != 0))
+            while ((b != 0) && ((bits & b) != 0))
             {
                 b = (b >> 1);
                 retVal.W++;
             }
 
-            b = _c.T;
-            while ((_bits & b) == 0)
+            b = c.T;
+            while ((bits & b) == 0)
             {
-                b = b >> (int)_c.Size;      // TO DO : Confirm use of type cast
+                b = b >> (int)c.Size;      // TO DO : Confirm use of type cast
             }
-            while ((b != 0) && ((_bits & b) != 0))
+            while ((b != 0) && ((bits & b) != 0))
             {
-                b = b >> (byte)_c.Size;     // TO DO : Confirm use of type cast
+                b = b >> (byte)c.Size;     // TO DO : Confirm use of type cast
                 retVal.H++;
             }
 
             return retVal;
         }
-
-
-        public static ulong Flood(Constants _c, ulong _within, ulong _seed)
+        
+        public static ulong Flood(Constants c, ulong within, ulong seed)
         {
             while (true)
             {
-                ulong next = Grow(_c, _within, _seed);
-                if (next == _seed)
+                ulong next = Grow(c, within, seed);
+                if (next == seed)
                 {
                     return next;
                 }
-                _seed = next;
+                seed = next;
             }
         }
 
-        public static ulong Grow(Constants _c, ulong _within, ulong _seed)
+        public static ulong Grow(Constants c, ulong within, ulong seed)
         {
-            ulong next = _seed;
-            next |= (_seed << 1) & ~_c.R;
-            next |= (_seed >> 1) & ~_c.L;
-            next |= (_seed >> (byte)_c.Size);       // TO DO : Confirm use of type cast
-            next |= (_seed << (byte)_c.Size);       // TO DO : Confirm use of type cast
-            return next & _within;
+            ulong next = seed;
+            next |= (seed << 1) & ~c.R;
+            next |= (seed >> 1) & ~c.L;
+            next |= (seed >> (byte)c.Size);       // TO DO : Confirm use of type cast
+            next |= (seed << (byte)c.Size);       // TO DO : Confirm use of type cast
+            return next & within;
         }
     }
-    #endregion
 }

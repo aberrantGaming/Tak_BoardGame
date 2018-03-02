@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using Com.aberrantGames.Tak.Bits;
 using System.Collections.Generic;
 using UnityEngine;
-using Com.aberrantGames.Tak.Bitboard;
-using Square = Com.aberrantGames.Tak.GameEngine.Tile;
-using Piece = Com.aberrantGames.Tak.GameEngine.Stone;
 using Color = System.Byte;
+using Piece = System.Byte;
+using Square = Com.aberrantGames.Tak.GameEngine.Tile;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
@@ -15,7 +14,7 @@ namespace Com.aberrantGames.Tak.GameEngine
         Resignation
     }
 
-    public struct Config        // TODO : Replace with GameHolder ScriptableObject
+    public struct Config
     {
         public int Size, Pieces, Capstones;
         public bool BlackWinsTies;
@@ -24,7 +23,6 @@ namespace Com.aberrantGames.Tak.GameEngine
 
     public class Position
     {
-        // Public Variables
         public Config cfg;
         public byte WhiteStones, WhiteCapstones, BlackStones, BlackCapstones;
         public int turn;
@@ -32,9 +30,8 @@ namespace Com.aberrantGames.Tak.GameEngine
         public uint[] Height;
         public ulong[] Stacks;
         public Analysis analysis;
-
-        // Private Variables
-        private ulong hash;
+        
+        public ulong hash;
     }
 
     public struct Analysis
@@ -44,12 +41,12 @@ namespace Com.aberrantGames.Tak.GameEngine
 
     public class Tile
     {
-        public Tile(uint _height)
-        {
-            Stack = new Stone[_height];
-        }
+        public Piece[] Stack;
 
-        public Stone[] Stack;
+        public Tile(uint size)
+        {
+            Stack = new Piece[size];
+        }
     }
 
     public struct FlatsCount
@@ -87,25 +84,27 @@ namespace Com.aberrantGames.Tak.GameEngine
         /// <summary>
         /// Initializes a new game based on the provided Configuration
         /// </summary>
-        /// <param name="_g"></param>
+        /// <param name="g"></param>
         /// <returns></returns>
-        public static Position New(Config _g)
+        public static Position New(Config g)
         {
-            if (_g.Pieces == 0)
-                _g.Pieces = defualtPieces[_g.Size];
-            if (_g.Capstones == 0)
-                _g.Capstones = defualtPieces[_g.Size];
+            if (g.Pieces == 0)
+                g.Pieces = defualtPieces[g.Size];
+            if (g.Capstones == 0)
+                g.Capstones = defualtPieces[g.Size];
+
+            g.c = Bitboard.Precompute((uint)g.Size);
 
             Position p = new Position()
             {
-                cfg = _g,
-                WhiteStones = (byte)_g.Pieces,
-                WhiteCapstones = (byte)_g.Capstones,
-                BlackStones = (byte)_g.Pieces,
-                BlackCapstones = (byte)_g.Capstones,
+                cfg = g,
+                WhiteStones = (byte)g.Pieces,
+                WhiteCapstones = (byte)g.Capstones,
+                BlackStones = (byte)g.Pieces,
+                BlackCapstones = (byte)g.Capstones,
                 turn = 0,
 
-                //hash = fnvBasis           // TO DO : Implement hash struct
+                //hash = fnvBasis
             };
             return p;
         }
@@ -116,63 +115,66 @@ namespace Com.aberrantGames.Tak.GameEngine
         /// <returns></returns>
         public static Position Clone(this Position p)
         {
-            return Allocate.Alloc(p);
+            return Allocation.Alloc(p);
         }
 
         /// <summary>
-        ///     Initializes a position with the specified tiles and move number.
+        /// Initializes a position with the specified tiles and move number.
         /// </summary>
         /// <returns></returns>
-        public static Position FromSquares(Config _cfg, Square[][] _board, int _move)
+        public static Position FromSquares(Config cfg, Square[][] board, int _move)
         {
-            Position p = New(_cfg);
+            Position p = New(cfg);
             p.turn = _move;
 
             for (int y = 0; y < p.Size(); y++)
             {
                 for (int x = 0; x < p.Size(); x++)
                 {
-                    Square sq = _board[y][x];
+                    Square sq = board[y][x];
                     if (sq.Stack.Length == 0)
                         continue;
                     int i = x + y * p.Size();
-                    switch (sq.Stack[0].Color)
+                    switch (sq.Stack[0].Color())
                     {
-                        case Stone.White: p.White |= (uint)(1 << i); break;
-                        case Stone.Black: p.Black |= (uint)(1 << i); break;
+                        case Stones.White: p.White |= (uint)(1 << i); break;
+                        case Stones.Black: p.Black |= (uint)(1 << i); break;
                     }
-                    switch (sq.Stack[0].Type)
+                    switch (sq.Stack[0].Type())
                     {
-                        case Stone.Capstone: p.Caps |= (uint)(1 << i); break;
-                        case Stone.Standing: p.Standing |= (uint)(1 << i); break;
-                    }
-
-                    for (int j = 0; j < sq.Stack.Length; j++)   //for j, piece := range sq {
-                    {
-                        //switch piece {
-                        //case MakePiece(White, Capstone):
-                        //p.whiteCaps--
-
-                        //case MakePiece(Black, Capstone):
-                        //p.blackCaps--
-
-                        //case MakePiece(White, Flat), MakePiece(White, Standing):
-                        //p.whiteStones--
-
-                        //case MakePiece(Black, Flat), MakePiece(Black, Standing):
-                        //p.blackStones--
-
-                        //default:
-                        //return nil, errors.New("bad stone")            
-                        //}
-
-                        //if (j == 0)
-                        //continue
-
-                        //if piece.Color() == Black {
-                        //p.Stacks[i] |= 1 << uint(j - 1)
+                        case Stones.Capstone: p.Caps |= (uint)(1 << i); break;
+                        case Stones.Standing: p.Standing |= (uint)(1 << i); break;
                     }
 
+                    int j = -1;                    
+                    foreach (Piece piece in sq.Stack)
+                    {
+                        j++;
+
+                        if (piece == Stones.MakePiece(Stones.White, Stones.Capstone))
+                            p.WhiteCapstones--;
+                        else if (piece == Stones.MakePiece(Stones.Black, Stones.Capstone))
+                            p.BlackCapstones--;
+                        else if (piece == Stones.MakePiece(Stones.White, Stones.Flat)
+                            || piece == Stones.MakePiece(Stones.White, Stones.Standing))
+                            p.WhiteStones--;
+                        else if (piece == Stones.MakePiece(Stones.Black, Stones.Flat)
+                            || piece == Stones.MakePiece(Stones.Black, Stones.Standing))
+                            p.BlackStones--;
+                        else
+                        {
+                            Debug.LogError("bad stone");
+                            return null;
+                        }
+
+                        if (j == 0)
+                            continue;
+
+                        if (piece.Color() == Stones.Black)
+                        {
+                            p.Stacks[i] |= (uint)(1 << (j - 1));
+                        }
+                    }
                     p.Height[i] = (uint)sq.Stack.Length;
                     //p.hash ^= p.hashAt(i);
                 }
@@ -209,10 +211,11 @@ namespace Com.aberrantGames.Tak.GameEngine
             for (int j = 1; j < p.Height[i]; j++)
             {
                 if ((p.Stacks[i] & (ulong)1 << (j - 1)) != 0)
-                    sq.Stack[j] = new Stone(Stone.MakePiece(Stone.Black, Stone.Flat));
+                    sq.Stack[j] = Stones.MakePiece(Stones.Black, Stones.Flat);
                 else
-                    sq.Stack[j] = new Stone(Stone.MakePiece(Stone.White, Stone.Flat));
+                    sq.Stack[j] = Stones.MakePiece(Stones.White, Stones.Flat);
             }
+
             return sq;
         }
 
@@ -222,20 +225,20 @@ namespace Com.aberrantGames.Tak.GameEngine
             byte c, t;
 
             if ((p.White & (uint)(1 << (int)i)) != 0)
-                c = Piece.White;
+                c = Stones.White;
             else if ((p.Black & (uint)(1 << (int)i)) != 0)
-                c = Piece.Black;
+                c = Stones.Black;
             else
-                return new Piece(0);
+                return 0;
 
-            if ((p.Standing&(uint)(1 << (int)i)) != 0)
-                t = Piece.Standing;
+            if ((p.Standing & (uint)(1 << (int)i)) != 0)
+                t = Stones.Standing;
             else if (p.Caps + (uint)(1 << (int)i) != 0)
-                t = Piece.Capstone;
+                t = Stones.Capstone;
             else
-                t = Piece.Flat;
+                t = Stones.Flat;
 
-            return new Piece(Piece.MakePiece(c, t));
+            return Stones.MakePiece(c, t);
         }
 
         public static void Set(this Position p, int x, int y, Square s)
@@ -251,16 +254,16 @@ namespace Com.aberrantGames.Tak.GameEngine
                 return;
             }
 
-            switch (s.Stack[0].Color)
+            switch (s.Stack[0].Color())
             {
-                case (Piece.White): p.White |= (uint)(1 << i); break;
-                case (Piece.Black): p.Black |= (uint)(1 << i); break;
+                case (Stones.White): p.White |= (uint)(1 << i); break;
+                case (Stones.Black): p.Black |= (uint)(1 << i); break;
             }
 
-            switch (s.Stack[0].Type)
+            switch (s.Stack[0].Type())
             {
-                case (Piece.Standing): p.Standing |= (uint)(1 << i); break;
-                case (Piece.Capstone): p.Caps |= (uint)(1 << i); break;
+                case (Stones.Standing): p.Standing |= (uint)(1 << i); break;
+                case (Stones.Capstone): p.Caps |= (uint)(1 << i); break;
             }
 
             //p.hash = ~p.hashAt(i);
@@ -269,7 +272,7 @@ namespace Com.aberrantGames.Tak.GameEngine
             p.Stacks[i] = 0;
             for (int j = 0; j <= s.Stack.Length; j++)
             {
-                if (s.Stack[j].Color == Piece.Black)
+                if (s.Stack[j].Color() == Stones.Black)
                     p.Stacks[i] |= (uint)(1 << j);
             }
             //p.hash = ~p.hashAt(i);
@@ -277,11 +280,11 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         public static Color ToMove(this Position p)
         {
-            if ((p.turn%2) == 0)
+            if ((p.turn % 2) == 0)
             {
-                return Piece.White;
+                return Stones.White;
             }
-            return Piece.Black;
+            return Stones.Black;
         }
 
         public static int TurnNumber(this Position p)
@@ -291,12 +294,12 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         public static int WhiteStones(this Position p)
         {
-            return (int)p.WhiteStones;
+            return p.WhiteStones;
         }
 
         public static int BlackStones(this Position p)
         {
-            return (int)p.BlackStones;
+            return p.BlackStones;
         }
 
         public static PlayerResult GameOver(this Position p)
@@ -308,7 +311,7 @@ namespace Com.aberrantGames.Tak.GameEngine
                     (p.BlackStones + p.BlackCapstones) != 0 &&
                     (p.White | p.Black) != p.cfg.c.Mask)
             {
-                return new PlayerResult(false, Piece.NoColor);
+                return new PlayerResult(false, Stones.NoColor);
             }
 
             return new PlayerResult(true, p.FlatsWinner());
@@ -319,21 +322,20 @@ namespace Com.aberrantGames.Tak.GameEngine
             Square sq = p.At(x, y);
 
             if (sq.Stack.Length == 0)
-                return new PlayerResult() { Player = Piece.White, Result = false };
+                return new PlayerResult() { Player = Stones.White, Result = false };
 
             return new PlayerResult()
             {
-                Player = sq.Stack[0].Color,
-                Result = sq.Stack[0].IsRoad
+                Player = sq.Stack[0].Color(),
+                Result = sq.Stack[0].IsRoad()
             };
         }
 
         public static PlayerResult HasRoad(this Position p)
         {
-            PlayerResult white = new PlayerResult() { Player = Piece.White, Result = false };
-            PlayerResult black = new PlayerResult() { Player = Piece.Black, Result = false };
+            PlayerResult white = new PlayerResult() { Player = Stones.White, Result = false };
+            PlayerResult black = new PlayerResult() { Player = Stones.Black, Result = false };
 
-            //for (ulong g = 0; g < (ulong)p.analysis.WhiteGroups.Count; g++)        // _, g := range p.analysis.WhiteGroups
             foreach (ulong g in p.analysis.WhiteGroups)
             {
                 if (((g & p.cfg.c.T) != 0 && (g & p.cfg.c.B) != 0) ||
@@ -352,7 +354,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             if (white.Result && black.Result)
             {
-                if (p.ToMove() == Piece.White)
+                if (p.ToMove() == Stones.White)
                     return black;
 
                 return white;
@@ -362,10 +364,11 @@ namespace Com.aberrantGames.Tak.GameEngine
             else if (black.Result)
                 return black;
             else
-                return new PlayerResult() { Player = Piece.NoColor, Result = false };
+                return new PlayerResult() { Player = Stones.NoColor, Result = false };
         }
 
-        public static Analysis Analysis(this Position p) {
+        public static Analysis Analysis(this Position p)
+        {
             return p.analysis;
         }
 
@@ -375,18 +378,18 @@ namespace Com.aberrantGames.Tak.GameEngine
             ulong br = p.Black & ~p.Standing;
             List<ulong> alloc = p.analysis.WhiteGroups;
 
-            p.analysis.WhiteGroups = Bitboard.Bitboard.FloodGroups(p.cfg.c, wr, alloc);
+            p.analysis.WhiteGroups = Bits.Bitboard.FloodGroups(p.cfg.c, wr, alloc);
             alloc = p.analysis.WhiteGroups;
             alloc = new List<ulong>(alloc.Capacity);
-            p.analysis.BlackGroups = Bitboard.Bitboard.FloodGroups(p.cfg.c, br, alloc);
+            p.analysis.BlackGroups = Bits.Bitboard.FloodGroups(p.cfg.c, br, alloc);
         }
 
         public static FlatsCount CountFlats(this Position p)
         {
             FlatsCount retVal = new FlatsCount
             {
-                White = (int)Bitboard.Bitboard.Popcount(p.White & ~(p.Standing | p.Caps)),
-                Black = (int)Bitboard.Bitboard.Popcount(p.Black & ~(p.Standing | p.Caps))
+                White = (int)Bits.Bitboard.Popcount(p.White & ~(p.Standing | p.Caps)),
+                Black = (int)Bits.Bitboard.Popcount(p.Black & ~(p.Standing | p.Caps))
             };
 
             return retVal;
@@ -396,15 +399,15 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             FlatsCount c = p.CountFlats();
             if (c.White > c.Black)
-                return Piece.White;
+                return Stones.White;
             else if (c.Black > c.White)
-                return Piece.Black;
+                return Stones.Black;
             else
             {
                 if (p.cfg.BlackWinsTies)
-                    return Piece.Black;
+                    return Stones.Black;
                 else
-                    return Piece.NoColor;
+                    return Stones.NoColor;
             }
         }
 
