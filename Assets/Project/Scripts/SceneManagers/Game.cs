@@ -53,24 +53,18 @@ namespace Com.aberrantGames.Tak.Scenes
         private void OnEnterState_GAME()
         {
             Debug.Log("Handling gameState transition to GAME.");
-<<<<<<< HEAD
             
-            Dictionary<string, Transform> prefabDictionary = new Dictionary<string, Transform>
-            {
-                { "BoardFoundation", pm.PlayerCollection.Board.BoardFoundation.transform },
-                { "TileLight", pm.PlayerCollection.Board.TileLight.transform },
-                { "TileDark", pm.PlayerCollection.Board.TileDark.transform }
-            };
+            //Dictionary<string, Transform> prefabDictionary = new Dictionary<string, Transform>
+            //{
+            //    { "BoardFoundation", pm.PlayerCollection.Board.BoardFoundation.transform },
+            //    { "TileLight", pm.PlayerCollection.Board.TileLight.transform },
+            //    { "TileDark", pm.PlayerCollection.Board.TileDark.transform }
+            //};
 
-            activeGame = new Board(selectedGamemode, prefabDictionary);
+            //activeGame = new Board(selectedGamemode, prefabDictionary);
 
-            Debug.Log("Gamemode Name : " + activeGame.config.GamemodeName + " ; " +
-                      "Board Size : " + activeGame.config.BoardSize);
-
-            // Transition to next game phase:
-            // gm.SetGameState();
-=======
->>>>>>> b67d07367ac08042a16ff980e223a6e59d56dc47
+            //Debug.Log("Gamemode Name : " + activeGame.config.GamemodeName + " ; " +
+            //          "Board Size : " + activeGame.config.BoardSize);}
         }
 
         #endregion

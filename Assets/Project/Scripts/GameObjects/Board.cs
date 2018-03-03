@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Com.aberrantGames.Tak.GameEngine;
 
-namespace Com.aberrantGames.Tak.GameEngine
+namespace Com.aberrantGames.Tak
 {
     public class Board : MonoBehaviour
     {
