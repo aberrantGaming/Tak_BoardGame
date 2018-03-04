@@ -5,7 +5,7 @@ using Type = System.Byte;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public static class Stones
+    public static class Stone
     {
         public const Color White = 1 << 7;
         public const Color Black = 1 << 6;

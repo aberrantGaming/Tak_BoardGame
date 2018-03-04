@@ -137,13 +137,13 @@ namespace Com.aberrantGames.Tak.GameEngine
                     int i = x + y * p.Size();
                     switch (sq.Stack[0].Color())
                     {
-                        case Stones.White: p.White |= (uint)(1 << i); break;
-                        case Stones.Black: p.Black |= (uint)(1 << i); break;
+                        case Stone.White: p.White |= (uint)(1 << i); break;
+                        case Stone.Black: p.Black |= (uint)(1 << i); break;
                     }
                     switch (sq.Stack[0].Type())
                     {
-                        case Stones.Capstone: p.Caps |= (uint)(1 << i); break;
-                        case Stones.Standing: p.Standing |= (uint)(1 << i); break;
+                        case Stone.Capstone: p.Caps |= (uint)(1 << i); break;
+                        case Stone.Standing: p.Standing |= (uint)(1 << i); break;
                     }
 
                     int j = -1;                    
@@ -151,15 +151,15 @@ namespace Com.aberrantGames.Tak.GameEngine
                     {
                         j++;
 
-                        if (piece == Stones.MakePiece(Stones.White, Stones.Capstone))
+                        if (piece == Stone.MakePiece(Stone.White, Stone.Capstone))
                             p.WhiteCapstones--;
-                        else if (piece == Stones.MakePiece(Stones.Black, Stones.Capstone))
+                        else if (piece == Stone.MakePiece(Stone.Black, Stone.Capstone))
                             p.BlackCapstones--;
-                        else if (piece == Stones.MakePiece(Stones.White, Stones.Flat)
-                            || piece == Stones.MakePiece(Stones.White, Stones.Standing))
+                        else if (piece == Stone.MakePiece(Stone.White, Stone.Flat)
+                            || piece == Stone.MakePiece(Stone.White, Stone.Standing))
                             p.WhiteStones--;
-                        else if (piece == Stones.MakePiece(Stones.Black, Stones.Flat)
-                            || piece == Stones.MakePiece(Stones.Black, Stones.Standing))
+                        else if (piece == Stone.MakePiece(Stone.Black, Stone.Flat)
+                            || piece == Stone.MakePiece(Stone.Black, Stone.Standing))
                             p.BlackStones--;
                         else
                         {
@@ -170,7 +170,7 @@ namespace Com.aberrantGames.Tak.GameEngine
                         if (j == 0)
                             continue;
 
-                        if (piece.Color() == Stones.Black)
+                        if (piece.Color() == Stone.Black)
                         {
                             p.Stacks[i] |= (uint)(1 << (j - 1));
                         }
@@ -211,9 +211,9 @@ namespace Com.aberrantGames.Tak.GameEngine
             for (int j = 1; j < p.Height[i]; j++)
             {
                 if ((p.Stacks[i] & (ulong)1 << (j - 1)) != 0)
-                    sq.Stack[j] = Stones.MakePiece(Stones.Black, Stones.Flat);
+                    sq.Stack[j] = Stone.MakePiece(Stone.Black, Stone.Flat);
                 else
-                    sq.Stack[j] = Stones.MakePiece(Stones.White, Stones.Flat);
+                    sq.Stack[j] = Stone.MakePiece(Stone.White, Stone.Flat);
             }
 
             return sq;
@@ -225,20 +225,20 @@ namespace Com.aberrantGames.Tak.GameEngine
             byte c, t;
 
             if ((p.White & (uint)(1 << (int)i)) != 0)
-                c = Stones.White;
+                c = Stone.White;
             else if ((p.Black & (uint)(1 << (int)i)) != 0)
-                c = Stones.Black;
+                c = Stone.Black;
             else
                 return 0;
 
             if ((p.Standing & (uint)(1 << (int)i)) != 0)
-                t = Stones.Standing;
+                t = Stone.Standing;
             else if (p.Caps + (uint)(1 << (int)i) != 0)
-                t = Stones.Capstone;
+                t = Stone.Capstone;
             else
-                t = Stones.Flat;
+                t = Stone.Flat;
 
-            return Stones.MakePiece(c, t);
+            return Stone.MakePiece(c, t);
         }
 
         public static void Set(this Position p, int x, int y, Square s)
@@ -256,14 +256,14 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             switch (s.Stack[0].Color())
             {
-                case (Stones.White): p.White |= (uint)(1 << i); break;
-                case (Stones.Black): p.Black |= (uint)(1 << i); break;
+                case (Stone.White): p.White |= (uint)(1 << i); break;
+                case (Stone.Black): p.Black |= (uint)(1 << i); break;
             }
 
             switch (s.Stack[0].Type())
             {
-                case (Stones.Standing): p.Standing |= (uint)(1 << i); break;
-                case (Stones.Capstone): p.Caps |= (uint)(1 << i); break;
+                case (Stone.Standing): p.Standing |= (uint)(1 << i); break;
+                case (Stone.Capstone): p.Caps |= (uint)(1 << i); break;
             }
 
             //p.hash = ~p.hashAt(i);
@@ -272,7 +272,7 @@ namespace Com.aberrantGames.Tak.GameEngine
             p.Stacks[i] = 0;
             for (int j = 0; j <= s.Stack.Length; j++)
             {
-                if (s.Stack[j].Color() == Stones.Black)
+                if (s.Stack[j].Color() == Stone.Black)
                     p.Stacks[i] |= (uint)(1 << j);
             }
             //p.hash = ~p.hashAt(i);
@@ -282,9 +282,9 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             if ((p.turn % 2) == 0)
             {
-                return Stones.White;
+                return Stone.White;
             }
-            return Stones.Black;
+            return Stone.Black;
         }
 
         public static int TurnNumber(this Position p)
@@ -311,7 +311,7 @@ namespace Com.aberrantGames.Tak.GameEngine
                     (p.BlackStones + p.BlackCapstones) != 0 &&
                     (p.White | p.Black) != p.cfg.c.Mask)
             {
-                return new PlayerResult(false, Stones.NoColor);
+                return new PlayerResult(false, Stone.NoColor);
             }
 
             return new PlayerResult(true, p.FlatsWinner());
@@ -322,7 +322,7 @@ namespace Com.aberrantGames.Tak.GameEngine
             Square sq = p.At(x, y);
 
             if (sq.Stack.Length == 0)
-                return new PlayerResult() { Player = Stones.White, Result = false };
+                return new PlayerResult() { Player = Stone.White, Result = false };
 
             return new PlayerResult()
             {
@@ -333,8 +333,8 @@ namespace Com.aberrantGames.Tak.GameEngine
 
         public static PlayerResult HasRoad(this Position p)
         {
-            PlayerResult white = new PlayerResult() { Player = Stones.White, Result = false };
-            PlayerResult black = new PlayerResult() { Player = Stones.Black, Result = false };
+            PlayerResult white = new PlayerResult() { Player = Stone.White, Result = false };
+            PlayerResult black = new PlayerResult() { Player = Stone.Black, Result = false };
 
             foreach (ulong g in p.analysis.WhiteGroups)
             {
@@ -354,7 +354,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             if (white.Result && black.Result)
             {
-                if (p.ToMove() == Stones.White)
+                if (p.ToMove() == Stone.White)
                     return black;
 
                 return white;
@@ -364,7 +364,7 @@ namespace Com.aberrantGames.Tak.GameEngine
             else if (black.Result)
                 return black;
             else
-                return new PlayerResult() { Player = Stones.NoColor, Result = false };
+                return new PlayerResult() { Player = Stone.NoColor, Result = false };
         }
 
         public static Analysis Analysis(this Position p)
@@ -399,15 +399,15 @@ namespace Com.aberrantGames.Tak.GameEngine
         {
             FlatsCount c = p.CountFlats();
             if (c.White > c.Black)
-                return Stones.White;
+                return Stone.White;
             else if (c.Black > c.White)
-                return Stones.Black;
+                return Stone.Black;
             else
             {
                 if (p.cfg.BlackWinsTies)
-                    return Stones.Black;
+                    return Stone.Black;
                 else
-                    return Stones.NoColor;
+                    return Stone.NoColor;
             }
         }
 

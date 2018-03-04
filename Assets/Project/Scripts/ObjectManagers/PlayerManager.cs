@@ -10,14 +10,11 @@ namespace Com.aberrantGames.Tak
     [System.Serializable]
     public struct Collection
     {
-        [SerializeField] private BoardCollectable board;
-        public BoardCollectable Board { get { return board; } private set { } }
+        [SerializeField] private Flatstones currentFlatstones;
+        public Flatstones CurrentFlatstones { get { return currentFlatstones; } private set { } }
 
-        [SerializeField] private TableCollectable table;
-        public TableCollectable Table { get { return table; } private set { } }
-
-        [SerializeField] private StonesCollectable stones;
-        public StonesCollectable Stones { get { return stones; } private set { } }
+        [SerializeField] private Flatstones currentCapstones;
+        public Flatstones CurrentCapstones { get { return currentCapstones; } private set { } }
     }
 
     public class PlayerManager : MonoBehaviour

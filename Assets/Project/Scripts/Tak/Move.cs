@@ -130,13 +130,13 @@ namespace Com.aberrantGames.Tak.GameEngine
                     next.analyze();
                     return next;
                 case (MoveType.PlaceFlat):
-                    place = Stones.MakePiece(p.ToMove(), Stones.Flat);
+                    place = Stone.MakePiece(p.ToMove(), Stone.Flat);
                     break;
                 case (MoveType.PlaceStanding):
-                    place = Stones.MakePiece(p.ToMove(), Stones.Standing);
+                    place = Stone.MakePiece(p.ToMove(), Stone.Standing);
                     break;
                 case (MoveType.PlaceCapstone):
-                    place = Stones.MakePiece(p.ToMove(), Stones.Capstone);
+                    place = Stone.MakePiece(p.ToMove(), Stone.Capstone);
                     break;
                 case (MoveType.SlideLeft):
                     dx = -1;
@@ -156,12 +156,12 @@ namespace Com.aberrantGames.Tak.GameEngine
             }
             if (p.turn < 2)
             {
-                if (place.Type() != Stones.Flat)
+                if (place.Type() != Stone.Flat)
                 {
                     Debug.LogError("illegal opening move");
                     return null;
                 }
-                place = Stones.MakePiece(place.Color().Flip(), place.Type());
+                place = Stone.MakePiece(place.Color().Flip(), place.Type());
             }
             uint i = (uint)(m.X + m.Y * p.Size());
             if (place != 0)
@@ -174,18 +174,18 @@ namespace Com.aberrantGames.Tak.GameEngine
                 byte? stones = new byte?();
                 switch(place.Type())
                 {
-                    case (Stones.Capstone):
-                        if (p.ToMove() == Stones.Black)
+                    case (Stone.Capstone):
+                        if (p.ToMove() == Stone.Black)
                             stones = next.BlackCapstones;
                         else
                             stones = next.WhiteCapstones;
                         next.Caps |= (uint)(1 << (int)i);
                         break;
-                    case (Stones.Standing):
+                    case (Stone.Standing):
                         next.Standing |= (uint)(1 << (int)i);
-                        goto case (Stones.Flat);
-                    case (Stones.Flat):
-                        if (place.Color() == Stones.Black)
+                        goto case (Stone.Flat);
+                    case (Stone.Flat):
+                        if (place.Color() == Stone.Black)
                             stones = next.BlackStones;
                         else
                             stones = next.WhiteStones;
@@ -197,7 +197,7 @@ namespace Com.aberrantGames.Tak.GameEngine
                     return null;
                 }
                 stones--;
-                if (place.Color() == Stones.White)
+                if (place.Color() == Stone.White)
                     next.White |= (uint)(1 << (int)i);
                 else
                     next.Black |= (uint)(1 << (int)i);
@@ -222,12 +222,12 @@ namespace Com.aberrantGames.Tak.GameEngine
                 Debug.LogError("illegal slide");
                 return null;
             }
-            if ((p.ToMove() == Stones.White) && ((p.White&(uint)(1 << (int)i)) == 0))
+            if ((p.ToMove() == Stone.White) && ((p.White&(uint)(1 << (int)i)) == 0))
             {
                 Debug.Log("illegal slide");
                 return null;
             }
-            if ((p.ToMove() == Stones.Black) && ((p.White&(uint)(1 << (int)i)) == 0))
+            if ((p.ToMove() == Stone.Black) && ((p.White&(uint)(1 << (int)i)) == 0))
             {
                 Debug.LogError("illegal slide");
                 return null;
@@ -235,7 +235,7 @@ namespace Com.aberrantGames.Tak.GameEngine
 
             Piece top = p.Top((int)m.X, (int)m.Y);
             ulong stack = p.Stacks[i] << 1;
-            if (top.Color() == Stones.Black)
+            if (top.Color() == Stone.Black)
                 stack |= 1;
 
             next.Caps &= ~(uint)(1 << (int)i);
@@ -288,7 +288,7 @@ namespace Com.aberrantGames.Tak.GameEngine
                 }
                 else if ((next.Standing & (uint)(1<<(int)i)) != 0)
                 {
-                    if (ct != 1 || top.Type() != Stones.Capstone)
+                    if (ct != 1 || top.Type() != Stone.Capstone)
                     {
                         Debug.LogError("illegal slide");
                         return null;
@@ -325,8 +325,8 @@ namespace Com.aberrantGames.Tak.GameEngine
                 {
                     switch(top.Type())
                     {
-                        case (Stones.Capstone): next.Caps |= (uint)(1 << (int)i); break;
-                        case (Stones.Standing): next.Standing |= (uint)(1 << (int)i); break;
+                        case (Stone.Capstone): next.Caps |= (uint)(1 << (int)i); break;
+                        case (Stone.Standing): next.Standing |= (uint)(1 << (int)i); break;
                     }
                 }
             }
@@ -365,9 +365,9 @@ namespace Com.aberrantGames.Tak.GameEngine
                     if (p.turn < 2)
                         continue;
 
-                    if ((next == Stones.White) && (p.White & (uint)(1 << (int)i)) == 0)
+                    if ((next == Stone.White) && (p.White & (uint)(1 << (int)i)) == 0)
                         continue;
-                    else if ((next == Stones.Black) && (p.Black & (uint)(1 << (int)i)) == 0)
+                    else if ((next == Stone.Black) && (p.Black & (uint)(1 << (int)i)) == 0)
                         continue;
 
                     Dircnt[] dirs = new Dircnt[4];
