@@ -3,21 +3,6 @@ using UnityEngine;
 
 namespace Com.aberrantGames.Tak
 {
-    [System.Serializable]
-    public class ObjectPoolItem
-    {
-        public GameObject objectToPool;
-        public int AmountToPool;
-        public bool shouldExpand = true;
-
-        public ObjectPoolItem(GameObject obj, int amt, bool exp = true)
-        {
-            objectToPool = obj;
-            AmountToPool = Mathf.Max(amt, 2);
-            shouldExpand = exp;
-        }
-    }
-
     public class ObjectPooler : MonoBehaviour
     {
         #region Singleton
@@ -47,7 +32,7 @@ namespace Com.aberrantGames.Tak
 
         #endregion
 
-        #region Public Methods
+        #region Public Methods        
 
         public GameObject GetPooledObject(int index)
         {
@@ -78,7 +63,7 @@ namespace Com.aberrantGames.Tak
             return PooledObjectsList[index];
         }
 
-        public int AddObject(GameObject GO, int amt = 3, bool exp = true)
+        public int AddObject(GameObject GO, int amt = 1, bool exp = true)
         {
             ObjectPoolItem item = new ObjectPoolItem(GO, amt, exp);
             int currLen = ItemsToPool.Count;
@@ -121,4 +106,20 @@ namespace Com.aberrantGames.Tak
 
         #endregion
     }
+
+    [System.Serializable]
+    public class ObjectPoolItem
+    {
+        public GameObject objectToPool;
+        public int AmountToPool;
+        public bool shouldExpand = true;
+
+        public ObjectPoolItem(GameObject obj, int amt, bool exp = true)
+        {
+            objectToPool = obj;
+            AmountToPool = Mathf.Max(amt, 2);
+            shouldExpand = exp;
+        }
+    }
+
 }
