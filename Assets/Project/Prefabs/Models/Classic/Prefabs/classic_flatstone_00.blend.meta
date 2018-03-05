@@ -1,15 +1,22 @@
 fileFormatVersion: 2
-guid: d4b49dfbbc70cc24bac4fe71fbacc41e
-timeCreated: 1518136116
+guid: 6d72235235663d84f9bda02f789e0f73
+timeCreated: 1518136096
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Cylinder_MeshPart0
+    100004: Cylinder_MeshPart1
     400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube
+    400002: Cylinder_MeshPart0
+    400004: Cylinder_MeshPart1
+    2300000: Cylinder_MeshPart0
+    2300002: Cylinder_MeshPart1
+    3300000: Cylinder_MeshPart0
+    3300002: Cylinder_MeshPart1
+    4300000: Cylinder_MeshPart0
+    4300002: Cylinder_MeshPart1
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -57,7 +64,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -76,7 +83,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

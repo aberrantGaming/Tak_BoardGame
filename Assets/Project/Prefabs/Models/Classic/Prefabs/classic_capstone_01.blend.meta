@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 1afaae227c8c18e41a90a8a61d9fd0f7
-timeCreated: 1519016697
+guid: 9c74612d68a3bad409ac82edaa5a2183
+timeCreated: 1518136107
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cube_001
+    4300000: Cube
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -57,7 +57,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -76,7 +76,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
