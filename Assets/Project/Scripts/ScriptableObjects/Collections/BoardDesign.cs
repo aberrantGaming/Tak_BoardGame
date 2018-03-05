@@ -4,15 +4,13 @@ using UnityEngine;
 
 namespace Com.aberrantGames.Tak.Collectables
 {
-    [CreateAssetMenu(menuName = "Collectable/Board")]
-    public class Board : Collectable
+    [CreateAssetMenu(menuName = "Collectable/Board Design")]
+    public class BoardDesign : Collectable
     {
-        public GameObject Prefab;
-        public Material Material;
+        public Texture Design;
+        public List<Tile> Tiles;
 
-        List<Tile> Tiles;
-
-        public Board()
+        public BoardDesign()
         {
             Tiles = new List<Tile>(64);
 
