@@ -3,7 +3,7 @@ using Com.aberrantGames.Tak.Collectables;
 
 namespace Com.aberrantGames.Tak
 {
-    public enum PlayerState { Idle, EnteringMatch, InMatch, LeavingMatch}
+    public enum PlayerState { IDLE, PREMATCH, MATCH, POSTMATCH}
     public enum CollectionType { Flatstones, Capstones, BoardDesign }
 
     public delegate void OnPlayerStateChangeHandler();
@@ -15,9 +15,29 @@ namespace Com.aberrantGames.Tak
         [SerializeField] private Capstones currCapstones;
         [SerializeField] private BoardDesign currBoardDesign;
 
-        public Flatstones CurrentFlatstones { get { return currFlatstones; } private set { } }
-        public Capstones CurrentCapstones { get { return currCapstones; } private set { } }
-        public BoardDesign CurrentBoardDesign { get { return currBoardDesign; } private set { } }
+        public Flatstones CurrentFlatstones {
+            get
+            {
+                return currFlatstones;
+            }
+            private set { }
+        }
+        public Capstones CurrentCapstones
+        {
+            get
+            {
+                return currCapstones;
+            }
+            private set { }
+        }
+        public BoardDesign CurrentBoardDesign
+        {
+            get
+            {
+                return currBoardDesign;
+            }
+            private set { }
+        }
 
         public void SetCollectable(CollectionType collectionType, ICollectable collectable)
         {
@@ -70,7 +90,8 @@ namespace Com.aberrantGames.Tak
         #endregion
 
         #region Public Variables
-        
+
+        public GameEngine.GameMode selectedGamemode;
         public Collection PlayerCollection;
 
         public PlayerState PlayerState { get; private set; }
@@ -109,11 +130,7 @@ namespace Com.aberrantGames.Tak
         /// </summary>
         internal protected void Initialize()
         {
-            if (PlayerCollection.CurrentFlatstones == null)
-                PlayerCollection.SetCollectable(CollectionType.Flatstones, ScriptableObject.CreateInstance<Flatstones>());
 
-            if (PlayerCollection.CurrentCapstones == null)
-                PlayerCollection.SetCollectable(CollectionType.Capstones, ScriptableObject.CreateInstance<Capstones>());
         }
 
         #endregion

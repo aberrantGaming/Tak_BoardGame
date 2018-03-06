@@ -8,15 +8,24 @@ namespace Com.aberrantGames.Tak.Collectables
     public class BoardDesign : Collectable
     {
         public Texture Design;
-        public List<Tile> Tiles;
-
-        public BoardDesign()
+        public IDictionary<int, List<Tile>> Boards
         {
-            Tiles = new List<Tile>(64);
-
-            name = "board_name";
-            desc = "board_description";
+            get
+            {
+                return new Dictionary<int, List<Tile>>
+                {
+                    { 3, board3 },
+                    { 4, board4 },
+                    { 5, board5 },
+                    { 6, board6 },
+                    { 7, board7 },
+                    { 8, board8 },
+                };
+            }
+            private set { }
         }
+
+        public List<Tile> board3, board4, board5, board6, board7, board8;
     }
 }
 

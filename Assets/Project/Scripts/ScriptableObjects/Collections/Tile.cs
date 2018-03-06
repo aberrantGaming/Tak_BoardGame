@@ -15,5 +15,10 @@ namespace Com.aberrantGames.Tak.Collectables
             name = "tile_name";
             desc = "tile_description";
         }
+
+        public static Tile MakeDefaultTile()
+        {
+            return Utilities.Defaults.GetDefaultTile();
+        }
     }
 }

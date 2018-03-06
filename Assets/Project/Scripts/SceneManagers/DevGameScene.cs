@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Com.aberrantGames.Tak.GameEngine;
 using UnityEngine;
 
 namespace Com.aberrantGames.Tak.Scenes
 {
-    public class Game : MonoBehaviour
+    public class DevGameScene : MonoBehaviour
     {
+        public GameMode currentGamemode;
+
         #region Private Variables
 
         GameManager gm;
         PlayerManager pm;
         ObjectPooler op;
 
+        Position game;
+        
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -25,13 +30,12 @@ namespace Com.aberrantGames.Tak.Scenes
             pm = PlayerManager.Instance;
             pm.OnStateChange += Pm_OnStateChange;
 
-            op = ObjectPooler.Instance;
+            op = ObjectPooler.Instance;            
         }
 
         private void Start()
         {
-            gm.SetGameState(GameState.GAME);
-            pm.SetPlayerState(PlayerState.EnteringMatch);
+            pm.SetPlayerState(PlayerState.PREMATCH);
         }
 
         #endregion
@@ -52,7 +56,7 @@ namespace Com.aberrantGames.Tak.Scenes
         {
             switch (pm.PlayerState)
             {
-                case PlayerState.EnteringMatch:
+                case PlayerState.PREMATCH:
                     OnEnterState_STARTING_MATCH();
                     break;
             }
@@ -60,31 +64,43 @@ namespace Com.aberrantGames.Tak.Scenes
 
         private void OnEnterState_GAME()
         {
-            Debug.Log("Handling gameState transition to GAME.");
+            Debug.Log("Handling game state transition to GAME...");
 
-            // FLIP THE COIN TO DETERMINE PLAYER 1
+            game = MakeGame(currentGamemode);
 
-            // INSTANTIATE THE GAMEBOARD
-            Board
-
-            pm.SetPlayerState(PlayerState.InMatch);
+            Gameboard gameboard = Gameboard.MakeGameboard(game, pm.PlayerCollection.CurrentBoardDesign);
+            
+            gameboard.DrawGameBoard();
+            
         }
 
         private void OnEnterState_STARTING_MATCH()
         {
-            Debug.Log("Preloading player's game objects...");
+            Debug.Log("Handling player state transition to PREMATCH...");
 
-            PreloadObjectPools();            
+            PreloadObjectPools();
+            currentGamemode = pm.selectedGamemode;
+
+            gm.SetGameState(GameState.GAME);
+        }
+
+        private Position MakeGame(GameMode gameMode)
+        {
+            Debug.Log("Creating new game; Size : (" + gameMode.Config.Size + ")...");
+
+            return Game.New(gameMode.Config);
         }
 
         private void PreloadObjectPools()
         {
+            Debug.Log("Preloading player's game objects...");
+
             List<GameObject> prefabsToLoad = new List<GameObject>
             {
                 pm.PlayerCollection.CurrentFlatstones.PrimaryPrefab,
                 pm.PlayerCollection.CurrentFlatstones.SecondaryPrefab,
                 pm.PlayerCollection.CurrentCapstones.PrimaryPrefab,
-                pm.PlayerCollection.CurrentCapstones.SecondaryPrefab
+                pm.PlayerCollection.CurrentCapstones.SecondaryPrefab,                
             };
 
             foreach (GameObject prefab in prefabsToLoad)
