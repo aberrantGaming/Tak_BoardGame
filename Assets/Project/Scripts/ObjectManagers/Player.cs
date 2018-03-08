@@ -3,11 +3,9 @@ using Com.aberrantGames.Tak.Collectables;
 
 namespace Com.aberrantGames.Tak
 {
-    public enum PlayerState { IDLE, PREMATCH, MATCH, POSTMATCH}
+    public enum PlayerState { IDLE, PREMATCH, MATCH, POSTMATCH }
     public enum CollectionType { Flatstones, Capstones, BoardDesign }
-
-    public delegate void OnPlayerStateChangeHandler();
-
+   
     [System.Serializable]
     public struct Collection
     {
@@ -65,73 +63,21 @@ namespace Com.aberrantGames.Tak
         }
     }
 
-    public class PlayerManager : MonoBehaviour
+    public class Player : MonoBehaviour
     {
-        #region Singleton Pattern
-
-        /// <summary>
-        /// Ensures that our class has only one instance and provides a global point of access to it.
-        /// </summary>
-        protected PlayerManager() { }
-        public event OnPlayerStateChangeHandler OnStateChange;
-
-        public static PlayerManager Instance { get; private set; }
-
-        protected void Awake()
-        {
-            if (PlayerManager.Instance == null)
-                Instance = this;
-            else
-                DestroyObject(this);
-
-            Initialize();
-        }
-
-        #endregion
-
         #region Public Variables
+        
+        public PlayerState PlayerState { get; private set; }
 
-        public GameEngine.GameMode selectedGamemode;
         public Collection PlayerCollection;
 
-        public PlayerState PlayerState { get; private set; }
+        public int matchScore;
 
         #endregion
 
         #region Private Variables
 
         private GameManager gm;
-        
-        #endregion
-
-        #region MonoBehaviour Callbacks
-
-        protected void OnApplicationQuit()
-        {
-            PlayerManager.Instance = null;
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        public void SetPlayerState(PlayerState state)
-        {
-            this.PlayerState = state;
-            OnStateChange();
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        /// Called from Awake() after establishing the Singleton pattern
-        /// </summary>
-        internal protected void Initialize()
-        {
-
-        }
 
         #endregion
     }

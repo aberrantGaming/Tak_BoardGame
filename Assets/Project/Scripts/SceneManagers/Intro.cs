@@ -10,16 +10,13 @@ namespace Com.aberrantGames.Tak.Scenes
         public float DelayTimer = 3f;
 
         GameManager gm;
-        PlayerManager pm;
+        Player pm;
         ObjectPooler op;
 
         private void Awake()
         {
             gm = GameManager.Instance;
             gm.OnStateChange += Gm_OnStateChange;
-
-            pm = PlayerManager.Instance;
-            pm.OnStateChange += Pm_OnStateChange;
 
             op = ObjectPooler.Instance;            
             
