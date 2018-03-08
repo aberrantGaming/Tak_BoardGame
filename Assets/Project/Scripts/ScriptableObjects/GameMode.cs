@@ -4,41 +4,24 @@ using UnityEngine;
 
 namespace Com.aberrantGames.Tak.GameEngine
 {
-    public class GameMode : ScriptableObject
+    public class Gamemode : ScriptableObject
     {
-        #region Exposed Auto-Properties
+        #region Properties
 
-        [SerializeField] private string gameModeName;
-        public string GameModeName { get { return gameModeName; } private set { } }
+        // |    General Properties  | \\
+        public string GameModeName { get { return gamemodeName; } private set { } }
+        public string GamemodeDescription { get { return gamemodeDesc; } private set { } }
 
-        [SerializeField] private int boardSize;
+        // |    Match Properties    | \\
+        public int ScoreToWin {  get { return scoreToWin; } private set { } }
+        public bool LightPlaysFirst { get { return lightPlaysFirst; } private set { } }
+        public bool DarkWinsTies { get { return darkWinsTies; } private set { } }
+
+        // |    Config Properties   | \\
         public int BoardSize { get { return boardSize; } private set { } }
-
-        [SerializeField] private byte playerCount;
-        public byte PlayerCount { get { return playerCount; } private set { } }
-
-        [SerializeField] private bool blackWinsTies;
-        public bool BlackWinsTies { get { return blackWinsTies; } private set { } }
-
-        [SerializeField] private int stonesCount;
-        public int StonesCount { get { return stonesCount; } private set { } }
-
-        [SerializeField] private int capstonesCount;
+        public int StonesCount { get { return flatstonesCount; } private set { } }
         public int CapstonesCount { get { return capstonesCount; } private set { } }
         
-        #endregion
-        
-        public GameMode()
-        {
-            this.gameModeName = "Default";
-            
-            this.boardSize = 3;
-            this.playerCount = 1;
-            this.blackWinsTies = true;
-            this.stonesCount = 0;
-            this.capstonesCount = 0;
-        }
-
         public Config Config
         {
             get
@@ -46,13 +29,28 @@ namespace Com.aberrantGames.Tak.GameEngine
                 Config retVal = new Config
                 {
                     Size = boardSize,
-                    Pieces = stonesCount,
+                    Pieces = flatstonesCount,
                     Capstones = capstonesCount,
-                    BlackWinsTies = blackWinsTies
+                    BlackWinsTies = darkWinsTies
                 };
 
                 return retVal;
             }
         }
+
+        #endregion
+
+        #region Private Variables
+
+        [SerializeField] private string gamemodeName = "Default";               // Gamemode name
+        [SerializeField] private string gamemodeDesc = "Default Gamemode";      // Gamemode description
+        [SerializeField] private int scoreToWin = 1;                            // Score required to win a match
+        [SerializeField] private bool lightPlaysFirst = false;                  // First-to-play is decided by coin if false
+        [SerializeField] private bool darkWinsTies = true;                      // Ties result in no score being awarded for a round if false;
+        [SerializeField] private int boardSize = 5;                             // Dimensions of the playable gameboard
+        [SerializeField] private int flatstonesCount = 0;                       // Number of flatstones that each player starts with
+        [SerializeField] private int capstonesCount = 0;                        // Number of capstones that each player starts with
+        
+        #endregion
     }
 }

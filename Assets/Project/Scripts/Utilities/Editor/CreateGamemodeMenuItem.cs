@@ -7,8 +7,8 @@ public static class CreateGamemodeMenuItem
     [MenuItem("Custom/Game Modes/Create New Gamemode Holder")]
 	public static void CreateGameLevelHolder()
     {
-        GameMode gamemodeHolder =
-            ScriptableObject.CreateInstance<GameMode>();
+        Gamemode gamemodeHolder =
+            ScriptableObject.CreateInstance<Gamemode>();
 
         AssetDatabase.CreateAsset(gamemodeHolder,
             "Assets/Resources/Gamemodes/NewGamemodeHolder.asset");
