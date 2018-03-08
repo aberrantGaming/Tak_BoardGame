@@ -8,13 +8,22 @@ namespace Com.aberrantGames.Tak
     {
         protected const string GameboardSpawn = "gbSPAWN";
 
-        private GameEngine.Position game;
+        #region Public Variables
+
+        public GameEngine.Position Position { get; set; }
+
+        #endregion
+
+        #region Private Variables
+
         private Collectables.BoardDesign design;
 
         private GameObject basePlane;
 
         private const float tileSize = 1f;
         private float tileOffset;
+
+        #endregion
 
         public static Gameboard MakeGameboard(GameEngine.Position _game, Collectables.BoardDesign _boardDesign = null)
         {
@@ -27,7 +36,7 @@ namespace Com.aberrantGames.Tak
             if (parent != null)
                 ret.transform.parent = parent.transform;
 
-            ret.game = _game;
+            ret.Position = _game;
             ret.design = _boardDesign;
 
             return ret;
@@ -35,7 +44,7 @@ namespace Com.aberrantGames.Tak
 
         public void DrawGameBoard()
         {
-            int boardSize = game.cfg.Size;
+            int boardSize = Position.cfg.Size;
             tileOffset = (boardSize / 2f) - (tileSize / 2);
 
             Debug.Log(boardSize); 
