@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using Com.aberrantGames.Tak.Collectables;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace Com.aberrantGames.Tak
-{
-    public enum PlayerState { IDLE, PREMATCH, MATCH, POSTMATCH }
+namespace Com.aberrantGames.Tak.Collectables
+{ 
     public enum CollectionType { Flatstones, Capstones, BoardDesign }
-   
+
     [System.Serializable]
     public struct Collection
     {
@@ -13,7 +13,8 @@ namespace Com.aberrantGames.Tak
         [SerializeField] private Capstones currCapstones;
         [SerializeField] private BoardDesign currBoardDesign;
 
-        public Flatstones CurrentFlatstones {
+        public Flatstones CurrentFlatstones
+        {
             get
             {
                 return currFlatstones;
@@ -63,22 +64,4 @@ namespace Com.aberrantGames.Tak
         }
     }
 
-    public class Player : MonoBehaviour
-    {
-        #region Public Variables
-        
-        public PlayerState PlayerState { get; private set; }
-
-        public Collection PlayerCollection;
-
-        public int matchScore;
-
-        #endregion
-
-        #region Private Variables
-
-        private GameManager gm;
-
-        #endregion
-    }
 }

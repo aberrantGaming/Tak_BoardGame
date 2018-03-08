@@ -31,10 +31,40 @@ namespace Com.aberrantGames.Tak
 
         #endregion
 
-        #region Public Variables
+        #region Properties
 
-        public GameState GameState { get; private set; }
-        public Gamemode Gamemode { get { return gamemode; } private set { } }
+        public GameState GameState
+        {
+            get;
+            private set;
+        }
+
+        public Gamemode Gamemode
+        {
+            get
+            {
+                return gamemode;
+            }
+            private set { }
+        }
+
+        private Player MatchWinner
+        {
+            get
+            {
+                foreach (byte player in matchPlayers.Keys)
+                {
+                    if (matchPlayers[player].matchScore == Gamemode.ScoreToWin)
+                        return matchPlayers[player];
+                }
+
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region Public Variables
 
         public float StartDelay = 3f;
         public float FinalDelay = 3f;
@@ -195,22 +225,13 @@ namespace Com.aberrantGames.Tak
                 roundWinner.matchScore++;
 
             // see if someone has won the match
-            matchWinner = GetMatchWinner();
+            matchWinner = MatchWinner;
 
             // Wait for the specified length of time until yielding control back to the game loop.
             yield return finalWait;     
         }
 
-        private Player GetMatchWinner()
-        {
-            foreach (byte player in matchPlayers.Keys)
-            {
-                if (matchPlayers[player].matchScore == Gamemode.ScoreToWin)
-                    return matchPlayers[player];
-            }
 
-            return null;
-        }
 
         #endregion
     }

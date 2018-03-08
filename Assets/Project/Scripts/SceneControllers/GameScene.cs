@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Com.aberrantGames.Tak
 {
-    public class Scene : MonoBehaviour
+    public class GameScene : MonoBehaviour
     {
         GameManager gm;
 
