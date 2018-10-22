@@ -9,7 +9,7 @@ namespace Com.aberrantGames.Tak
 
     public delegate void OnGameStateChangeHandler();
 
-    public class GameManager : Photon.PunBehaviour
+    public class GameManager : MonoBehaviour
     {
         #region Singleton Pattern
 
@@ -39,7 +39,7 @@ namespace Com.aberrantGames.Tak
             private set;
         }
 
-        public Gamemode Gamemode
+        public MatchSettings Gamemode
         {
             get
             {
@@ -73,7 +73,9 @@ namespace Com.aberrantGames.Tak
 
         #region Private Variables
 
-        [SerializeField] Gamemode gamemode;
+        private const bool DEBUG_ENABLED = true;
+
+        [SerializeField] MatchSettings gamemode;
 
         private int roundNumber;
         private byte firstToPlay;
@@ -120,10 +122,10 @@ namespace Com.aberrantGames.Tak
                 { Stone.Black, GetComponent<Player>()}
             };
 
-            firstToPlay =
-                (Gamemode.LightPlaysFirst)
-                ? Stone.White
-                : (Random.value > 0.5f ? Stone.Black : Stone.White);
+            firstToPlay = Stone.White;
+            //    gamemode.LightPlaysFirst
+            //    ? Stone.White
+            //    : (Random.value > 0.5f ? Stone.Black : Stone.White);
             
             StartCoroutine(MatchFlow());
         }
@@ -142,18 +144,22 @@ namespace Com.aberrantGames.Tak
             }
             else
             {
+                if (DEBUG_ENABLED) Debug.Log("restarting MatchFlow()");
                 StartCoroutine(MatchFlow());
             }
         }
 
         private IEnumerator RoundStarting()
         {
+            if (DEBUG_ENABLED) Debug.Log("RoundStarting..");
+
             // As soon as the round starts, reset board position and disable player control
             gameboard = Gameboard.MakeGameboard(
-                Game.New(Gamemode.Config),
+                Game.New(gamemode.Config),
                 matchPlayers[firstToPlay].PlayerCollection.CurrentBoardDesign);
-            
+
             // TO DO : implement player input
+            if (DEBUG_ENABLED) Debug.Log("Player Input Passed.");
 
             // Increment the round number
             roundNumber++;
@@ -201,11 +207,13 @@ namespace Com.aberrantGames.Tak
 
         private IEnumerator RoundPlaying()
         {
+            if (DEBUG_ENABLED) Debug.Log("RoundStarting..");
+
             // enable player control
             // TO DO : implement player input
 
             // while there is not a winner return on the next frame
-            while (!Game.WinDetails(gameboard.Position).Over)
+            while (!GameEngine.Game.WinDetails(gameboard.Position).Over)
                 yield return null;
         }
 

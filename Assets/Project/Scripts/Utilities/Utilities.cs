@@ -20,10 +20,10 @@ namespace Com.aberrantGames.Tak.Utilities
         private const string defaultFlatstoneName = "plain_flatstones_00";
         private const string defaultCapstoneName = "plain_capstones_00";
 
-        public static GameEngine.Gamemode GetDefaultGamemode()
+        public static Gamemode GetDefaultGamemode()
         {
             object o = Resources.Load(gamemodesPath + defaultGamemodeName);
-            GameEngine.Gamemode ret = (GameEngine.Gamemode)o;
+            Gamemode ret = (Gamemode)o;
             return ret;
         }
 

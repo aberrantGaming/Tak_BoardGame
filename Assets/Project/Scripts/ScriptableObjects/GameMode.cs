@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Com.aberrantGames.Tak.GameEngine
+namespace Com.aberrantGames.Tak
 {
     public class Gamemode : ScriptableObject
     {
@@ -22,11 +22,11 @@ namespace Com.aberrantGames.Tak.GameEngine
         public int StonesCount { get { return flatstonesCount; } private set { } }
         public int CapstonesCount { get { return capstonesCount; } private set { } }
         
-        public Config Config
+        public GameEngine.Config Config
         {
             get
             {
-                Config retVal = new Config
+                GameEngine.Config retVal = new GameEngine.Config
                 {
                     Size = boardSize,
                     Pieces = flatstonesCount,

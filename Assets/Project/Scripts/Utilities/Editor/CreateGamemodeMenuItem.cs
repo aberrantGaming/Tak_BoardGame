@@ -1,4 +1,4 @@
-﻿using Com.aberrantGames.Tak.GameEngine;
+﻿using Com.aberrantGames.Tak;
 using UnityEditor;
 using UnityEngine;
 
