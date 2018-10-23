@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>470</x>
+      <y>50</y>
+      <w>140</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>ICollectable
+--
+ID: Int
+Rarity: Int
+Name: String
+Description: String
+--
+/+AddCollectable()/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>210</y>
+      <w>210</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;ScriptableObject, ICollectable&gt;&gt;
+Collectables::Collectable
+--
+-id: Int
+-rarity: Enum
+-name: String
+-desc: String
+_-ID: Int_
+_-Rarity: Int_
+_-Name: String_
+_-Description: String_
+--
+#AddCollectable(_id: int): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>550</x>
+      <y>570</y>
+      <w>210</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Collectables::Flatstones
+--
+-Prefab_01: GameObject
+-Prefab_02: GameObject
+-Material_Dark: Material
+-Material_Light: Material
+-Type: Enum(0)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>400</y>
+      <w>140</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>120.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>400</y>
+      <w>360</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>340.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>770</x>
+      <y>570</y>
+      <w>210</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Collectables::Stones Bag
+--
+-TilePrefab: GameObject
+-TileMaterial: Material</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>420</x>
+      <y>400</y>
+      <w>140</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;170.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>330</x>
+      <y>570</y>
+      <w>210</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Collectables::Tile
+--
+-Prefab: GameObject
+-Material: Material</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>550</x>
+      <y>730</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Collectables::Capstones
+--
+-Type: Enum(1)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>640</x>
+      <y>670</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>200</x>
+      <y>400</y>
+      <w>360</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;170.0;340.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>110</x>
+      <y>570</y>
+      <w>210</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Collectables::Board
+--
+-Prefab: GameObject
+-Material: Material
+-Tiles: List&lt;Tile&gt;(64)</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
