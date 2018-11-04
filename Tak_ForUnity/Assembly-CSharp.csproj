@@ -62,7 +62,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\_Libraries\Tak_ForUnity\Position.cs" />
+    <Compile Include="Assets\Scripts\Framework\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Framework\Objects\Gameboard.cs" />
+    <Compile Include="Assets\Scripts\Framework\Scenes\Intro.cs" />
+    <Compile Include="Assets\Scripts\Framework\Scenes\MainMenu.cs" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\Vendor\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Ryan/source/Team Repositories/Tak_BoardGame/Tak_ForUnity/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
