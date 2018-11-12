@@ -9,6 +9,10 @@ Unity3D
 ## Contributing
 Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.
 
+When importing objects to Unity, please follow the established structures for the project files, scene hierarchy, and assets directory.
+
+Please use .FBX for 3D objects and follow the practices [discussed in this article](https://gamedevacademy.org/how-to-import-blender-models-into-unity-your-one-stop-guide/).
+
 ## Authors
 Ryan Cortino - Core Systems Developer - aberrantGames
 
