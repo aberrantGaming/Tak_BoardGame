@@ -533,7 +533,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 695222272}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1703250107}
+        m_MethodName: PlayButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &695222272
@@ -780,9 +791,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1023710338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6247de7340dd1d41af007c9f904ac68, type: 3}
+  m_Script: {fileID: 11500000, guid: 94afea378efa1894ca2b5403bbde1fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MainMenuPrefab: {fileID: 943822973}
+  PregameMenuPrefab: {fileID: 943822973}
 --- !u!1 &1048641668
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,6 +1129,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1703250106}
+  - component: {fileID: 1703250107}
   m_Layer: 0
   m_Name: GUI
   m_TagString: Untagged
@@ -1137,6 +1151,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1703250107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1703250105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4db209c0d2a4a734e94ff5bd50357b67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1900547981
 GameObject:
   m_ObjectHideFlags: 0

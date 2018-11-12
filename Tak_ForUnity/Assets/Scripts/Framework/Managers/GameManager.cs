@@ -35,6 +35,9 @@ namespace aberrantGames.Tak
         #endregion
 
         #region Public Variables
+
+        // TO DO: Look into creating a seperate manager for matches.
+        public GameObject GameboardPrefab;
         
         #endregion
 

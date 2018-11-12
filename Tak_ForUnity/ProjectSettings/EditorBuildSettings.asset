@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menu/MainMenu.unity
     guid: c9077402885471142853a88088f8e043
+  - enabled: 1
+    path: Assets/Scenes/Levels/Tavern.unity
+    guid: b703fad10bffc5f4a97d316373c4fbb9
   m_configObjects: {}

@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace aberrantGames.Tak.Scenes
 {
-    public class Scene_MainMenu : MonoBehaviour
+    public class MainMenu : MonoBehaviour
     {
         public Transform MainMenuPrefab;
         public Transform PregameMenuPrefab;
@@ -32,7 +33,7 @@ namespace aberrantGames.Tak.Scenes
                     ShowMainMenu();
                     break;
                 case (GameState.PREGAME):
-                    ShowPregameMenu();
+                    RunPregame();
                     break;
                 case (GameState.QUIT):
                     Application.Quit();
@@ -43,17 +44,14 @@ namespace aberrantGames.Tak.Scenes
         private void ShowMainMenu()
         {
             MainMenuPrefab.gameObject.SetActive(true);
-
-            if (PregameMenuPrefab.gameObject.activeSelf)
-                PregameMenuPrefab.gameObject.SetActive(false);
         }
 
-        private void ShowPregameMenu()
+        private void RunPregame()        
         {
-            //PregameMenuPrefab.gameObject.SetActive(true);
+            // verify gamemode configuration
 
-            //if (MainMenuPrefab.gameObject.activeSelf)
-            //    MainMenuPrefab.gameObject.SetActive(false);
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }
