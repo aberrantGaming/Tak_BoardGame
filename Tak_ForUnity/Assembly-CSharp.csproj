@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\Framework\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Framework\Scenes\Intro.cs" />
     <Compile Include="Assets\Scripts\Framework\Scenes\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Framework\Utilities\SceneReference.cs" />
     <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Vendor\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\Vendor\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
